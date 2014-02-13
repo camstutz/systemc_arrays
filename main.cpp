@@ -4,7 +4,7 @@
 
 #include <systemc.h>
 
-#include "signal_array.hpp"
+#include "sc_channel_array.hpp"
 #include "source.hpp"
 #include "sink.hpp"
 
@@ -19,7 +19,7 @@ int sc_main(int argc, char *agv[]) {
     source src("source");
     sink snk("sink");
 
-    signal_array<bool, 3> signals("test_signal");
+    sc_channel_array<sc_signal, bool, 3> signals("test_signal");
 
     std::cout << "Number of signals: " << signals.size() << std::endl;
 
@@ -35,7 +35,7 @@ int sc_main(int argc, char *agv[]) {
     std::cout << "\n--- Simulation starts ---\n" << std::endl;
 
     creation = std::chrono::high_resolution_clock::now();
-    sc_start(1000, SC_NS);
+    sc_start(500, SC_NS);
     end = std::chrono::high_resolution_clock::now();
 
     std::cout << "\n--- Simulation ended ---\n" << std::endl;
@@ -47,6 +47,7 @@ int sc_main(int argc, char *agv[]) {
     std::cout << "Time for model creation : " << creation_time.count()   << "s" << std::endl;
     std::cout << "Time for simulation     : " << simulation_time.count() << "s" << std::endl;
     std::cout << "Simulated Time          : " << sc_time_stamp() << std::endl;
+    std::cout << "Delta Cycles            : " << sc_delta_count() << std::endl;
 
     return(0);
 }

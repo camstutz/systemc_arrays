@@ -1,11 +1,11 @@
 
 #include <systemc.h>
 
-#include "port_array.hpp"
+#include "sc_port_array.hpp"
 
 class sink : public sc_module {
 public:
-    port_array<sc_in, bool, 3> input;
+    sc_port_array<sc_in, sc_signal, bool, 3> input;
 
     void detect_signal();
 

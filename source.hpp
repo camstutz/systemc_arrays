@@ -1,11 +1,11 @@
 
 #include <systemc.h>
 
-#include "port_array.hpp"
+#include "sc_port_array.hpp"
 
 class source : public sc_module {
 public:
-    port_array<sc_out, bool, 3> output;
+    sc_port_array<sc_out, sc_signal, bool, 3> output;
 
     void create_data();
 
