@@ -4,27 +4,31 @@
 
 #include <systemc.h>
 
+#include "sc_module_array.hpp"
 #include "sc_channel_array.hpp"
 #include "source.hpp"
 #include "sink.hpp"
 
 
-int sc_main(int argc, char *agv[]) {
-
+int sc_main(int argc, char *agv[])
+{
     std::chrono::time_point<std::chrono::system_clock> start, creation, end;
     std::chrono::duration<double> creation_time, simulation_time;
 
     start = std::chrono::high_resolution_clock::now();
 
     source src("source");
-    sink snk("sink");
+    sc_module_array<sink, 2> sinks("sink");
 
     sc_channel_array<sc_signal, bool, 3> signals("test_signal");
 
     std::cout << "Number of signals: " << signals.size() << std::endl;
 
     src.output.bind(signals);
-    snk.input.bind(signals);
+    for(auto &single_sink : sinks)
+    {
+      (*single_sink).input.bind(signals);
+    }
 
     // **** Setup Tracing
     sc_trace_file* fp;
