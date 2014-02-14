@@ -16,18 +16,16 @@
 
 //******************************************************************************
 template<template<class > class port_type,
-        template<class, sc_writer_policy> class channel_type,
-        typename data_type, std::size_t port_count>
-sc_port_array<port_type, channel_type, data_type, port_count>::sc_port_array()
+         typename data_type, std::size_t port_count>
+sc_port_array<port_type, data_type, port_count>::sc_port_array()
 {
     return;
 }
 
 //******************************************************************************
 template<template<class > class port_type,
-        template<class, sc_writer_policy> class channel_type,
-        typename data_type, std::size_t port_count>
-sc_port_array<port_type, channel_type, data_type, port_count>::sc_port_array(
+         typename data_type, std::size_t port_count>
+sc_port_array<port_type, data_type, port_count>::sc_port_array(
         const char* name) :
         sc_com_array<port_type<data_type>, port_count>(name)
 {
@@ -36,9 +34,9 @@ sc_port_array<port_type, channel_type, data_type, port_count>::sc_port_array(
 
 //******************************************************************************
 template<template<class > class port_type,
-        template<class, sc_writer_policy> class channel_type,
-        typename data_type, std::size_t port_count>
-void sc_port_array<port_type, channel_type, data_type, port_count>::bind(
+         typename data_type, std::size_t port_count>
+template<template<typename, sc_writer_policy> class channel_type>
+void sc_port_array<port_type, data_type, port_count>::bind(
         sc_channel_array<channel_type, data_type, port_count> &signals)
 {
     auto signal_iter = signals.begin();

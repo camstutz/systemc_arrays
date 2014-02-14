@@ -5,7 +5,7 @@
 
 class source : public sc_module {
 public:
-    sc_port_array<sc_out, sc_signal, bool, 3> output;
+    sc_port_array<sc_out, bool, 3> output;
 
     void create_data();
 
