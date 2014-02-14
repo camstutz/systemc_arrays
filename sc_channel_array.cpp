@@ -16,19 +16,19 @@
 
 //******************************************************************************
 template<template<class, sc_writer_policy> class channel_type,
-        typename data_type,
-        unsigned int channel_count>
-sc_channel_array<channel_type, data_type, channel_count>::sc_channel_array() {
-
+        typename data_type, std::size_t channel_count>
+sc_channel_array<channel_type, data_type, channel_count>::sc_channel_array()
+{
     return;
 }
 
 //******************************************************************************
 template<template<class, sc_writer_policy> class channel_type,
-        typename data_type,
-        unsigned int channel_count>
-sc_channel_array<channel_type, data_type, channel_count>::sc_channel_array(const char* name) :
-        sc_com_array<channel_type<data_type, SC_ONE_WRITER>, channel_count>(name) {
-
+        typename data_type, std::size_t channel_count>
+sc_channel_array<channel_type, data_type, channel_count>::sc_channel_array(
+        const char* name) :
+        sc_com_array<channel_type<data_type, SC_ONE_WRITER>, channel_count>(
+        name)
+{
     return;
 }

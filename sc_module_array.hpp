@@ -13,14 +13,14 @@
 
 #pragma once
 
+#include <cstddef>
 #include <string>
 
 #include <systemc.h>
 
 #include "sc_object_array.hpp"
 
-// todo: change to size_type
-template<typename module_type, unsigned int module_count>
+template<typename module_type, std::size_t module_count>
 class sc_module_array : public sc_object_array<module_type, module_count>
 {
 

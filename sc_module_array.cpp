@@ -15,16 +15,16 @@
 #include "sc_module_array.hpp"
 
 //******************************************************************************
-template<typename object_type, unsigned int module_count>
-sc_module_array<object_type, module_count>::sc_module_array() {
-
+template<typename module_type, std::size_t module_count>
+sc_module_array<module_type, module_count>::sc_module_array()
+{
     return;
 }
 
 //******************************************************************************
-template<typename module_type, unsigned int module_count>
+template<typename module_type, std::size_t module_count>
 sc_module_array<module_type, module_count>::sc_module_array(const char* name) :
-        sc_object_array<module_type, module_count>(name) {
-
+        sc_object_array<module_type, module_count>(name)
+{
     return;
 }

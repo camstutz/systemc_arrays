@@ -15,14 +15,14 @@
 #include "sc_com_array.hpp"
 
 //******************************************************************************
-template<typename object_type, unsigned int object_count>
+template<typename object_type, std::size_t object_count>
 sc_com_array<object_type, object_count>::sc_com_array() {
 
     return;
 }
 
 //******************************************************************************
-template<typename object_type, unsigned int object_count>
+template<typename object_type, std::size_t object_count>
 sc_com_array<object_type, object_count>::sc_com_array(const char* name) :
         sc_object_array<object_type, object_count>(name) {
 
@@ -30,7 +30,7 @@ sc_com_array<object_type, object_count>::sc_com_array(const char* name) :
 }
 
 //******************************************************************************
-template<typename object_type, unsigned int object_count>
+template<typename object_type, std::size_t object_count>
 void sc_com_array<object_type, object_count>::make_sensitive(
         sc_sensitive& sensitive_list) const {
 
@@ -44,7 +44,7 @@ void sc_com_array<object_type, object_count>::make_sensitive(
 }
 
 //******************************************************************************
-template<typename object_type, unsigned int object_count>
+template<typename object_type, std::size_t object_count>
 void sc_trace(sc_trace_file* tf,
         const sc_com_array<object_type, object_count>& com_objects,
         const std::string& name)

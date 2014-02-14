@@ -13,16 +13,15 @@
 
 #pragma once
 
+#include <cstddef>
 #include <array>
 #include <string>
 
-//#include <systemc.h>
+#include <systemc.h>
 
-
-// todo: change object_count to size_type
-template<typename object_type, unsigned int object_count>
-class sc_object_array {
-
+template<typename object_type, std::size_t object_count>
+class sc_object_array
+{
 public:
     typedef std::array<object_type*, object_count> object_array_t;
 
@@ -30,17 +29,15 @@ public:
 
     sc_object_array();
     sc_object_array(const char* name);
-//    ~sc_object_array();
 
     const char* name() const;
 
     typename object_array_t::size_type size() const;
-    // todo: change pos to size_type
-    object_type* operator[](unsigned int pos);
+    object_type* operator[](std::size_t pos);
     object_type** begin();
-    object_type* const* begin() const;
+    object_type* const * begin() const;
     object_type** end();
-    object_type* const* end() const;
+    object_type* const * end() const;
 
 private:
     object_array_t objects;
