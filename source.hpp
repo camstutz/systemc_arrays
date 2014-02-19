@@ -1,11 +1,15 @@
 
+#pragma once
+
 #include <systemc.h>
 
-//#include "sc_port_array.hpp"
+#include "sc_map_square.hpp"
 
-class source : public sc_module {
+class source : public sc_module
+{
 public:
-    //sc_port_array<sc_out, bool, 3> output;
+    std::vector<int> test;
+    sc_map_square<sc_out<bool> > output;
 
     void create_data();
 

@@ -1,11 +1,11 @@
 
 #include <systemc.h>
 
-//#include "sc_port_array.hpp"
+#include "sc_map_square.hpp"
 
 class sink : public sc_module {
 public:
-    //sc_port_array<sc_in, bool, 3> input;
+    sc_map_square<sc_in<bool>> input;
 
     void detect_signal();
 
