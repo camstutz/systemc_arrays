@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <chrono>
+
 
 #include <systemc.h>
 
@@ -10,14 +10,14 @@
 #include "sc_map_4d.hpp"
 #include "source.hpp"
 #include "sink.hpp"
+#include "sc_analyzer.hpp"
 
 
 int sc_main(int argc, char *agv[])
 {
-    std::chrono::time_point<std::chrono::system_clock> start, creation, end;
-    std::chrono::duration<double> creation_time, simulation_time;
+    sc_analyzer myAnalyzer;
 
-    start = std::chrono::high_resolution_clock::now();
+    myAnalyzer.register_model_setup_start();
 
     source src1("source1");
     source_square src2("source2");
@@ -70,20 +70,18 @@ int sc_main(int argc, char *agv[])
 
     std::cout << "\n--- Simulation starts ---\n" << std::endl;
 
-    creation = std::chrono::high_resolution_clock::now();
+    myAnalyzer.register_model_setup_end();
+    myAnalyzer.register_simulation_start();
+
     sc_start(1000, SC_NS);
-    end = std::chrono::high_resolution_clock::now();
+
+    myAnalyzer.register_simulation_end();
 
     std::cout << "\n--- Simulation ended ---\n" << std::endl;
 
     sc_close_vcd_trace_file(fp);
 
-    creation_time = creation - start;
-    simulation_time = end - creation;
-    std::cout << "Time to create model : " << creation_time.count()   << "s" << std::endl;
-    std::cout << "Time to simulate     : " << simulation_time.count() << "s" << std::endl;
-    std::cout << "Simulated Time       : " << sc_time_stamp() << std::endl;
-    std::cout << "Delta Cycles         : " << sc_delta_count() << std::endl;
+    myAnalyzer.print_report();
 
     return(0);
 }
