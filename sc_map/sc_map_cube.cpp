@@ -111,6 +111,7 @@ object_type* sc_map_cube<object_type>::creator::operator() (
     sc_map_cube<object_type>::key_type id_Y = (id / size_X) % size_Y;
     sc_map_cube<object_type>::key_type id_X = id % size_X;
 
+    // todo: only remove if there is number in the end of name
     std::string full_name(name);
     std::size_t id_pos = full_name.find_first_of('_');
     full_name = full_name.substr(0, id_pos);

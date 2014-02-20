@@ -66,6 +66,7 @@ template<typename object_type>
 object_type* sc_map_linear<object_type>::creator::operator() (
         const sc_module_name name, sc_map_linear<object_type>::key_type id)
 {
+    // todo: only remove if there is number in the end of name
     std::string full_name(name);
     std::size_t id_pos = full_name.find_first_of('_');
     full_name = full_name.substr(0, id_pos);
