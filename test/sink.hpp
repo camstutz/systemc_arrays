@@ -1,10 +1,10 @@
 
 #include <systemc.h>
 
-#include "sc_map_linear.hpp"
-#include "sc_map_square.hpp"
-#include "sc_map_cube.hpp"
-#include "sc_map_4d.hpp"
+#include "../sc_map/sc_map_linear.hpp"
+#include "../sc_map/sc_map_square.hpp"
+#include "../sc_map/sc_map_cube.hpp"
+#include "../sc_map/sc_map_4d.hpp"
 
 class sink : public sc_module {
 public:
