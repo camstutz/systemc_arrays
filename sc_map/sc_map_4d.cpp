@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_4d.cpp
  * @author Christian Amstutz
- * @date Feb 19, 2014
+ * @date Feb 21, 2014
  *
  * @brief
  */
@@ -82,10 +82,44 @@ typename sc_map_4d<object_type>::size_type
 
 //******************************************************************************
 template<typename object_type>
-object_type& sc_map_4d<object_type>::at(const key_type key_W, const key_type key_Z,
-        const key_type key_Y, const key_type key_X)
+object_type& sc_map_4d<object_type>::at(const key_type key_W,
+        const key_type key_Z, const key_type key_Y, const key_type key_X)
 {
+    // todo: at exception handling for out range accesses
     return (*objects_map[key_W][key_Z][key_Y][key_X]);
+}
+
+//******************************************************************************
+template<typename object_type>
+std::pair<bool, typename sc_map_4d<object_type>::full_key_type>
+        sc_map_4d<object_type>::get_key(object_type& object) const
+{
+    std::pair<bool, full_key_type> full_key;
+    full_key.first = false;
+
+    for (auto W_dim_element : objects_map)
+    {
+        for (auto Z_dim_element : W_dim_element.second)
+        {
+            for (auto Y_dim_element : Z_dim_element.second)
+            {
+                for (auto map_element : Y_dim_element.second)
+                {
+                    if (map_element.second == &object)
+                    {
+                        full_key.first = true;
+                        full_key.second.W_dim = W_dim_element.first;
+                        full_key.second.Z_dim = Z_dim_element.first;
+                        full_key.second.Y_dim = Y_dim_element.first;
+                        full_key.second.X_dim = map_element.first;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return (full_key);
 }
 
 //******************************************************************************
