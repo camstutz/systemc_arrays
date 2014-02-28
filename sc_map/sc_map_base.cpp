@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.cpp
  * @author Christian Amstutz
- * @date Feb 19, 2014
+ * @date Feb 28, 2014
  *
  * @brief
  */
@@ -65,38 +65,4 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std:
         full_name << name << "." << my_object.name();
         sc_trace(tf, my_object, full_name.str().c_str());
     }
-}
-
-//******************************************************************************
-template<typename object_type>
-sc_map_iter<object_type>::sc_map_iter(sc_map_base<object_type>& sc_map, unsigned int pos) :
-        sc_map(sc_map), pos(pos)
-{}
-
-//******************************************************************************
-template<typename object_type>
-bool sc_map_iter<object_type>::operator==(const sc_map_iter& other)
-{
-    return (pos == other.pos);
-}
-
-//******************************************************************************
-template<typename object_type>
-bool sc_map_iter<object_type>::operator!=(const sc_map_iter& other)
-{
-    return (pos != other.pos);
-}
-
-//******************************************************************************
-template<typename object_type>
-const sc_map_iter<object_type>& sc_map_iter<object_type>::operator++ ()
-{
-    ++pos; return (*this);
-}
-
-//******************************************************************************
-template<typename object_type>
-object_type& sc_map_iter<object_type>::operator*()
-{
-    return (sc_map.objects[pos]);
 }
