@@ -26,47 +26,19 @@ class sc_map_iterator :
         public std::iterator<std::forward_iterator_tag, object_type>
 {
 public:
-    sc_map_iterator(sc_map_base<object_type>& sc_map, unsigned int pos);
+    sc_map_iterator();
     virtual ~sc_map_iterator() {};
-
-    bool operator==(const sc_map_iterator& other) const;
-    bool operator!=(const sc_map_iterator& other) const;
 
     virtual sc_map_iterator& operator++ () = 0;
 
-    object_type& operator*();
-
-protected:
-    sc_map_base<object_type>& sc_map;
-    int pos;
+    virtual object_type& operator*() =0;
 };
 
 
 //******************************************************************************
 template<typename object_type>
-sc_map_iterator<object_type>::sc_map_iterator(sc_map_base<object_type>& sc_map,
-        unsigned int pos) :
-        sc_map(sc_map), pos(pos)
+sc_map_iterator<object_type>::sc_map_iterator()
 {}
 
-//******************************************************************************
-template<typename object_type>
-bool sc_map_iterator<object_type>::operator==(const sc_map_iterator& other) const
-{
-    return (pos == other.pos);
-}
 
-//******************************************************************************
-template<typename object_type>
-bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other) const
-{
-    return ( !(*this == other));
-}
-
-//******************************************************************************
-template<typename object_type>
-object_type& sc_map_iterator<object_type>::operator*()
-{
-    return (sc_map.objects[pos]);
-}
 
