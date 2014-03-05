@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_cube.cpp
  * @author Christian Amstutz
- * @date Feb 21, 2014
+ * @date Mar 3, 2014
  *
  * @brief
  */
@@ -29,7 +29,7 @@ sc_map_cube<object_type>::sc_map_cube(
         for (size_type y = 0; y<element_cnt_Y; ++y) {
             for (size_type x = 0; x<element_cnt_X; ++x) {
                 key_type vector_id = z*element_cnt_Y*element_cnt_X + y*element_cnt_X + x;
-                objects_map[start_id_Z+z][start_id_Y+y][start_id_X+x] = &this->objects[vector_id];
+                objects_map[start_id_Z+z][start_id_Y+y][start_id_X+x] = vector_id;
             }
         }
     }
@@ -69,8 +69,8 @@ template<typename object_type>
 object_type& sc_map_cube<object_type>::at(const key_type key_Z,
         const key_type key_Y, const key_type key_X)
 {
-    // todo: at exception handling for out range accesses
-    return (*objects_map.at(key_Z).at(key_Y).at(key_X) );
+    object_type& ret_object = this->objects[get_vect_pos(key_Z, key_Y, key_X)];
+    return (ret_object);
 }
 
 //******************************************************************************
@@ -87,7 +87,8 @@ std::pair<bool, typename sc_map_cube<object_type>::full_key_type>
         {
             for (auto map_element : Y_dim_element.second)
             {
-                if (map_element.second == &object)
+                const object_type* map_object = &this->objects[map_element.second];
+                if (map_object == &object)
                 {
                     full_key.first = true;
                     full_key.second.Z_dim = Z_dim_element.first;
@@ -119,6 +120,18 @@ bool sc_map_cube<object_type>::bind(sc_map_cube<signal_type>& signals_map)
     this->objects.bind(signals_map.objects);
 
     return (true);
+}
+
+//******************************************************************************
+template<typename object_type>
+typename sc_map_cube<object_type>::size_type
+        sc_map_cube<object_type>::get_vect_pos(key_type pos_Z, key_type pos_Y,
+        key_type pos_X)
+{
+    // todo: at exception handling for out of range accesses
+    size_type vector_pos = objects_map.at(pos_Z).at(pos_Y).at(pos_X);
+
+    return (vector_pos);
 }
 
 //******************************************************************************

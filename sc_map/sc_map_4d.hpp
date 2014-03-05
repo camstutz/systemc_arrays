@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_4d.hpp
  * @author Christian Amstutz
- * @date Feb 21, 2014
+ * @date Mar 3, 2014
  *
  * @brief
  *
@@ -67,7 +67,9 @@ private:
     key_type start_id_Y;
     key_type start_id_X;
 
-    std::map<key_type, std::map<key_type, std::map<key_type, std::map<key_type, object_type*> > > > objects_map;
+    std::map<key_type, std::map<key_type, std::map<key_type, std::map<key_type, size_type> > > > objects_map;
+
+    size_type get_vect_pos(key_type pos_W, key_type pos_Z, key_type pos_Y, key_type pos_X);
 
     class creator
     {

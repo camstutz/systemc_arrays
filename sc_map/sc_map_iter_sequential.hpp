@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iter_sequential.hpp
  * @author Christian Amstutz
- * @date Feb 28, 2014
+ * @date Mar 3, 2014
  *
  * @brief
  *
@@ -21,16 +21,14 @@ template<typename object_type>
 class sc_map_iter_sequential : public sc_map_iterator<object_type>
 {
 public:
-    bool operator==(const sc_map_iter_sequential& other) const;
-    bool operator!=(const sc_map_iter_sequential& other) const;
+    typedef typename sc_map_iterator<object_type>::size_type size_type;
+
+    virtual ~sc_map_iter_sequential() {};
+
     virtual sc_map_iter_sequential& operator++ ();
-    virtual object_type& operator*();
 
 private:
-    sc_map_base<object_type>& sc_map;
-    int pos;
-
-    sc_map_iter_sequential(sc_map_base<object_type>& sc_map, unsigned int pos);
+    sc_map_iter_sequential(sc_map_base<object_type>& sc_map, size_type pos);
 
     friend class sc_map_base<object_type>;
 };
@@ -38,44 +36,19 @@ private:
 
 //******************************************************************************
 template<typename object_type>
-bool sc_map_iter_sequential<object_type>::operator==(const sc_map_iter_sequential& other) const
-{
-    if (&other != this)
-    {
-        return false;
-    }
-    else
-    {
-        return (pos == other.pos);
-    }
-}
-
-//******************************************************************************
-template<typename object_type>
-bool sc_map_iter_sequential<object_type>::operator!=(const sc_map_iter_sequential& other) const
-{
-    return ( !(*this == other));
-}
-
-//******************************************************************************
-template<typename object_type>
 sc_map_iter_sequential<object_type>&
         sc_map_iter_sequential<object_type>::operator++ ()
 {
-    ++pos;
+    size_type new_pos = sc_map_iterator<object_type>::get_vect_pos();
+    ++new_pos;
+    sc_map_iterator<object_type>::set_vect_pos(new_pos);
+
     return (*this);
 }
 
 //******************************************************************************
 template<typename object_type>
-object_type& sc_map_iter_sequential<object_type>::operator*()
-{
-    return (sc_map.objects[pos]);
-}
-
-//******************************************************************************
-template<typename object_type>
 sc_map_iter_sequential<object_type>::sc_map_iter_sequential(
-        sc_map_base<object_type>& sc_map, unsigned int pos) :
-        sc_map(sc_map), pos(pos)
+        sc_map_base<object_type>& sc_map, size_type pos) :
+        sc_map_iterator<object_type>(sc_map, pos)
 {}

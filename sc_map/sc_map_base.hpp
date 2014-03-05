@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date Feb 28, 2014
+ * @date Mar 4, 2014
  *
  * @brief
  *
@@ -41,6 +41,7 @@ public:
     sc_vector<object_type> objects;
 
     sc_map_base(const sc_module_name name);
+    virtual ~sc_map_base() {};
 
     size_type size();
     iterator begin();
