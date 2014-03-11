@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date Mar 5, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  *
@@ -51,8 +51,6 @@ public:
 
     sc_map_iter_square<object_type> begin_dim(const key_type pos_Y, const bool iterate_Y, const key_type pos_X, const bool iterate_X);
     sc_map_iter_square<object_type> begin_dim(const key_type start_Y, const key_type stop_Y, const bool iterate_Y, const key_type start_X, const key_type stop_X, const bool iterate_X);
-    //sc_map_iter_square<object_type> end_dim(const key_type pos_Y, bool const iterate_Y, const key_type pos_X, const bool iterate_X);
-    //sc_map_iter_square<object_type> end_dim(const key_type start_Y, const key_type stop_Y, bool const iterate_Y, const key_type start_X, const key_type stop_X, const bool iterate_X);
 
     template<typename signal_type>
     bool bind(sc_map_square<signal_type>& signals_map);

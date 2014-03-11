@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date Mar 4, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  *
@@ -33,9 +33,11 @@ public:
     bool operator==(const sc_map_iterator& other) const;
     bool operator!=(const sc_map_iterator& other) const;
 
-    virtual sc_map_iterator& operator++ ();
+    virtual sc_map_iterator& operator++ () =0;
 
-    virtual object_type& operator*();
+    virtual object_type& operator* ();
+    virtual object_type* operator-> ();
+    // todo: operator -> for pointer member access
 
 protected:
     sc_map_iterator(sc_map_base<object_type>& sc_map, size_type vect_pos=0);
@@ -66,20 +68,27 @@ bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other)
 }
 
 //******************************************************************************
+//template<typename object_type>
+//sc_map_iterator<object_type>& sc_map_iterator<object_type>::operator++ ()
+//{
+//    // todo: this function is only here to make the class non abstract
+//    set_vect_pos(vect_pos+1);
+//    return (*this);
+//}
+
+//******************************************************************************
 template<typename object_type>
-sc_map_iterator<object_type>& sc_map_iterator<object_type>::operator++ ()
+object_type& sc_map_iterator<object_type>::operator* ()
 {
-    // todo: this function is only here to make the class non abstract
-    set_vect_pos(vect_pos+1);
-    return (*this);
+    // todo: ensure that out of range is not accessed (end iterator)
+    return (sc_map.objects[vect_pos]);
 }
 
 //******************************************************************************
 template<typename object_type>
-object_type& sc_map_iterator<object_type>::operator*()
+object_type* sc_map_iterator<object_type>::operator-> ()
 {
-    // todo: ensure that out of range is not accessed (end iterator)
-    return (sc_map.objects[vect_pos]);
+    return (&sc_map.objects[vect_pos]);
 }
 
 //******************************************************************************

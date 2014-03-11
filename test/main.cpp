@@ -11,6 +11,7 @@
 #include "../sc_analyzer/sc_analyzer.hpp"
 #include "source.hpp"
 #include "sink.hpp"
+#include "bind_tester.hpp"
 
 
 
@@ -59,27 +60,27 @@ int sc_main(int argc, char *agv[])
     snk3.input.bind(signals3);
     snk4.input.bind(signals4);
 
-//    // Testing get_key()
-//    for (auto& this_sig : signals1)
-//    {
-//        std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key = signals1.get_key(this_sig);
-//        std::cout << "Key: " << the_key.first << " - " << the_key.second.X_dim << std::endl;
-//    }
-//    std::cout << "signals 1: done" << std::endl;
-//    std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key2 = signals1.get_key(signals1.at(0));
-//    std::cout << "Key: " << the_key2.first << " - " << the_key2.second.X_dim << std::endl;
-//    sc_signal<bool> test_signal;
-//    std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key = signals1.get_key(test_signal);
-//    std::cout << "Key: " << the_key.first << " - " << the_key.second.X_dim << std::endl;
-//
-//    std::pair<bool, sc_map_square<sc_signal<bool> >::full_key_type> the_key3 = signals2.get_key(signals2.at(1,1));
-//    std::cout << "Key: " << the_key3.first << " - " << the_key3.second.Y_dim << "," << the_key3.second.X_dim << std::endl;
-//
-//    std::pair<bool, sc_map_cube<sc_signal<bool> >::full_key_type> the_key4 = signals3.get_key(signals3.at(3,1,1));
-//    std::cout << "Key: " << the_key4.first << " - " << the_key4.second.Z_dim << "," << the_key4.second.Y_dim << "," << the_key4.second.X_dim << std::endl;
-//
-//    std::pair<bool, sc_map_4d<sc_signal<bool> >::full_key_type> the_key5 = signals4.get_key(signals4.at(2,3,0,1));
-//    std::cout << "Key: " << the_key5.first << " - " << the_key5.second.W_dim << ","<< the_key5.second.Z_dim << "," << the_key5.second.Y_dim << "," << the_key5.second.X_dim << std::endl;
+    // Testing get_key()
+    for (auto& this_sig : signals1)
+    {
+        std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key = signals1.get_key(this_sig);
+        std::cout << "Key: " << the_key.first << " - " << the_key.second.X_dim << std::endl;
+    }
+
+    std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key2 = signals1.get_key(signals1.at(0));
+    std::cout << "Key: " << the_key2.first << " - " << the_key2.second.X_dim << std::endl;
+    sc_signal<bool> test_signal;
+    std::pair<bool, sc_map_linear<sc_signal<bool> >::full_key_type> the_key = signals1.get_key(test_signal);
+    std::cout << "Key: " << the_key.first << " - " << the_key.second.X_dim << std::endl;
+
+    std::pair<bool, sc_map_square<sc_signal<bool> >::full_key_type> the_key3 = signals2.get_key(signals2.at(1,1));
+    std::cout << "Key: " << the_key3.first << " - " << the_key3.second.Y_dim << "," << the_key3.second.X_dim << std::endl;
+
+    std::pair<bool, sc_map_cube<sc_signal<bool> >::full_key_type> the_key4 = signals3.get_key(signals3.at(3,1,1));
+    std::cout << "Key: " << the_key4.first << " - " << the_key4.second.Z_dim << "," << the_key4.second.Y_dim << "," << the_key4.second.X_dim << std::endl;
+
+    std::pair<bool, sc_map_4d<sc_signal<bool> >::full_key_type> the_key5 = signals4.get_key(signals4.at(2,3,0,1));
+    std::cout << "Key: " << the_key5.first << " - " << the_key5.second.W_dim << ","<< the_key5.second.Z_dim << "," << the_key5.second.Y_dim << "," << the_key5.second.X_dim << std::endl;
 
     // Testing dimensional iterators
     sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
@@ -106,6 +107,26 @@ int sc_main(int argc, char *agv[])
     }
     std::cout << std::endl;
 
+    // Test multi-dimensional partial binding
+    sc_map_linear<sc_signal<bool>> bind_signals(10, "bsigs");
+    bind_tester btest1("btest1");
+//    auto iter2 = bind_signals.begin();
+//    bool result = btest1.output.bind(0,2,false, 0,1,true, iter2);
+//    std::cout << "result of binding: " << result << std::endl;
+//    ++iter2;
+//    result = btest1.output.bind(1,2,false, 0,1,true, iter2);
+//    std::cout << "result of binding: " << result << std::endl;
+//    ++iter2;
+//    result = btest1.output.bind(2,2,false, 0,1,true, iter2);
+//    std::cout << "result of binding: " << result << std::endl;
+
+    auto p_iter = btest1.output.begin_dim(0,1,true, 0,1,true);
+    auto s_iter = bind_signals.begin();
+    btest1.output.bind_by_iter(p_iter, s_iter);
+
+    btest1.output.at(2,0).bind(bind_signals.at(8));
+    btest1.output.at(2,1).bind(bind_signals.at(7));
+
     // **** Setup Tracing
     sc_trace_file* fp;
     fp=sc_create_vcd_trace_file("wave");
@@ -115,13 +136,14 @@ int sc_main(int argc, char *agv[])
     sc_trace(fp, signals2, "signal2");
     sc_trace(fp, signals3, "signal3");
     sc_trace(fp, signals4, "signal4");
+    sc_trace(fp, bind_signals, "b_signal");
 
     std::cout << "\n--- Simulation starts ---\n" << std::endl;
 
     myAnalyzer.register_model_setup_end();
     myAnalyzer.register_simulation_start();
 
-    //sc_start(1000, SC_NS);
+    sc_start(1000, SC_NS);
 
     myAnalyzer.register_simulation_end();
 

@@ -34,6 +34,7 @@ public:
     sc_map_iter_square& operator++ ();
 
 private:
+    // todo: add iterator with only which X and which Y should be iterated
     sc_map_iter_square(sc_map_square<object_type>& sc_map,
             key_type start_Y, key_type stop_Y, bool iterate_Y,
             key_type start_X, key_type stop_X, bool iterate_X);

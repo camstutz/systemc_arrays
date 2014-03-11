@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.cpp
  * @author Christian Amstutz
- * @date Mar 5, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  */
@@ -112,31 +112,6 @@ sc_map_iter_square<object_type> sc_map_square<object_type>::begin_dim(
             start_X, stop_X, iterate_X);
     return (square_map_it);
 }
-
-////******************************************************************************
-//template<typename object_type>
-//sc_map_iter_square<object_type> sc_map_square<object_type>::end_dim(
-//        const key_type pos_Y, const bool iterate_Y,
-//        const key_type pos_X, const bool iterate_X)
-//{
-//    sc_map_iter_square<object_type> square_map_it = end_dim(
-//            pos_Y, start_id_Y+size_Y()-1, iterate_Y,
-//            pos_X, start_id_X+size_X()-1, iterate_X);
-//    return (square_map_it);
-//}
-//
-////******************************************************************************
-//template<typename object_type>
-//sc_map_iter_square<object_type> sc_map_square<object_type>::end_dim(
-//        const key_type start_Y, const key_type stop_Y, const bool iterate_Y,
-//        const key_type start_X, const key_type stop_X, const bool iterate_X)
-//{
-//    sc_map_iter_square<object_type> square_map_it(*this,
-//            start_Y, stop_Y, iterate_Y,
-//            start_X, stop_X, iterate_X);
-//    ++square_map_it;
-//    return (square_map_it);
-//}
 
 //******************************************************************************
 template<typename object_type>

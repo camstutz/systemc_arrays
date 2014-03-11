@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.cpp
  * @author Christian Amstutz
- * @date Feb 28, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  */
@@ -39,6 +39,37 @@ template<typename object_type>
 typename sc_map_base<object_type>::iterator sc_map_base<object_type>::end()
 {
     return (iterator(*this, objects.size()));
+}
+
+//******************************************************************************
+template<typename object_type>
+template<typename signal_type>
+bool sc_map_base<object_type>::bind_by_iter(sc_map_iterator<object_type>& port_iter,
+        sc_map_iterator<signal_type>& signal_iter)
+{
+    // todo: check for equal size
+    // todo: check for same object
+    // todo: check for compatibility of port and signal (pre-processor)
+
+    auto end = this->end();
+    for ( ; port_iter != end; ++port_iter)
+    {
+        port_iter->bind(*signal_iter);
+        ++signal_iter;
+    }
+
+    return (true);
+}
+
+//******************************************************************************
+template<typename object_type>
+template<typename signal_type>
+bool sc_map_base<object_type>::bind_by_iter(sc_map_iterator<signal_type>& signal_iter)
+{
+    auto port_iter = this->begin();
+    bool bind_ok = bind_by_iter(port_iter ,signal_iter);
+
+    return (bind_ok);
 }
 
 //******************************************************************************

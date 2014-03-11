@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date Mar 4, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  *
@@ -46,6 +46,11 @@ public:
     size_type size();
     iterator begin();
     iterator end();
+
+    template<typename signal_type>
+    bool bind_by_iter(sc_map_iterator<object_type>& port_iter, sc_map_iterator<signal_type>& signal_iter);
+    template<typename signal_type>
+    bool bind_by_iter(sc_map_iterator<signal_type>& signal_iter);
 
     void make_sensitive(sc_sensitive& sensitive_list) const;
     //todo: void write_all(data_type value);
