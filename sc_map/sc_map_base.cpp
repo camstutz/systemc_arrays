@@ -88,6 +88,19 @@ void sc_map_base<object_type>::make_sensitive(
 }
 
 //******************************************************************************
+template<typename object_type>
+template<typename data_type>
+void sc_map_base<object_type>::write_all(const data_type& value)
+{
+    for(auto& obj : objects)
+    {
+        obj.write(value);
+    }
+
+    return;
+}
+
+//******************************************************************************
 template<typename trace_obj_type>
 void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name)
 {

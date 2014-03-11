@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_4d.hpp
  * @author Christian Amstutz
- * @date Mar 3, 2014
+ * @date Mar 11, 2014
  *
  * @brief
  *
@@ -61,11 +61,10 @@ public:
     bool bind(sc_map_4d<signal_type>& signals_map);
 
 private:
-    // todo: make these const
-    key_type start_id_W;
-    key_type start_id_Z;
-    key_type start_id_Y;
-    key_type start_id_X;
+    const key_type start_id_W;
+    const key_type start_id_Z;
+    const key_type start_id_Y;
+    const key_type start_id_X;
 
     std::map<key_type, std::map<key_type, std::map<key_type, std::map<key_type, size_type> > > > objects_map;
 

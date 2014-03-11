@@ -53,9 +53,11 @@ public:
     bool bind_by_iter(sc_map_iterator<signal_type>& signal_iter);
 
     void make_sensitive(sc_sensitive& sensitive_list) const;
-    //todo: void write_all(data_type value);
+    template<typename data_type>
+    void write_all(const data_type& value);
+    //template<typename data_type>
+    // todo: void write_range(data_type value);
 
-    //* todo: 2 trace functions one for vector and one for single signals
     //* todo: add the const to second argument of sc_trace
     template<typename trace_obj_type>
     friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name);

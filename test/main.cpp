@@ -120,6 +120,8 @@ int sc_main(int argc, char *agv[])
 //    result = btest1.output.bind(2,2,false, 0,1,true, iter2);
 //    std::cout << "result of binding: " << result << std::endl;
 
+    bind_signals.write_all(true);
+
     auto p_iter = btest1.output.begin_dim(0,1,true, 0,1,true);
     auto s_iter = bind_signals.begin();
     btest1.output.bind_by_iter(p_iter, s_iter);
