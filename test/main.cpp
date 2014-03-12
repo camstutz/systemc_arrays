@@ -84,7 +84,7 @@ int sc_main(int argc, char *agv[])
 
     // Testing dimensional iterators
     sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
-    sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq.begin_dim(0, true, 1, true);
+    sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq.begin_partial(0, true, 1, true);
     sc_map_iter_sequential<sc_signal<bool> > end = signals_sq.end();
     std::cout << std::endl;
     for( ; sig_iter != end; ++sig_iter)
@@ -92,14 +92,14 @@ int sc_main(int argc, char *agv[])
         std::cout << (*sig_iter).name() << std::endl;
     }
 
-    sc_map_iter_square<sc_signal<bool> > sig_iter2 = signals_sq.begin_dim(0, 1, true, 0, 1, true);
+    sc_map_iter_square<sc_signal<bool> > sig_iter2 = signals_sq.begin_partial(0, 1, true, 0, 1, true);
     std::cout << std::endl;
     for( ; sig_iter2 != end; ++sig_iter2)
     {
         std::cout << (*sig_iter2).name() << std::endl;
     }
 
-    sc_map_iter_square<sc_signal<bool> > sig_iter3 = signals_sq.begin_dim(1, 3, false, 0, 1, true);
+    sc_map_iter_square<sc_signal<bool> > sig_iter3 = signals_sq.begin_partial(1, false, 1, true);
     std::cout << std::endl;
     for( ; sig_iter3 != end; ++sig_iter3)
     {
@@ -120,9 +120,9 @@ int sc_main(int argc, char *agv[])
 //    result = btest1.output.bind(2,2,false, 0,1,true, iter2);
 //    std::cout << "result of binding: " << result << std::endl;
 
-    bind_signals.write_all(true);
+    //bind_signals.write_all(true);
 
-    auto p_iter = btest1.output.begin_dim(0,1,true, 0,1,true);
+    auto p_iter = btest1.output.begin_partial(0,1,true, 0,1,true);
     auto s_iter = bind_signals.begin();
     btest1.output.bind_by_iter(p_iter, s_iter);
 
@@ -145,7 +145,7 @@ int sc_main(int argc, char *agv[])
     myAnalyzer.register_model_setup_end();
     myAnalyzer.register_simulation_start();
 
-    sc_start(1000, SC_NS);
+    //sc_start(1000, SC_NS);
 
     myAnalyzer.register_simulation_end();
 

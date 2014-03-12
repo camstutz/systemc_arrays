@@ -49,8 +49,8 @@ public:
     object_type& at(const key_type key_Y, const key_type key_X);
     std::pair<bool, full_key_type> get_key(const object_type& object) const;
 
-    sc_map_iter_square<object_type> begin_dim(const key_type pos_Y, const bool iterate_Y, const key_type pos_X, const bool iterate_X);
-    sc_map_iter_square<object_type> begin_dim(const key_type start_Y, const key_type stop_Y, const bool iterate_Y, const key_type start_X, const key_type stop_X, const bool iterate_X);
+    sc_map_iter_square<object_type> begin_partial(const key_type pos_Y, const bool iterate_Y, const key_type pos_X, const bool iterate_X);
+    sc_map_iter_square<object_type> begin_partial(const key_type start_Y, const key_type stop_Y, const bool iterate_Y, const key_type start_X, const key_type stop_X, const bool iterate_X);
 
     template<typename signal_type>
     bool bind(sc_map_square<signal_type>& signals_map);

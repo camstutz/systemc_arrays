@@ -37,7 +37,6 @@ public:
 
     virtual object_type& operator* ();
     virtual object_type* operator-> ();
-    // todo: operator -> for pointer member access
 
 protected:
     sc_map_iterator(sc_map_base<object_type>& sc_map, size_type vect_pos=0);
@@ -66,15 +65,6 @@ bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other)
 {
     return ( !(*this==other));
 }
-
-//******************************************************************************
-//template<typename object_type>
-//sc_map_iterator<object_type>& sc_map_iterator<object_type>::operator++ ()
-//{
-//    // todo: this function is only here to make the class non abstract
-//    set_vect_pos(vect_pos+1);
-//    return (*this);
-//}
 
 //******************************************************************************
 template<typename object_type>

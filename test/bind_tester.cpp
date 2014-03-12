@@ -14,7 +14,7 @@ bind_tester::bind_tester(sc_module_name _name) :
 //******************************************************************************
 void bind_tester::create_data() {
 
-    auto out_iter = output.begin_dim(0,2,true, 0,1,true);
+    auto out_iter = output.begin_partial(0,2,true, 0,1,true);
 
     wait(15, SC_NS);
 
