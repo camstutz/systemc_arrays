@@ -101,6 +101,22 @@ int sc_main(int argc, char *agv[])
     {
         std::cout << (*sig_iter3).name() << std::endl;
     }
+
+    auto port_it3 = src3.output.begin_partial(2,true, 1,false, 1,false);
+    auto port_it3_end = src3.output.end();
+    std::cout << std::endl;
+    for( ; port_it3 != port_it3_end; ++port_it3)
+    {
+        std::cout << (*port_it3).name() << std::endl;
+    }
+
+    sc_map_iter_4d<sc_in<bool> > port_it4 = snk4.input.begin_partial(3,false, 1,false, 1,true, 1,false);
+    sc_map_iter_sequential<sc_in<bool> > port_it4_end = snk4.input.end();
+    std::cout << std::endl;
+    for( ; port_it4 != port_it4_end; ++port_it4)
+    {
+        std::cout << (*port_it4).name() << std::endl;
+    }
     std::cout << std::endl;
 
     // Test multi-dimensional partial binding
@@ -141,7 +157,7 @@ int sc_main(int argc, char *agv[])
     myAnalyzer.register_model_setup_end();
     myAnalyzer.register_simulation_start();
 
-    //sc_start(1000, SC_NS);
+    sc_start(1000, SC_NS);
 
     myAnalyzer.register_simulation_end();
 

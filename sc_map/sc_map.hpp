@@ -22,3 +22,5 @@
 #include "sc_map_iterator.hpp"
 #include "sc_map_iter_sequential.hpp"
 #include "sc_map_iter_square.hpp"
+#include "sc_map_iter_cube.hpp"
+#include "sc_map_iter_4d.hpp"

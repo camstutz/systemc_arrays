@@ -29,7 +29,6 @@ class sc_map_base
 {
 public:
     typedef int key_type;
-    //* todo: are these typedefs necessary?
     typedef sc_map_iter_sequential<object_type> iterator;
     typedef ptrdiff_t difference_type;
     typedef sc_vector_base::size_type size_type;
@@ -58,7 +57,7 @@ public:
     //template<typename data_type>
     // todo: void write_range(data_type value);
 
-    //* todo: add the const to second argument of sc_trace
+    //* todo: add const to second argument of sc_trace
     template<typename trace_obj_type>
     friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name);
 
