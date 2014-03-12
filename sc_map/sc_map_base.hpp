@@ -46,6 +46,7 @@ public:
     iterator begin();
     iterator end();
 
+    // todo: single signal to many port binding
     template<typename signal_type>
     bool bind_by_iter(sc_map_iterator<object_type>& port_iter, sc_map_iterator<signal_type>& signal_iter);
     template<typename signal_type>
