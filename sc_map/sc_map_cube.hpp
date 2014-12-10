@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_cube.hpp
  * @author Christian Amstutz
- * @date May 19, 2014
+ * @date December 10, 2014
  *
  * @brief
  *
@@ -315,7 +315,7 @@ object_type* sc_map_cube<object_type>::creator::operator() (
 //    std::stringstream full_name(cut_name.substr(0, id_pos) );
     std::stringstream full_name;
     full_name << name;
-    full_name << "_" << id_Z << "-" << id_Y << "-" << id_X;
+    full_name << "-" << id_Z << "_" << id_Y << "_" << id_X;
 
     return (new object_type(full_name.str().c_str()));
 }

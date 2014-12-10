@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date May 21, 2014
+ * @date December 10, 2014
  *
  * @brief
  *
@@ -269,7 +269,7 @@ object_type* sc_map_square<object_type>::creator::operator() (
 //    std::stringstream full_name(cut_name.substr(0, id_pos) );
     std::stringstream full_name;
     full_name << name;
-    full_name << "_" << id_Y << "-" << id_X;
+    full_name << "-" << id_Y << "_" << id_X;
 
     return (new object_type(full_name.str().c_str()));
 }
