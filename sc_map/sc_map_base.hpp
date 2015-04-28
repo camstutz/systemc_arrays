@@ -28,6 +28,8 @@
 template<typename object_type>
 class sc_map_base : public sc_object
 {
+    friend class sc_map_iterator<object_type>;
+
 public:
     typedef std::vector<object_type*> container_type;
     typedef typename container_type::iterator container_iterator;
@@ -66,23 +68,24 @@ public:
     template<typename signal_type>
     bool bind_by_iter(sc_map_iterator<signal_type>& signal_iter);
 
-    void make_sensitive(sc_sensitive& sensitive_list) const;
     template<typename data_type>
     void write_all(const data_type& value);
     //template<typename data_type>
     // todo: void write_range(data_type value);
 
-    //* todo: add const to second argument of sc_trace
-    template<typename trace_obj_type>
-    friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name);
+//* todo: add const to second argument of sc_trace
+template<typename trace_obj_type>
+friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name);
 
-    /** Function for tracing support in ModelSim */
+template<typename trace_obj_type>
+friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<trace_obj_type>& sc_map);
+
+/** Function for tracing support in ModelSim */
 #ifdef MODELSIM_COMPILER
     template<typename data_type>
     void register_signal_modelsim();
 #endif
 
-    friend class sc_map_iterator<object_type>;
 };
 
 //******************************************************************************
@@ -200,23 +203,6 @@ bool sc_map_base<object_type>::bind_by_iter(sc_map_iterator<signal_type>& signal
 
 //******************************************************************************
 template<typename object_type>
-void sc_map_base<object_type>::make_sensitive(
-        sc_sensitive& sensitive_list) const
-{
-    // todo: change it to a traditional way of sensitivity lists
-    // todo: make it possible to react on other than pos
-    // todo: make it not to use the reference, but const
-    const_container_iterator object_it = objects.begin();
-    for (; object_it != objects.end(); ++object_it)
-    {
-        sensitive_list << **object_it;
-    }
-
-    return;
-}
-
-//******************************************************************************
-template<typename object_type>
 template<typename data_type>
 void sc_map_base<object_type>::write_all(const data_type& value)
 {
@@ -242,6 +228,21 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std:
     }
 
     return;
+}
+
+//******************************************************************************
+template<typename trace_obj_type>
+sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<trace_obj_type>& signal_map)
+{
+
+    for ( typename sc_map_base<trace_obj_type>::iterator signal_it = signal_map.begin();
+          signal_it != signal_map.end();
+          ++signal_it)
+    {
+        sensitivity_list << *signal_it;
+    }
+
+    return sensitivity_list;
 }
 
 // *****************************************************************************
