@@ -1,14 +1,14 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date June 4, 2014
+ * @date April 28, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
