@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date April 28, 2015
+ * @date April 29, 2015
  *
  * @brief
  *
@@ -13,14 +13,15 @@
 
 #pragma once
 
-#include <cstddef>
-#include <string>
-#include <sstream>
+#include "sc_map_iter_sequential.hpp"
+
+#include "../modelsim_support/modelsim_support.hpp"
 
 #include <systemc.h>
 
-#include "sc_map_iter_sequential.hpp"
-#include "../modelsim_support/modelsim_support.hpp"
+#include <cstddef>
+#include <string>
+#include <sstream>
 
 //* todo: add access operators [] .at()
 
@@ -42,6 +43,9 @@ public:
     typedef object_type* pointer;
     typedef object_type& reference;
 
+    static const char key_separator;
+    static const char key_sub_separator;
+
     //* todo: hide objects to the outside world
     container_type objects;
 
@@ -60,7 +64,7 @@ public:
     iterator end();
 
     template<typename signal_type>
-    void bind(sc_map_base<signal_type> signal_map);
+    void bind(sc_map_base<signal_type>& signal_map);
     // todo: how to access members of modules over which is iterated
     // todo: single signal to many port binding
     template<typename signal_type>
@@ -72,6 +76,8 @@ public:
     void write_all(const data_type& value);
     //template<typename data_type>
     // todo: void write_range(data_type value);
+
+    virtual std::string key_string(object_type& map_element) const = 0;
 
 //* todo: add const to second argument of sc_trace
 template<typename trace_obj_type>
@@ -91,6 +97,15 @@ friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<tra
 //******************************************************************************
 
 //******************************************************************************
+
+template<typename object_type>
+const char sc_map_base<object_type>::key_separator = '_';
+
+template<typename object_type>
+const char sc_map_base<object_type>::key_sub_separator = '-';
+
+//******************************************************************************
+
 template<typename object_type>
 sc_map_base<object_type>::sc_map_base(const sc_module_name name) :
         sc_object(name)
@@ -152,7 +167,7 @@ typename sc_map_base<object_type>::iterator sc_map_base<object_type>::end()
 //******************************************************************************
 template<typename object_type>
 template<typename signal_type>
-void sc_map_base<object_type>::bind(sc_map_base<signal_type> signal_map)
+void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 {
     // todo: check range
 
@@ -223,7 +238,8 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std:
     for (; object_it != sc_map.end(); ++object_it)
     {
         std::stringstream full_name;
-        full_name << name << "." << object_it->name();
+        full_name << name
+                  << sc_map_base<trace_obj_type>::key_separator << sc_map.key_string(*object_it);
         sc_trace(tf, *object_it, full_name.str().c_str());
     }
 

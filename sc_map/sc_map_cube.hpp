@@ -1,27 +1,27 @@
 /*!
  * @file sc_map_cube.hpp
  * @author Christian Amstutz
- * @date December 10, 2014
+ * @date April 29, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
+
+#include "sc_map_base.hpp"
+#include "sc_map_iter_cube.hpp"
+
+#include <systemc.h>
 
 #include <string>
 #include <sstream>
 #include <map>
 #include <utility>
-
-#include <systemc.h>
-
-#include "sc_map_base.hpp"
-#include "sc_map_iter_cube.hpp"
 
 //******************************************************************************
 template<typename object_type>
@@ -50,6 +50,7 @@ public:
             const key_type start_id_Z = default_start_id_Z,
             const key_type start_id_Y = default_start_id_Y,
             const key_type start_id_X = default_start_id_X);
+    virtual ~sc_map_cube() {};
 
     size_type size_Z();
     size_type size_Y();
@@ -57,6 +58,7 @@ public:
 
     object_type& at(const key_type key_Z, const key_type key_Y, const key_type key_X);
     std::pair<bool, full_key_type> get_key(object_type& object) const;
+    virtual std::string key_string(object_type& map_element) const;
 
     cube_iterator begin_partial(
             const key_type pos_Z, const bool iterate_Z,
@@ -124,7 +126,7 @@ template<typename object_type>
 typename sc_map_cube<object_type>::size_type
         sc_map_cube<object_type>::size_Z()
 {
-    return (objects_map.size());
+    return objects_map.size();
 }
 
 //******************************************************************************
@@ -133,7 +135,7 @@ typename sc_map_cube<object_type>::size_type
         sc_map_cube<object_type>::size_Y()
 {
     typename map_type::iterator first_Z = objects_map.begin();
-    return (first_Z->second.size() );
+    return first_Z->second.size();
 }
 
 //******************************************************************************
@@ -143,7 +145,7 @@ typename sc_map_cube<object_type>::size_type
 {
     typename map_type::iterator first_Z = objects_map.begin();
     typename map_2d_type::iterator first_Y = first_Z->second.begin();
-    return (first_Y->second.size() );
+    return first_Y->second.size();
 }
 
 //******************************************************************************
@@ -152,7 +154,7 @@ object_type& sc_map_cube<object_type>::at(const key_type key_Z,
         const key_type key_Y, const key_type key_X)
 {
     object_type& ret_object = *this->objects[get_vect_pos(key_Z, key_Y, key_X)];
-    return (ret_object);
+    return  ret_object;
 }
 
 //******************************************************************************
@@ -188,7 +190,25 @@ std::pair<bool, typename sc_map_cube<object_type>::full_key_type>
         }
     }
 
-    return (full_key);
+    return full_key;
+}
+
+//******************************************************************************
+template<typename object_type>
+std::string sc_map_cube<object_type>::key_string(object_type& map_element) const
+{
+    std::stringstream key_sstream;
+
+    std::pair<bool, full_key_type> key_return = get_key(map_element);
+    if (key_return.first)
+    {
+        full_key_type key = key_return.second;
+        key_sstream << key.Z_dim << sc_map_base<object_type>::key_sub_separator
+                    << key.Y_dim << sc_map_base<object_type>::key_sub_separator
+                    << key.X_dim;
+    }
+
+    return key_sstream.str();
 }
 
 //******************************************************************************
@@ -239,7 +259,7 @@ typename sc_map_cube<object_type>::cube_iterator
             start_Y, stop_Y, iterate_Y,
             start_X, stop_X, iterate_X);
 
-    return (cube_map_it);
+    return cube_map_it;
 }
 
 //******************************************************************************
@@ -255,7 +275,7 @@ typename sc_map_cube<object_type>::cube_iterator
             start_Y, stop_Y, iterate_Y,
             start_X, stop_X, iterate_X);
 
-    return (cube_map_it);
+    return cube_map_it;
 }
 
 //******************************************************************************
@@ -269,12 +289,12 @@ bool sc_map_cube<object_type>::bind(sc_map_cube<signal_type>& signals_map)
     {
         std::cout << "Error: Binding of port with signal of different dimension."
                 << std::endl;
-        return(false);
+        return false;
     }
 
     sc_map_base<object_type>::bind(signals_map);
 
-    return (true);
+    return true;
 }
 
 //******************************************************************************
@@ -286,7 +306,7 @@ typename sc_map_cube<object_type>::size_type
     // todo: at exception handling for out of range accesses
     size_type vector_pos = objects_map.at(pos_Z).at(pos_Y).at(pos_X);
 
-    return (vector_pos);
+    return vector_pos;
 }
 
 //******************************************************************************
@@ -312,7 +332,10 @@ object_type* sc_map_cube<object_type>::creator::operator() (
     std::stringstream full_name;
     full_name << name;
 
-    full_name << "-" << id_Z << "_" << id_Y << "_" << id_X;
+    full_name << sc_map_cube<object_type>::key_separator
+              << id_Z << sc_map_cube<object_type>::key_sub_separator
+              << id_Y << sc_map_cube<object_type>::key_sub_separator
+              << id_X;
 
     return (new object_type(full_name.str().c_str()));
 }

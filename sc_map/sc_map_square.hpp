@@ -1,27 +1,27 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date December 10, 2014
+ * @date April 29, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
+
+#include "sc_map_base.hpp"
+#include "sc_map_iter_square.hpp"
+
+#include <systemc.h>
 
 #include <string>
 #include <sstream>
 #include <map>
 #include <utility>
-
-#include <systemc.h>
-
-#include "sc_map_base.hpp"
-#include "sc_map_iter_square.hpp"
 
 //******************************************************************************
 template<typename object_type>
@@ -46,12 +46,14 @@ public:
             const size_type element_cnt_X, const sc_module_name name = "",
             const key_type start_id_Y = default_start_id_Y,
             const key_type start_id_X = default_start_id_X);
+    virtual ~sc_map_square() {};
 
     size_type size_Y() const;
     size_type size_X() const;
 
     object_type& at(const key_type key_Y, const key_type key_X);
     std::pair<bool, full_key_type> get_key(const object_type& object) const;
+    virtual std::string key_string(object_type& map_element) const;
 
     square_iterator begin_partial(const key_type pos_Y, const bool iterate_Y,
                                   const key_type pos_X, const bool iterate_X);
@@ -163,7 +165,24 @@ std::pair<bool, typename sc_map_square<object_type>::full_key_type>
         }
     }
 
-    return (full_key);
+    return full_key;
+}
+
+//******************************************************************************
+template<typename object_type>
+std::string sc_map_square<object_type>::key_string(object_type& map_element) const
+{
+    std::stringstream key_sstream;
+
+    std::pair<bool, full_key_type> key_return = get_key(map_element);
+    if (key_return.first)
+    {
+        full_key_type key = key_return.second;
+        key_sstream << key.Y_dim << sc_map_base<object_type>::key_sub_separator
+                    << key.X_dim;
+    }
+
+    return key_sstream.str();
 }
 
 //******************************************************************************
@@ -200,7 +219,7 @@ typename sc_map_square<object_type>::square_iterator
     sc_map_iter_square<object_type> square_map_it(*this,
             start_Y, stop_Y, iterate_Y,
             start_X, stop_X, iterate_X);
-    return (square_map_it);
+    return square_map_it;
 }
 
 //******************************************************************************
@@ -226,12 +245,12 @@ bool sc_map_square<object_type>::bind(sc_map_square<signal_type>& signals_map)
     {
         std::cout << "Error: Binding of port with signal of different dimension."
                 << std::endl;
-        return(false);
+        return false;
     }
 
     sc_map_base<object_type>::bind(signals_map);
 
-    return (true);
+    return true;
 }
 
 //******************************************************************************
@@ -267,7 +286,8 @@ object_type* sc_map_square<object_type>::creator::operator() (
 
     std::stringstream full_name;
 
-    full_name << name << "-" << id_Y << "_" << id_X;
+    full_name << name << sc_map_square<object_type>::key_separator << id_Y
+            << sc_map_square<object_type>::key_sub_separator << id_X;
 
 
     return (new object_type(full_name.str().c_str()));

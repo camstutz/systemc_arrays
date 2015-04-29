@@ -1,26 +1,26 @@
 /*!
  * @file sc_map_linear.hpp
  * @author Christian Amstutz
- * @date December 10, 2014
+ * @date April 29, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
+
+#include "sc_map_base.hpp"
+
+#include <systemc.h>
 
 #include <string>
 #include <sstream>
 #include <map>
 #include <utility>
-
-#include <systemc.h>
-
-#include "sc_map_base.hpp"
 
 //******************************************************************************
 template<typename object_type>
@@ -39,11 +39,13 @@ public:
 
     sc_map_linear(const size_type element_count, const sc_module_name name = "",
             const key_type start_id = default_start_id);
+    virtual ~sc_map_linear() {};
 
     //* todo: const version needed?
     object_type& at(const key_type key);
     object_type& operator[] (const key_type key);
     std::pair<bool, full_key_type> get_key(object_type& object) const;
+    virtual std::string key_string(object_type& map_element) const;
 
     template<typename signal_type>
     bool bind(sc_map_linear<signal_type>& signals_map);
@@ -91,7 +93,7 @@ object_type& sc_map_linear<object_type>::at(const key_type key)
 template<typename object_type>
 object_type& sc_map_linear<object_type>::operator[] (const key_type key)
 {
-    return (at(key));
+    return at(key);
 }
 
 //******************************************************************************
@@ -113,7 +115,23 @@ std::pair<bool, typename sc_map_linear<object_type>::full_key_type>
         }
     }
 
-    return (full_key);
+    return full_key;
+}
+
+//******************************************************************************
+template<typename object_type>
+std::string sc_map_linear<object_type>::key_string(object_type& map_element) const
+{
+    std::stringstream key_sstream;
+
+    std::pair<bool, full_key_type> key_return = get_key(map_element);
+    if (key_return.first)
+    {
+        full_key_type key = key_return.second;
+        key_sstream << key.X_dim;
+    }
+
+    return key_sstream.str();
 }
 
 //******************************************************************************
@@ -129,12 +147,12 @@ bool sc_map_linear<object_type>::bind(sc_map_linear<signal_type>& signals_map)
                 << signals_map.name()
                 << ") of different dimension."
                 << std::endl;
-        return(false);
+        return false;
     }
 
     sc_map_base<object_type>::bind(signals_map);
 
-    return (true);
+    return true;
 }
 
 //******************************************************************************
@@ -144,7 +162,7 @@ object_type* sc_map_linear<object_type>::creator::operator() (
 {
     std::stringstream full_name;
     
-    full_name << name << "-" << id;
+    full_name << name << sc_map_linear<object_type>::key_separator << id;
 
     return (new object_type(full_name.str().c_str()) );
 }

@@ -149,11 +149,11 @@ int sc_main(int argc, char *agv[])
     fp=sc_create_vcd_trace_file("wave");
     fp->set_time_unit(1, SC_NS);
 
-//    sc_trace(fp, signals1, "signal1");
-//    sc_trace(fp, signals2, "signal2");
-//    sc_trace(fp, signals3, "signal3");
-//    sc_trace(fp, signals4, "signal4");
-//    sc_trace(fp, bind_signals, "b_signal");
+    sc_trace(fp, signals1, "signal1");
+    sc_trace(fp, signals2, "signal2");
+    sc_trace(fp, signals3, "signal3");
+    sc_trace(fp, signals4, "signal4");
+    sc_trace(fp, bind_signals, "b_signal");
 
     sc_delay_tb delay_testbench("delay_testbench");
     sc_trace(fp, delay_testbench.clock, "clock");
