@@ -46,9 +46,6 @@ public:
     static const char key_separator;
     static const char key_sub_separator;
 
-    //* todo: hide objects to the outside world
-    container_type objects;
-
     sc_map_base(const sc_module_name name);
     virtual ~sc_map_base() {};
 
@@ -78,6 +75,9 @@ public:
     // todo: void write_range(data_type value);
 
     virtual std::string key_string(object_type& map_element) const = 0;
+
+protected:
+    container_type objects;
 
 //* todo: add const to second argument of sc_trace
 template<typename trace_obj_type>
