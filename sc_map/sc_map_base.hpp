@@ -61,13 +61,17 @@ public:
     iterator end();
 
     template<typename signal_type>
+    void bind(sc_signal<signal_type>& signal);
+    template<typename signal_type>
+    void operator()(sc_signal<signal_type>& signal);
+    template<typename signal_type>
     void bind(sc_map_base<signal_type>& signal_map);
-    // todo: how to access members of modules over which is iterated
-    // todo: single signal to many port binding
-    template <typename iter_type>
-    bool bind(iter_type signal_it);
+    template<typename signal_type>
+    void operator()(sc_map_base<signal_type>& signal_map);
     template <typename signal_it_type>
-    bool operator()(signal_it_type signal_it);
+    void bind(signal_it_type signal_it);
+    template <typename signal_it_type>
+    void operator()(signal_it_type signal_it);
 
     template<typename data_type>
     void write_all(const data_type& value);
@@ -167,6 +171,29 @@ typename sc_map_base<object_type>::iterator sc_map_base<object_type>::end()
 //******************************************************************************
 template<typename object_type>
 template<typename signal_type>
+void sc_map_base<object_type>::bind(sc_signal<signal_type>& signal)
+{
+    for (iterator port_it = begin(); port_it != end(); ++port_it)
+    {
+        port_it->bind(signal);
+    }
+
+    return;
+}
+
+//******************************************************************************
+template<typename object_type>
+template<typename signal_type>
+void sc_map_base<object_type>::operator()(sc_signal<signal_type>& signal)
+{
+    bind(signal);
+
+    return;
+}
+
+//******************************************************************************
+template<typename object_type>
+template<typename signal_type>
 void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 {
     // todo: check range
@@ -187,8 +214,18 @@ void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 
 //******************************************************************************
 template<typename object_type>
+template<typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_base<signal_type>& signal_map)
+{
+    bind(signal_map);
+
+    return;
+}
+
+//******************************************************************************
+template<typename object_type>
 template<typename signal_it_type>
-bool sc_map_base<object_type>::bind(signal_it_type signal_it)
+void sc_map_base<object_type>::bind(signal_it_type signal_it)
 {
     // todo: check for equal size
     // todo: check for same object
@@ -202,15 +239,17 @@ bool sc_map_base<object_type>::bind(signal_it_type signal_it)
         ++signal_it;
     }
 
-    return true;
+    return;
 }
 
 //******************************************************************************
 template<typename object_type>
 template<typename signal_it_type>
-bool sc_map_base<object_type>::operator()(signal_it_type signal_it)
+void sc_map_base<object_type>::operator()(signal_it_type signal_it)
 {
-    return bind(signal_it);
+    bind(signal_it);
+
+    return;
 }
 
 //******************************************************************************
