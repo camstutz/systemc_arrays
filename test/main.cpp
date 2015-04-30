@@ -1,9 +1,3 @@
-
-#include <iostream>
-
-
-#include <systemc.h>
-
 #include "../sc_map/sc_map.hpp"
 #include "../sc_analyzer/sc_analyzer.hpp"
 #include "source.hpp"
@@ -12,6 +6,9 @@
 
 #include "sc_delay_tb.hpp"
 
+#include <systemc.h>
+
+#include <iostream>
 
 int sc_main(int argc, char *agv[])
 {
@@ -80,8 +77,10 @@ int sc_main(int argc, char *agv[])
 
     std::pair<bool, sc_map_4d<sc_signal<bool> >::full_key_type> the_key5 = signals4.get_key(signals4.at(2,3,0,1));
     std::cout << "Key: " << the_key5.first << " - " << the_key5.second.W_dim << ","<< the_key5.second.Z_dim << "," << the_key5.second.Y_dim << "," << the_key5.second.X_dim << std::endl;
+    std::cout << std::endl;
 
     // Testing dimensional iterators
+
     sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
     sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq.begin_partial(0, true, 1, true);
     sc_map_iter_sequential<sc_signal<bool> > end = signals_sq.end();

@@ -1,23 +1,21 @@
 /*!
  * @file sc_map_iter_square.hpp
  * @author Christian Amstutz
- * @date May 21, 2014
+ * @date April 30, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
 
 #include "sc_map_base.hpp"
-#include "sc_map_square.hpp"
 #include "sc_map_iterator.hpp"
 
-//******************************************************************************
 template<typename object_type>
 class sc_map_square;
 
@@ -25,6 +23,8 @@ class sc_map_square;
 template<typename object_type>
 class sc_map_iter_square : public sc_map_iterator<object_type>
 {
+    friend class sc_map_square<object_type>;
+
 public:
     typedef typename sc_map_base<object_type>::key_type key_type;
     typedef typename sc_map_iterator<object_type>::size_type size_type;
@@ -46,8 +46,6 @@ private:
     const key_type X_iter_stop;
     key_type X_pos;
     const bool iterate_X;
-
-    friend class sc_map_square<object_type>;
 };
 
 //******************************************************************************

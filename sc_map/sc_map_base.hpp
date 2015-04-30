@@ -64,10 +64,10 @@ public:
     void bind(sc_map_base<signal_type>& signal_map);
     // todo: how to access members of modules over which is iterated
     // todo: single signal to many port binding
-    template<typename signal_type>
-    bool bind_by_iter(sc_map_iterator<object_type>& port_iter, sc_map_iterator<signal_type>& signal_iter);
-    template<typename signal_type>
-    bool bind_by_iter(sc_map_iterator<signal_type>& signal_iter);
+    template <typename iter_type>
+    bool bind(iter_type signal_it);
+    template <typename signal_it_type>
+    bool operator()(signal_it_type signal_it);
 
     template<typename data_type>
     void write_all(const data_type& value);
@@ -154,14 +154,14 @@ typename sc_map_base<object_type>::size_type sc_map_base<object_type>::size()
 template<typename object_type>
 typename sc_map_base<object_type>::iterator sc_map_base<object_type>::begin()
 {
-    return (iterator(*this, 0));
+    return iterator(*this, 0);
 }
 
 //******************************************************************************
 template<typename object_type>
 typename sc_map_base<object_type>::iterator sc_map_base<object_type>::end()
 {
-    return (iterator(*this, objects.size()));
+    return iterator(*this, objects.size());
 }
 
 //******************************************************************************
@@ -187,33 +187,30 @@ void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 
 //******************************************************************************
 template<typename object_type>
-template<typename signal_type>
-bool sc_map_base<object_type>::bind_by_iter(sc_map_iterator<object_type>& port_iter,
-        sc_map_iterator<signal_type>& signal_iter)
+template<typename signal_it_type>
+bool sc_map_base<object_type>::bind(signal_it_type signal_it)
 {
     // todo: check for equal size
     // todo: check for same object
     // todo: check for compatibility of port and signal (pre-processor)
 
-    iterator end = this->end();
-    for ( ; port_iter != end; ++port_iter)
+    sc_map_iter_sequential<object_type> port_it = this->begin();
+    for (; port_it != this->end(); ++port_it)
     {
-        port_iter->bind(*signal_iter);
-        ++signal_iter;
+        port_it->bind(*signal_it);
+
+        ++signal_it;
     }
 
-    return (true);
+    return true;
 }
 
 //******************************************************************************
 template<typename object_type>
-template<typename signal_type>
-bool sc_map_base<object_type>::bind_by_iter(sc_map_iterator<signal_type>& signal_iter)
+template<typename signal_it_type>
+bool sc_map_base<object_type>::operator()(signal_it_type signal_it)
 {
-    iterator port_iter = this->begin();
-    bool bind_ok = bind_by_iter(port_iter, signal_iter);
-
-    return (bind_ok);
+    return bind(signal_it);
 }
 
 //******************************************************************************

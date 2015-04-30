@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date April 29, 2015
+ * @date April 30, 2015
  *
  * @brief
  *
@@ -27,6 +27,8 @@
 template<typename object_type>
 class sc_map_square : public sc_map_base<object_type>
 {
+    friend class sc_map_iter_square<object_type>;
+
 public:
     typedef sc_map_iter_square<object_type> square_iterator;
     typedef typename sc_map_base<object_type>::key_type key_type;
@@ -82,8 +84,6 @@ private:
         object_type* operator() (const sc_module_name name,
                 sc_map_square<object_type>::key_type id);
     };
-
-    friend class sc_map_iter_square<object_type>;
 };
 
 //******************************************************************************
@@ -103,7 +103,7 @@ sc_map_square<object_type>::sc_map_square(
 
     for (size_type y = 0; y<element_cnt_Y; ++y) {
         for (size_type x = 0; x<element_cnt_X; ++x) {
-            key_type vector_id = y*element_cnt_X + x;
+            size_type vector_id = y*element_cnt_X + x;
             objects_map[start_id_Y+y][start_id_X+x] = vector_id;
         }
     }
@@ -116,7 +116,7 @@ template<typename object_type>
 typename sc_map_square<object_type>::size_type
         sc_map_square<object_type>::size_Y() const
 {
-    return (objects_map.size());
+    return objects_map.size();
 }
 
 //******************************************************************************
@@ -125,7 +125,7 @@ typename sc_map_square<object_type>::size_type
         sc_map_square<object_type>::size_X() const
 {
     typename map_type::const_iterator first_Y = objects_map.begin();
-    return (first_Y->second.size() );
+    return first_Y->second.size();
 }
 
 //******************************************************************************
@@ -232,8 +232,22 @@ typename sc_map_square<object_type>::square_iterator
     sc_map_iter_square<object_type> square_map_it(*this,
             start_Y, stop_Y, iterate_Y,
             start_X, stop_X, iterate_X);
-    return (square_map_it);
+
+    return square_map_it;
 }
+
+//******************************************************************************
+//template<typename object_type>
+//sc_map_square<object_type>::square_iterator sc_map_square<object_type>::operator()(
+//        const key_type Y_start, const key_type X_start,
+//        const key_type Y_stop,  const key_type Y_stop)
+//{
+//    sc_map_iter_square<object_type> square_map_it(*this,
+//            Y_start, stop_Y, true,
+//            start_X, stop_X, true);
+//
+//    return square_map_it;
+//}
 
 //******************************************************************************
 template<typename object_type>

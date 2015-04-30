@@ -1,21 +1,19 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date May 21, 2014
+ * @date April 30, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
 
 #include <iterator>
-
-#include "sc_map_base.hpp"
 
 template<typename object_type>
 class sc_map_base;
@@ -26,8 +24,6 @@ class sc_map_iterator :
         public std::iterator<std::forward_iterator_tag, object_type>
 {
 public:
-    typedef typename sc_map_base<object_type>::size_type size_type;
-
     virtual ~sc_map_iterator() {};
 
     bool operator==(const sc_map_iterator& other) const;
@@ -39,6 +35,13 @@ public:
     virtual object_type* operator-> ();
 
 protected:
+    typedef typename sc_map_base<object_type>::size_type size_type;
+    typedef typename sc_map_base<object_type>::key_type key_type;
+    typedef bool cnt_direction_t;
+
+    static const cnt_direction_t up;
+    static const cnt_direction_t down;
+
     sc_map_iterator(sc_map_base<object_type>& sc_map, size_type vect_pos=0);
 
     size_type get_vect_pos();
@@ -49,6 +52,18 @@ protected:
 private:
     size_type vect_pos;
 };
+
+//******************************************************************************
+
+//******************************************************************************
+
+template<typename object_type>
+const typename sc_map_iterator<object_type>::cnt_direction_t
+        sc_map_iterator<object_type>::up = true;
+
+template<typename object_type>
+const typename sc_map_iterator<object_type>::cnt_direction_t
+        sc_map_iterator<object_type>::down = false;
 
 //******************************************************************************
 template<typename object_type>
@@ -63,7 +78,7 @@ template<typename object_type>
 bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other)
         const
 {
-    return ( !(*this==other));
+    return !(*this==other);
 }
 
 //******************************************************************************
