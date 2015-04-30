@@ -17,8 +17,12 @@ int sc_main(int argc, char *agv[])
     sink snk1("sink1");
 
     sc_map_linear<sc_signal<bool> >::iterator signal_it = signals1.begin();
-    src1.output.bind(signal_it);
+    //src1.output.bind(signal_it);
+    src1.output(0,0).bind(signals1(0,0));
+    src1.output(1,1).bind(signals1(1,1));
+
     snk1.input.bind(*(signals1.begin()));
+
 
     std::cout << "\n--- Simulation starts ---\n" << std::endl;
 

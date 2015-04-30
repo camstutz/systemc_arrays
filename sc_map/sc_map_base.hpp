@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date April 29, 2015
+ * @date April 30, 2015
  *
  * @brief
  *
@@ -26,7 +26,7 @@
 //* todo: add access operators [] .at()
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 class sc_map_base : public sc_object
 {
     friend class sc_map_iterator<object_type>;
@@ -53,20 +53,20 @@ public:
     //void init( size_type n )
     //    { init( n, &sc_map_base<object_type>::create_element ); }
 
-    template<typename Creator>
+    template <typename Creator>
     void init(size_type n, Creator object_creator);
 
     size_type size();
     iterator begin();
     iterator end();
 
-    template<typename signal_type>
+    template <typename signal_type>
     void bind(sc_signal<signal_type>& signal);
-    template<typename signal_type>
+    template <typename signal_type>
     void operator()(sc_signal<signal_type>& signal);
-    template<typename signal_type>
+    template <typename signal_type>
     void bind(sc_map_base<signal_type>& signal_map);
-    template<typename signal_type>
+    template <typename signal_type>
     void operator()(sc_map_base<signal_type>& signal_map);
     template <typename signal_it_type>
     void bind(signal_it_type signal_it);
@@ -84,15 +84,15 @@ protected:
     container_type objects;
 
 //* todo: add const to second argument of sc_trace
-template<typename trace_obj_type>
+template <typename trace_obj_type>
 friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name);
 
-template<typename trace_obj_type>
+template <typename trace_obj_type>
 friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<trace_obj_type>& sc_map);
 
 /** Function for tracing support in ModelSim */
 #ifdef MODELSIM_COMPILER
-    template<typename data_type>
+    template <typename data_type>
     void register_signal_modelsim();
 #endif
 
@@ -102,22 +102,22 @@ friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<tra
 
 //******************************************************************************
 
-template<typename object_type>
+template <typename object_type>
 const char sc_map_base<object_type>::key_separator = '_';
 
-template<typename object_type>
+template <typename object_type>
 const char sc_map_base<object_type>::key_sub_separator = '-';
 
 //******************************************************************************
 
-template<typename object_type>
+template <typename object_type>
 sc_map_base<object_type>::sc_map_base(const sc_module_name name) :
         sc_object(name)
 {}
 
 //******************************************************************************
-template<typename object_type>
-template<typename Creator>
+template <typename object_type>
+template <typename Creator>
 void sc_map_base<object_type>::init(size_type n, Creator object_creator)
 {
     // check correct call conditions
@@ -148,29 +148,29 @@ void sc_map_base<object_type>::init(size_type n, Creator object_creator)
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_base<object_type>::size_type sc_map_base<object_type>::size()
 {
     return (objects.size());
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_base<object_type>::iterator sc_map_base<object_type>::begin()
 {
     return iterator(*this, 0);
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_base<object_type>::iterator sc_map_base<object_type>::end()
 {
     return iterator(*this, objects.size());
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_type>
+template <typename object_type>
+template <typename signal_type>
 void sc_map_base<object_type>::bind(sc_signal<signal_type>& signal)
 {
     for (iterator port_it = begin(); port_it != end(); ++port_it)
@@ -182,8 +182,8 @@ void sc_map_base<object_type>::bind(sc_signal<signal_type>& signal)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_type>
+template <typename object_type>
+template <typename signal_type>
 void sc_map_base<object_type>::operator()(sc_signal<signal_type>& signal)
 {
     bind(signal);
@@ -192,8 +192,8 @@ void sc_map_base<object_type>::operator()(sc_signal<signal_type>& signal)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_type>
+template <typename object_type>
+template <typename signal_type>
 void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 {
     // todo: check range
@@ -213,8 +213,8 @@ void sc_map_base<object_type>::bind(sc_map_base<signal_type>& signal_map)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_type>
+template <typename object_type>
+template <typename signal_type>
 void sc_map_base<object_type>::operator()(sc_map_base<signal_type>& signal_map)
 {
     bind(signal_map);
@@ -223,8 +223,8 @@ void sc_map_base<object_type>::operator()(sc_map_base<signal_type>& signal_map)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_it_type>
+template <typename object_type>
+template <typename signal_it_type>
 void sc_map_base<object_type>::bind(signal_it_type signal_it)
 {
     // todo: check for equal size
@@ -243,8 +243,8 @@ void sc_map_base<object_type>::bind(signal_it_type signal_it)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename signal_it_type>
+template <typename object_type>
+template <typename signal_it_type>
 void sc_map_base<object_type>::operator()(signal_it_type signal_it)
 {
     bind(signal_it);
@@ -253,8 +253,8 @@ void sc_map_base<object_type>::operator()(signal_it_type signal_it)
 }
 
 //******************************************************************************
-template<typename object_type>
-template<typename data_type>
+template <typename object_type>
+template <typename data_type>
 void sc_map_base<object_type>::write_all(const data_type& value)
 {
     container_iterator object_it = objects.begin();
@@ -267,7 +267,7 @@ void sc_map_base<object_type>::write_all(const data_type& value)
 }
 
 //******************************************************************************
-template<typename trace_obj_type>
+template <typename trace_obj_type>
 void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name)
 {
     typename sc_map_base<trace_obj_type>::iterator object_it = sc_map.begin();
@@ -283,7 +283,7 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std:
 }
 
 //******************************************************************************
-template<typename trace_obj_type>
+template <typename trace_obj_type>
 sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<trace_obj_type>& signal_map)
 {
 

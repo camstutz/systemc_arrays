@@ -34,6 +34,9 @@ public:
     virtual object_type& operator* ();
     virtual object_type* operator-> ();
 
+    template <typename signal_it_type>
+    void bind(signal_it_type signal_it);
+
 protected:
     typedef typename sc_map_base<object_type>::size_type size_type;
     typedef typename sc_map_base<object_type>::key_type key_type;
@@ -57,16 +60,16 @@ private:
 
 //******************************************************************************
 
-template<typename object_type>
+template <typename object_type>
 const typename sc_map_iterator<object_type>::cnt_direction_t
         sc_map_iterator<object_type>::up = true;
 
-template<typename object_type>
+template <typename object_type>
 const typename sc_map_iterator<object_type>::cnt_direction_t
         sc_map_iterator<object_type>::down = false;
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 bool sc_map_iterator<object_type>::operator==(const sc_map_iterator& other)
         const
 {
@@ -74,7 +77,7 @@ bool sc_map_iterator<object_type>::operator==(const sc_map_iterator& other)
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other)
         const
 {
@@ -82,7 +85,7 @@ bool sc_map_iterator<object_type>::operator!=(const sc_map_iterator& other)
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type& sc_map_iterator<object_type>::operator* ()
 {
     // todo: ensure that out of range is not accessed (end iterator)
@@ -90,14 +93,29 @@ object_type& sc_map_iterator<object_type>::operator* ()
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type* sc_map_iterator<object_type>::operator-> ()
 {
     return (sc_map->objects[vect_pos]);
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
+template <typename signal_it_type>
+void sc_map_iterator<object_type>::bind(signal_it_type signal_it)
+{
+    for (; *this != sc_map->end(); ++(*this))
+    {
+        (**this).bind(*signal_it);
+
+        ++signal_it;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
 sc_map_iterator<object_type>::sc_map_iterator(sc_map_base<object_type>& sc_map,
         size_type vect_pos) :
         sc_map(&sc_map),
@@ -105,7 +123,7 @@ sc_map_iterator<object_type>::sc_map_iterator(sc_map_base<object_type>& sc_map,
 {}
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_iterator<object_type>::size_type
         sc_map_iterator<object_type>::get_vect_pos()
 {
@@ -113,7 +131,7 @@ typename sc_map_iterator<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 void sc_map_iterator<object_type>::set_vect_pos(size_type vect_pos)
 {
     this->vect_pos = vect_pos;
