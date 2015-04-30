@@ -58,9 +58,6 @@ public:
     std::pair<bool, full_key_type> get_key(object_type& object) const;
     virtual std::string key_string(object_type& map_element) const;
 
-    template <typename signal_type>
-    bool bind(sc_map_linear<signal_type>& signals_map);
-
 private:
     key_type start_id_X;
 
@@ -176,27 +173,6 @@ std::string sc_map_linear<object_type>::key_string(object_type& map_element) con
     }
 
     return key_sstream.str();
-}
-
-//******************************************************************************
-template<typename object_type>
-template<typename signal_type>
-bool sc_map_linear<object_type>::bind(sc_map_linear<signal_type>& signals_map)
-{
-    if (base::size() !=  signals_map.size())
-    {
-        std::cerr << "Error: Binding of port ("
-                << this->name()
-                << ") with signal ("
-                << signals_map.name()
-                << ") of different dimension."
-                << std::endl;
-        return false;
-    }
-
-    base::bind(signals_map);
-
-    return true;
 }
 
 //******************************************************************************

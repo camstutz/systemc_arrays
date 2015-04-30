@@ -36,6 +36,8 @@ public:
 
     template <typename signal_it_type>
     void bind(signal_it_type signal_it);
+    template <typename signal_it_type>
+    void operator()(signal_it_type signal_it);
 
 protected:
     typedef typename sc_map_base<object_type>::size_type size_type;
@@ -110,6 +112,16 @@ void sc_map_iterator<object_type>::bind(signal_it_type signal_it)
 
         ++signal_it;
     }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_it_type>
+void sc_map_iterator<object_type>::operator()(signal_it_type signal_it)
+{
+    bind(signal_it);
 
     return;
 }

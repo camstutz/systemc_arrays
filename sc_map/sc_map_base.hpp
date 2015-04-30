@@ -68,10 +68,10 @@ public:
     void bind(sc_map_base<signal_type>& signal_map);
     template <typename signal_type>
     void operator()(sc_map_base<signal_type>& signal_map);
-    template <typename signal_it_type>
-    void bind(signal_it_type signal_it);
-    template <typename signal_it_type>
-    void operator()(signal_it_type signal_it);
+    template <typename signal_type>
+    void bind(sc_map_iterator<signal_type>& signal_it);
+    template <typename signal_type>
+    void operator()(sc_map_iterator<signal_type>& signal_it);
 
     template<typename data_type>
     void write_all(const data_type& value);
@@ -224,8 +224,8 @@ void sc_map_base<object_type>::operator()(sc_map_base<signal_type>& signal_map)
 
 //******************************************************************************
 template <typename object_type>
-template <typename signal_it_type>
-void sc_map_base<object_type>::bind(signal_it_type signal_it)
+template <typename signal_type>
+void sc_map_base<object_type>::bind(sc_map_iterator<signal_type>& signal_it)
 {
     // todo: check for equal size
     // todo: check for same object
@@ -244,8 +244,8 @@ void sc_map_base<object_type>::bind(signal_it_type signal_it)
 
 //******************************************************************************
 template <typename object_type>
-template <typename signal_it_type>
-void sc_map_base<object_type>::operator()(signal_it_type signal_it)
+template <typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_iterator<signal_type>& signal_it)
 {
     bind(signal_it);
 
