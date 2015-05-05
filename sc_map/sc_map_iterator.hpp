@@ -48,35 +48,40 @@ public:
     virtual object_type& operator* ();
     virtual object_type* operator-> ();
 
+    template<typename data_type>
+    void write(const data_type& value);
+    template<typename data_type>
+    void operator= (const data_type& value);
+
     template <typename signal_type>
     void bind(sc_signal<signal_type>& signal);
     template <typename signal_type>
-    void operator()(sc_signal<signal_type>& signal);
+    void operator() (sc_signal<signal_type>& signal);
     template <typename signal_type>
     void bind(sc_map_base<signal_type>& signal_map);
     template <typename signal_type>
-    void operator()(sc_map_base<signal_type>& signal_map);
+    void operator() (sc_map_base<signal_type>& signal_map);
     template <typename signal_type>
     void bind(sc_map_iterator<signal_type>& signal_it);
     template <typename signal_type>
-    void operator()(sc_map_iterator<signal_type>& signal_it);
+    void operator() (sc_map_iterator<signal_type>& signal_it);
 
     template <typename signal_type>
     void bind(sc_map_iter_linear<signal_type> signal_it);
     template <typename signal_type>
-    void operator()(sc_map_iter_linear<signal_type> signal_it);
+    void operator() (sc_map_iter_linear<signal_type> signal_it);
     template <typename signal_type>
     void bind(sc_map_iter_square<signal_type> signal_it);
     template <typename signal_type>
-    void operator()(sc_map_iter_square<signal_type> signal_it);
+    void operator() (sc_map_iter_square<signal_type> signal_it);
     template <typename signal_type>
     void bind(sc_map_iter_cube<signal_type> signal_it);
     template <typename signal_type>
-    void operator()(sc_map_iter_cube<signal_type> signal_it);
+    void operator() (sc_map_iter_cube<signal_type> signal_it);
     template <typename signal_type>
     void bind(sc_map_iter_4d<signal_type> signal_it);
     template <typename signal_type>
-    void operator()(sc_map_iter_4d<signal_type> signal_it);
+    void operator() (sc_map_iter_4d<signal_type> signal_it);
 
 protected:
     typedef typename sc_map_base<object_type>::size_type size_type;
@@ -144,6 +149,29 @@ object_type* sc_map_iterator<object_type>::operator-> ()
 
 //******************************************************************************
 template <typename object_type>
+template<typename data_type>
+void sc_map_iterator<object_type>::write(const data_type& value)
+{
+    for (; *this != sc_map->end(); ++(*this))
+    {
+        (**this).write(value);
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template<typename data_type>
+void sc_map_iterator<object_type>::operator= (const data_type& value)
+{
+    write(value);
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
 template <typename signal_type>
 void sc_map_iterator<object_type>::bind(sc_signal<signal_type>& signal)
 {
@@ -158,7 +186,7 @@ void sc_map_iterator<object_type>::bind(sc_signal<signal_type>& signal)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_signal<signal_type>& signal)
+void sc_map_iterator<object_type>::operator() (sc_signal<signal_type>& signal)
 {
     bind(signal);
 
@@ -184,7 +212,8 @@ void sc_map_iterator<object_type>::bind(sc_map_base<signal_type>& signal_map)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_base<signal_type>& signal_map)
+void sc_map_iterator<object_type>::operator() (sc_map_base<signal_type>&
+        signal_map)
 {
     bind(signal_map);
 
@@ -209,7 +238,8 @@ void sc_map_iterator<object_type>::bind(sc_map_iterator<signal_type>& signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_iterator<signal_type>& signal_it)
+void sc_map_iterator<object_type>::operator() (sc_map_iterator<signal_type>&
+        signal_it)
 {
     bind(signal_it);
 
@@ -219,7 +249,8 @@ void sc_map_iterator<object_type>::operator()(sc_map_iterator<signal_type>& sign
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::bind(sc_map_iter_linear<signal_type> signal_it)
+void sc_map_iterator<object_type>::bind(sc_map_iter_linear<signal_type>
+        signal_it)
 {
     sc_map_iterator<signal_type> *sig_map_it = &signal_it;
     bind(*sig_map_it);
@@ -230,7 +261,8 @@ void sc_map_iterator<object_type>::bind(sc_map_iter_linear<signal_type> signal_i
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_iter_linear<signal_type> signal_it)
+void sc_map_iterator<object_type>::operator() (sc_map_iter_linear<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -240,7 +272,8 @@ void sc_map_iterator<object_type>::operator()(sc_map_iter_linear<signal_type> si
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::bind(sc_map_iter_square<signal_type> signal_it)
+void sc_map_iterator<object_type>::bind(sc_map_iter_square<signal_type>
+        signal_it)
 {
     sc_map_iterator<signal_type> *sig_map_it = &signal_it;
     bind(*sig_map_it);
@@ -251,7 +284,8 @@ void sc_map_iterator<object_type>::bind(sc_map_iter_square<signal_type> signal_i
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_iter_square<signal_type> signal_it)
+void sc_map_iterator<object_type>::operator() (sc_map_iter_square<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -272,7 +306,8 @@ void sc_map_iterator<object_type>::bind(sc_map_iter_cube<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_iter_cube<signal_type> signal_it)
+void sc_map_iterator<object_type>::operator() (sc_map_iter_cube<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -293,7 +328,8 @@ void sc_map_iterator<object_type>::bind(sc_map_iter_4d<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_iterator<object_type>::operator()(sc_map_iter_4d<signal_type> signal_it)
+void sc_map_iterator<object_type>::operator() (sc_map_iter_4d<signal_type>
+        signal_it)
 {
     bind(signal_it);
 

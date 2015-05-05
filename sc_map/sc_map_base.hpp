@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date May 4, 2015
+ * @date May 5, 2015
  *
  * @brief
  *
@@ -94,8 +94,6 @@ public:
 
     template<typename data_type>
     void write_all(const data_type& value);
-    //template<typename data_type>
-    // todo: void write_range(data_type value);
 
     virtual std::string key_string(object_type& map_element) const = 0;
 
@@ -264,7 +262,8 @@ void sc_map_base<object_type>::bind(sc_map_iterator<signal_type>& signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::operator()(sc_map_iterator<signal_type>& signal_it)
+void sc_map_base<object_type>::operator()(sc_map_iterator<signal_type>&
+        signal_it)
 {
     bind(signal_it);
 
@@ -274,7 +273,8 @@ void sc_map_base<object_type>::operator()(sc_map_iterator<signal_type>& signal_i
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::bind(sc_map_iter_linear<signal_type> signal_it)
+void sc_map_base<object_type>::bind(sc_map_iter_linear<signal_type>
+        signal_it)
 {
     sc_map_iter_sequential<object_type> port_it = this->begin();
     for (; port_it != this->end(); ++port_it)
@@ -290,7 +290,8 @@ void sc_map_base<object_type>::bind(sc_map_iter_linear<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::operator()(sc_map_iter_linear<signal_type> signal_it)
+void sc_map_base<object_type>::operator() (sc_map_iter_linear<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -316,7 +317,8 @@ void sc_map_base<object_type>::bind(sc_map_iter_square<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::operator()(sc_map_iter_square<signal_type> signal_it)
+void sc_map_base<object_type>::operator() (sc_map_iter_square<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -342,7 +344,8 @@ void sc_map_base<object_type>::bind(sc_map_iter_cube<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::operator()(sc_map_iter_cube<signal_type> signal_it)
+void sc_map_base<object_type>::operator() (sc_map_iter_cube<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -368,7 +371,8 @@ void sc_map_base<object_type>::bind(sc_map_iter_4d<signal_type> signal_it)
 //******************************************************************************
 template <typename object_type>
 template <typename signal_type>
-void sc_map_base<object_type>::operator()(sc_map_iter_4d<signal_type> signal_it)
+void sc_map_base<object_type>::operator() (sc_map_iter_4d<signal_type>
+        signal_it)
 {
     bind(signal_it);
 
@@ -391,7 +395,8 @@ void sc_map_base<object_type>::write_all(const data_type& value)
 
 //******************************************************************************
 template <typename trace_obj_type>
-void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std::string& name)
+void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map,
+        const std::string& name)
 {
     typename sc_map_base<trace_obj_type>::iterator object_it = sc_map.begin();
     for (; object_it != sc_map.end(); ++object_it)
@@ -407,7 +412,8 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_obj_type>& sc_map, const std:
 
 //******************************************************************************
 template <typename trace_obj_type>
-sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<trace_obj_type>& signal_map)
+sc_sensitive& operator<< (sc_sensitive& sensitivity_list,
+        sc_map_base<trace_obj_type>& signal_map)
 {
 
     for ( typename sc_map_base<trace_obj_type>::iterator signal_it = signal_map.begin();
