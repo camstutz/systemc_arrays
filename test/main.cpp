@@ -142,7 +142,7 @@ int sc_main(int argc, char *agv[])
 //    result = btest1.output.bind(2,2,false, 0,1,true, iter2);
 //    std::cout << "result of binding: " << result << std::endl;
 
-    bind_signals.write_all(true);
+    bind_signals.write(true);
 
 //    sc_map_square<sc_out<bool> >::square_iterator p_iter = btest1.output(0 ,1, 0, 1);
 //    sc_map_linear<sc_signal<bool> >::iterator s_iter = bind_signals.begin();

@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date May 4, 2015
+ * @date May 5, 2015
  *
  * @brief
  *

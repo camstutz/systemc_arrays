@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iter_4d.hpp
  * @author Christian Amstutz
- * @date May 4, 2015
+ * @date May 5, 2015
  *
  * @brief
  *
@@ -27,14 +27,16 @@ class sc_map_iter_4d : public sc_map_iterator<object_type>
     friend class sc_map_4d<object_type>;
 
 public:
+    typedef sc_map_iterator<object_type> base;
     typedef typename sc_map_base<object_type>::key_type key_type;
+
+    using base::operator=;
 
     virtual ~sc_map_iter_4d() {};
 
     sc_map_iter_4d& operator++ ();
 
 private:
-    typedef sc_map_iterator<object_type> base;
     typedef typename base::size_type size_type;
 
     using base::update_dim;

@@ -26,14 +26,16 @@ class sc_map_iter_linear : public sc_map_iterator<object_type>
     friend class sc_map_linear<object_type>;
 
 public:
+    typedef sc_map_iterator<object_type> base;
     typedef typename sc_map_base<object_type>::key_type key_type;
+
+    using base::operator=;
 
     virtual ~sc_map_iter_linear() {};
 
     sc_map_iter_linear& operator++ ();
 
 private:
-    typedef sc_map_iterator<object_type> base;
     typedef typename base::size_type size_type;
 
     using base::update_dim;

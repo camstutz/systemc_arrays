@@ -93,7 +93,9 @@ public:
     void operator()(sc_map_iter_4d<signal_type> signal_it);
 
     template<typename data_type>
-    void write_all(const data_type& value);
+    void write(const data_type& value);
+    template<typename data_type>
+    void operator= (const data_type& value);
 
     virtual std::string key_string(object_type& map_element) const = 0;
 
@@ -382,13 +384,23 @@ void sc_map_base<object_type>::operator() (sc_map_iter_4d<signal_type>
 //******************************************************************************
 template <typename object_type>
 template <typename data_type>
-void sc_map_base<object_type>::write_all(const data_type& value)
+void sc_map_base<object_type>::write(const data_type& value)
 {
     container_iterator object_it = objects.begin();
     for(; object_it != objects.end(); ++object_it)
     {
         (*object_it)->write(value);
     }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template<typename data_type>
+void sc_map_base<object_type>::operator= (const data_type& value)
+{
+    write(value);
 
     return;
 }
