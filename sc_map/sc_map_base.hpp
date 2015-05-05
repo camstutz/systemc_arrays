@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date April 30, 2015
+ * @date May 4, 2015
  *
  * @brief
  *
@@ -14,6 +14,10 @@
 #pragma once
 
 #include "sc_map_iter_sequential.hpp"
+#include "sc_map_iter_linear.hpp"
+#include "sc_map_iter_square.hpp"
+#include "sc_map_iter_cube.hpp"
+#include "sc_map_iter_4d.hpp"
 
 #include "../modelsim_support/modelsim_support.hpp"
 
@@ -22,8 +26,6 @@
 #include <cstddef>
 #include <string>
 #include <sstream>
-
-//* todo: add access operators [] .at()
 
 //******************************************************************************
 template <typename object_type>
@@ -72,6 +74,23 @@ public:
     void bind(sc_map_iterator<signal_type>& signal_it);
     template <typename signal_type>
     void operator()(sc_map_iterator<signal_type>& signal_it);
+
+    template <typename signal_type>
+    void bind(sc_map_iter_linear<signal_type> signal_it);
+    template <typename signal_type>
+    void operator()(sc_map_iter_linear<signal_type> signal_it);
+    template <typename signal_type>
+    void bind(sc_map_iter_square<signal_type> signal_it);
+    template <typename signal_type>
+    void operator()(sc_map_iter_square<signal_type> signal_it);
+    template <typename signal_type>
+    void bind(sc_map_iter_cube<signal_type> signal_it);
+    template <typename signal_type>
+    void operator()(sc_map_iter_cube<signal_type> signal_it);
+    template <typename signal_type>
+    void bind(sc_map_iter_4d<signal_type> signal_it);
+    template <typename signal_type>
+    void operator()(sc_map_iter_4d<signal_type> signal_it);
 
     template<typename data_type>
     void write_all(const data_type& value);
@@ -246,6 +265,110 @@ void sc_map_base<object_type>::bind(sc_map_iterator<signal_type>& signal_it)
 template <typename object_type>
 template <typename signal_type>
 void sc_map_base<object_type>::operator()(sc_map_iterator<signal_type>& signal_it)
+{
+    bind(signal_it);
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::bind(sc_map_iter_linear<signal_type> signal_it)
+{
+    sc_map_iter_sequential<object_type> port_it = this->begin();
+    for (; port_it != this->end(); ++port_it)
+    {
+        port_it->bind(*signal_it);
+
+        ++signal_it;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_iter_linear<signal_type> signal_it)
+{
+    bind(signal_it);
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::bind(sc_map_iter_square<signal_type> signal_it)
+{
+    sc_map_iter_sequential<object_type> port_it = this->begin();
+    for (; port_it != this->end(); ++port_it)
+    {
+        port_it->bind(*signal_it);
+
+        ++signal_it;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_iter_square<signal_type> signal_it)
+{
+    bind(signal_it);
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::bind(sc_map_iter_cube<signal_type> signal_it)
+{
+    sc_map_iter_sequential<object_type> port_it = this->begin();
+    for (; port_it != this->end(); ++port_it)
+    {
+        port_it->bind(*signal_it);
+
+        ++signal_it;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_iter_cube<signal_type> signal_it)
+{
+    bind(signal_it);
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::bind(sc_map_iter_4d<signal_type> signal_it)
+{
+    sc_map_iter_sequential<object_type> port_it = this->begin();
+    for (; port_it != this->end(); ++port_it)
+    {
+        port_it->bind(*signal_it);
+
+        ++signal_it;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename signal_type>
+void sc_map_base<object_type>::operator()(sc_map_iter_4d<signal_type> signal_it)
 {
     bind(signal_it);
 

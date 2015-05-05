@@ -24,12 +24,13 @@
 #include <utility>
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 class sc_map_4d : public sc_map_base<object_type>
 {
 public:
+    typedef sc_map_base<object_type> base;
     typedef sc_map_iter_4d<object_type> _4d_iterator;
-    typedef typename sc_map_base<object_type>::key_type key_type;
+    typedef typename base::key_type key_type;
     typedef struct
     {
         key_type W_dim;
@@ -37,16 +38,19 @@ public:
         key_type Y_dim;
         key_type X_dim;
     } full_key_type;
-    typedef typename sc_map_base<object_type>::size_type size_type;
+    typedef typename base::size_type size_type;
     typedef std::map<key_type, size_type> map_1d_type;
     typedef std::map<key_type, map_1d_type> map_2d_type;
     typedef std::map<key_type, map_2d_type> map_3d_type;
     typedef std::map<key_type, map_3d_type> map_type;
 
-    static const key_type default_start_id_W = 0;
-    static const key_type default_start_id_Z = 0;
-    static const key_type default_start_id_Y = 0;
-    static const key_type default_start_id_X = 0;
+    static const key_type default_start_id_W;
+    static const key_type default_start_id_Z;
+    static const key_type default_start_id_Y;
+    static const key_type default_start_id_X;
+
+    using base::bind;
+    using base::operator();
 
     sc_map_4d(const size_type element_cnt_W, const size_type element_cnt_Z,
             const size_type element_cnt_Y, const size_type element_cnt_X,
@@ -64,22 +68,13 @@ public:
 
     object_type& at(const key_type key_W, const key_type key_Z,
             const key_type key_Y, const key_type key_X);
+    _4d_iterator operator()(const key_type W_start, const key_type W_stop,
+                            const key_type Z_start, const key_type Z_stop,
+                            const key_type Y_start, const key_type Y_stop,
+                            const key_type X_start, const key_type X_stop);
+
     std::pair<bool, full_key_type> get_key(object_type& object) const;
     virtual std::string key_string(object_type& map_element) const;
-
-    _4d_iterator begin_partial(
-            const key_type pos_W, const bool iterate_W,
-            const key_type pos_Z, const bool iterate_Z,
-            const key_type pos_Y, const bool iterate_Y,
-            const key_type pos_X, const bool iterate_X);
-    _4d_iterator begin_partial(
-            const key_type start_W, const key_type stop_W, const bool iterate_W,
-            const key_type start_Z, const key_type stop_Z, const bool iterate_Z,
-            const key_type start_Y, const key_type stop_Y, const bool iterate_Y,
-            const key_type start_X, const key_type stop_X, const bool iterate_X);
-
-    template<typename signal_type>
-    bool bind(sc_map_4d<signal_type>& signals_map);
 
 private:
     const key_type start_id_W;
@@ -111,7 +106,26 @@ private:
 //******************************************************************************
 
 //******************************************************************************
-template<typename object_type>
+
+template <typename object_type>
+const typename sc_map_4d<object_type>::key_type
+        sc_map_4d<object_type>::default_start_id_W = 0;
+
+template <typename object_type>
+const typename sc_map_4d<object_type>::key_type
+        sc_map_4d<object_type>::default_start_id_Z = 0;
+
+template <typename object_type>
+const typename sc_map_4d<object_type>::key_type
+        sc_map_4d<object_type>::default_start_id_Y = 0;
+
+template <typename object_type>
+const typename sc_map_4d<object_type>::key_type
+        sc_map_4d<object_type>::default_start_id_X = 0;
+
+//******************************************************************************
+
+template <typename object_type>
 sc_map_4d<object_type>::sc_map_4d(
         const size_type element_cnt_W, const size_type element_cnt_Z,
         const size_type element_cnt_Y, const size_type element_cnt_X,
@@ -142,7 +156,7 @@ sc_map_4d<object_type>::sc_map_4d(
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_4d<object_type>::size_type
         sc_map_4d<object_type>::size_W()
 {
@@ -150,7 +164,7 @@ typename sc_map_4d<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_4d<object_type>::size_type
         sc_map_4d<object_type>::size_Z()
 {
@@ -159,7 +173,7 @@ typename sc_map_4d<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_4d<object_type>::size_type
         sc_map_4d<object_type>::size_Y()
 {
@@ -169,7 +183,7 @@ typename sc_map_4d<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_4d<object_type>::size_type
         sc_map_4d<object_type>::size_X()
 {
@@ -180,7 +194,7 @@ typename sc_map_4d<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type& sc_map_4d<object_type>::at(const key_type key_W,
         const key_type key_Z, const key_type key_Y, const key_type key_X)
 {
@@ -189,7 +203,21 @@ object_type& sc_map_4d<object_type>::at(const key_type key_W,
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
+typename sc_map_4d<object_type>::_4d_iterator sc_map_4d<object_type>::operator()(
+        const key_type W_start, const key_type W_stop,
+        const key_type Z_start, const key_type Z_stop,
+        const key_type Y_start, const key_type Y_stop,
+        const key_type X_start, const key_type X_stop)
+{
+    sc_map_iter_4d<object_type> it(*this, W_start, W_stop, Z_start, Z_stop,
+            Y_start, Y_stop, X_start, X_stop);
+
+    return it;
+}
+
+//******************************************************************************
+template <typename object_type>
 std::pair<bool, typename sc_map_4d<object_type>::full_key_type>
         sc_map_4d<object_type>::get_key(object_type& object) const
 {
@@ -231,7 +259,7 @@ std::pair<bool, typename sc_map_4d<object_type>::full_key_type>
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 std::string sc_map_4d<object_type>::key_string(object_type& map_element) const
 {
     std::stringstream key_sstream;
@@ -250,107 +278,7 @@ std::string sc_map_4d<object_type>::key_string(object_type& map_element) const
 }
 
 //******************************************************************************
-template<typename object_type>
-typename sc_map_4d<object_type>::_4d_iterator sc_map_4d<object_type>::begin_partial(
-        const key_type pos_W, const bool iterate_W,
-        const key_type pos_Z, const bool iterate_Z,
-        const key_type pos_Y, const bool iterate_Y,
-        const key_type pos_X, const bool iterate_X)
-{
-    key_type start_W, stop_W, start_Z, stop_Z, start_Y, stop_Y, start_X, stop_X;
-
-    if (iterate_W)
-    {
-        start_W = start_id_W;
-        stop_W = start_id_W+size_W()-1;
-    }
-    else
-    {
-        start_W = pos_W;
-        stop_W = pos_W;
-    }
-
-    if (iterate_Z)
-    {
-        start_Z = start_id_Z;
-        stop_Z = start_id_Z+size_Z()-1;
-    }
-    else
-    {
-        start_Z = pos_Z;
-        stop_Z = pos_Z;
-    }
-
-    if (iterate_Y)
-    {
-        start_Y = start_id_Y;
-        stop_Y = start_id_Y+size_Y()-1;
-    }
-    else
-    {
-        start_Y = pos_Y;
-        stop_Y = pos_Y;
-    }
-
-    if (iterate_X)
-    {
-        start_X = start_id_X;
-        stop_X = start_id_X+size_X()-1;
-    }
-    else
-    {
-        start_X = pos_X;
-        stop_X = pos_X;
-    }
-
-    sc_map_iter_4d<object_type> _4d_map_it(*this,
-            start_W, stop_W, iterate_W,
-            start_Z, stop_Z, iterate_Z,
-            start_Y, stop_Y, iterate_Y,
-            start_X, stop_X, iterate_X);
-
-    return _4d_map_it;
-}
-
-//******************************************************************************
-template<typename object_type>
-typename sc_map_4d<object_type>::_4d_iterator sc_map_4d<object_type>::begin_partial(
-        const key_type start_W, const key_type stop_W, const bool iterate_W,
-        const key_type start_Z, const key_type stop_Z, const bool iterate_Z,
-        const key_type start_Y, const key_type stop_Y, const bool iterate_Y,
-        const key_type start_X, const key_type stop_X, const bool iterate_X)
-{
-    sc_map_iter_4d<object_type> _4d_map_it(*this,
-            start_W, stop_W, iterate_W,
-            start_Z, stop_Z, iterate_Z,
-            start_Y, stop_Y, iterate_Y,
-            start_X, stop_X, iterate_X);
-
-    return _4d_map_it;
-}
-
-//******************************************************************************
-template<typename object_type>
-template<typename signal_type>
-bool sc_map_4d<object_type>::bind(sc_map_4d<signal_type>& signals_map)
-{
-    if (    (this->size_W() !=  signals_map.size_W()) &
-            (this->size_Z() !=  signals_map.size_Z()) &
-            (this->size_Y() !=  signals_map.size_Y()) &
-            (this->size_X() !=  signals_map.size_X()) )
-    {
-        std::cout << "Error: Binding of port with signal of different dimension."
-                << std::endl;
-        return false;
-    }
-
-    sc_map_base<object_type>::bind(signals_map);
-
-    return true;
-}
-
-//******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_4d<object_type>::size_type
         sc_map_4d<object_type>::get_vect_pos(key_type pos_W,
                 key_type pos_Z, key_type pos_Y, key_type pos_X)
@@ -362,7 +290,7 @@ typename sc_map_4d<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 sc_map_4d<object_type>::creator::creator(
         const sc_map_4d<object_type>::size_type size_W,
         const sc_map_4d<object_type>::size_type size_Z,
@@ -372,7 +300,7 @@ sc_map_4d<object_type>::creator::creator(
 {}
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type* sc_map_4d<object_type>::creator::operator() (
         const sc_module_name name, sc_map_4d<object_type>::size_type id)
 {

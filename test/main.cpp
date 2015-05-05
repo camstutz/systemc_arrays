@@ -82,7 +82,8 @@ int sc_main(int argc, char *agv[])
     // Testing dimensional iterators
 
     sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
-    sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq.begin_partial(0, true, 1, true);
+
+    sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq(0, 1000, 1, 1000);
     sc_map_iter_sequential<sc_signal<bool> > end = signals_sq.end();
     std::cout << std::endl;
     for( ; sig_iter != end; ++sig_iter)
@@ -90,21 +91,28 @@ int sc_main(int argc, char *agv[])
         std::cout << (*sig_iter).name() << std::endl;
     }
 
-    sc_map_iter_square<sc_signal<bool> > sig_iter2 = signals_sq.begin_partial(0, 1, true, 0, 1, true);
+    sc_map_iter_square<sc_signal<bool> > sig_iter2 = signals_sq(0, 1, 0, 1);
     std::cout << std::endl;
     for( ; sig_iter2 != end; ++sig_iter2)
     {
         std::cout << (*sig_iter2).name() << std::endl;
     }
 
-    sc_map_iter_square<sc_signal<bool> > sig_iter3 = signals_sq.begin_partial(1, false, 1, true);
+    sc_map_iter_square<sc_signal<bool> > sig_iter2p = signals_sq(1, 0, 1, 0);
+    std::cout << std::endl;
+    for( ; sig_iter2p != end; ++sig_iter2p)
+    {
+        std::cout << (*sig_iter2p).name() << std::endl;
+    }
+
+    sc_map_iter_square<sc_signal<bool> > sig_iter3 = signals_sq(1, 1, 1, 1000);
     std::cout << std::endl;
     for( ; sig_iter3 != end; ++sig_iter3)
     {
         std::cout << (*sig_iter3).name() << std::endl;
     }
 
-    sc_map_cube<sc_out<bool> >::cube_iterator port_it3 = src3.output.begin_partial(2,true, 1,false, 1,false);
+    sc_map_cube<sc_out<bool> >::cube_iterator port_it3 = src3.output(2, 1000, 1, 1, 1, 1);
     sc_map_cube<sc_out<bool> >::iterator port_it3_end = src3.output.end();
     std::cout << std::endl;
     for( ; port_it3 != port_it3_end; ++port_it3)
@@ -112,7 +120,7 @@ int sc_main(int argc, char *agv[])
         std::cout << (*port_it3).name() << std::endl;
     }
 
-    sc_map_iter_4d<sc_in<bool> > port_it4 = snk4.input.begin_partial(3,false, 1,false, 1,true, 1,false);
+    sc_map_iter_4d<sc_in<bool> > port_it4 = snk4.input(3, 3, 1, 1, 1, 1000, 1, 1);
     sc_map_iter_sequential<sc_in<bool> > port_it4_end = snk4.input.end();
     std::cout << std::endl;
     for( ; port_it4 != port_it4_end; ++port_it4)
@@ -134,14 +142,15 @@ int sc_main(int argc, char *agv[])
 //    result = btest1.output.bind(2,2,false, 0,1,true, iter2);
 //    std::cout << "result of binding: " << result << std::endl;
 
-    //bind_signals.write_all(true);
+    bind_signals.write_all(true);
 
-    sc_map_square<sc_out<bool> >::square_iterator p_iter = btest1.output.begin_partial(0,1,true, 0,1,true);
-    sc_map_linear<sc_signal<bool> >::iterator s_iter = bind_signals.begin();
-    btest1.output.bind_by_iter(p_iter, s_iter);
-
-    btest1.output.at(2,0).bind(bind_signals.at(8));
-    btest1.output.at(2,1).bind(bind_signals.at(7));
+//    sc_map_square<sc_out<bool> >::square_iterator p_iter = btest1.output(0 ,1, 0, 1);
+//    sc_map_linear<sc_signal<bool> >::iterator s_iter = bind_signals.begin();
+//    btest1.output.bind(s_iter);
+//
+//    btest1.output.at(2,0).bind(bind_signals.at(8));
+//    btest1.output.at(2,1).bind(bind_signals.at(7));
+    btest1.output.bind(bind_signals(0,5));
 
     // **** Setup Tracing
     sc_trace_file* fp;
@@ -152,7 +161,7 @@ int sc_main(int argc, char *agv[])
     sc_trace(fp, signals2, "signal2");
     sc_trace(fp, signals3, "signal3");
     sc_trace(fp, signals4, "signal4");
-    sc_trace(fp, bind_signals, "b_signal");
+    //sc_trace(fp, bind_signals, "b_signal");
 
     sc_delay_tb delay_testbench("delay_testbench");
     sc_trace(fp, delay_testbench.clock, "clock");

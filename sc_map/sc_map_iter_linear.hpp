@@ -16,11 +16,11 @@
 #include "sc_map_base.hpp"
 #include "sc_map_iterator.hpp"
 
-template<typename object_type>
+template <typename object_type>
 class sc_map_linear;
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 class sc_map_iter_linear : public sc_map_iterator<object_type>
 {
     friend class sc_map_linear<object_type>;
@@ -36,7 +36,10 @@ private:
     typedef sc_map_iterator<object_type> base;
     typedef typename base::size_type size_type;
 
-    sc_map_iter_linear(sc_map_linear<object_type>& sc_map, key_type start_X, key_type stop_X);
+    using base::update_dim;
+
+    sc_map_iter_linear(sc_map_linear<object_type>& sc_map,
+            key_type start_X, key_type stop_X);
 
     key_type X_iter_start;
     key_type X_iter_stop;
@@ -45,47 +48,30 @@ private:
 };
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 sc_map_iter_linear<object_type>&
         sc_map_iter_linear<object_type>::operator++ ()
 {
     sc_map_linear<object_type>* sc_map_lin =
             dynamic_cast<sc_map_linear<object_type>* >(this->sc_map);
 
-    if (X_up_cnt == base::up)
+    if (update_dim(X_pos, X_iter_start, X_iter_stop, X_up_cnt))
     {
-        ++X_pos;
-
-        if (X_pos <= X_iter_stop)
-        {
-            this->set_vect_pos(sc_map_lin->get_vect_pos(X_pos));
-        }
-        else
-        {
-            this->set_vect_pos(sc_map_lin->size());
-        }
+        this->set_vect_pos(sc_map_lin->get_vect_pos(X_pos));
     }
     else
     {
-        --X_pos;
-
-        if (X_pos >= X_iter_stop)
-        {
-            this->set_vect_pos(sc_map_lin->get_vect_pos(X_pos));
-        }
-        else
-        {
-            this->set_vect_pos(sc_map_lin->size());
-        }
+        this->set_vect_pos(sc_map_lin->size());
     }
 
     return *this;
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 sc_map_iter_linear<object_type>::sc_map_iter_linear(
-        sc_map_linear<object_type>& sc_map, key_type start_X, key_type stop_X) :
+        sc_map_linear<object_type>& sc_map,
+        key_type start_X, key_type stop_X) :
         sc_map_iterator<object_type>(sc_map)
 {
     sc_map_linear<object_type>* sc_map_lin =
@@ -93,10 +79,11 @@ sc_map_iter_linear<object_type>::sc_map_iter_linear(
 
     // Check validity
     key_type min_X = sc_map_lin->start_id_X;
-    key_type max_X = sc_map_lin->start_id_X + sc_map_lin->size_X();
+    key_type max_X = sc_map_lin->start_id_X + sc_map_lin->size_X()-1;
 
     if (start_X < min_X) {start_X = min_X;}
     if (start_X > max_X) {start_X = max_X;}
+
     if (stop_X < min_X) {stop_X = min_X;}
     if (stop_X > max_X) {stop_X = max_X;}
 

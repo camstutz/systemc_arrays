@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear.hpp
  * @author Christian Amstutz
- * @date April 30, 2015
+ * @date May 4, 2015
  *
  * @brief
  *
@@ -24,7 +24,7 @@
 #include <utility>
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 class sc_map_linear : public sc_map_base<object_type>
 {
     friend class sc_map_iter_linear<object_type>;
@@ -40,10 +40,10 @@ public:
     typedef typename base::size_type size_type;
     typedef typename std::map<key_type, size_type> map_type;
 
+    static const key_type default_start_id;
+
     using base::bind;
     using base::operator();
-
-    static const key_type default_start_id;
 
     sc_map_linear(const size_type element_cnt_X, const sc_module_name name = "", const key_type start_id_X = default_start_id);
     virtual ~sc_map_linear() {};
@@ -78,13 +78,13 @@ private:
 
 //******************************************************************************
 
-template<typename object_type>
+template <typename object_type>
 const typename sc_map_linear<object_type>::key_type
         sc_map_linear<object_type>::default_start_id = 0;
 
 //******************************************************************************
 
-template<typename object_type>
+template <typename object_type>
 sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X,
         const sc_module_name name, const key_type start_id_X) :
         sc_map_base<object_type>(name)
@@ -102,14 +102,14 @@ sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X,
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_linear<object_type>::size_type sc_map_linear<object_type>::size_X() const
 {
     return objects_map.size();
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type& sc_map_linear<object_type>::at(const key_type key_X)
 {
     // todo: at exception handling for out range accesses
@@ -119,14 +119,14 @@ object_type& sc_map_linear<object_type>::at(const key_type key_X)
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type& sc_map_linear<object_type>::operator[] (const key_type key_X)
 {
     return at(key_X);
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_linear<object_type>::linear_iterator
         sc_map_linear<object_type>::operator()(const key_type X_start,
         const key_type X_stop)
@@ -137,7 +137,7 @@ typename sc_map_linear<object_type>::linear_iterator
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 std::pair<bool, typename sc_map_linear<object_type>::full_key_type>
         sc_map_linear<object_type>::get_key(object_type& object) const
 {
@@ -160,7 +160,7 @@ std::pair<bool, typename sc_map_linear<object_type>::full_key_type>
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 std::string sc_map_linear<object_type>::key_string(object_type& map_element) const
 {
     std::stringstream key_sstream;
@@ -176,7 +176,7 @@ std::string sc_map_linear<object_type>::key_string(object_type& map_element) con
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 typename sc_map_linear<object_type>::size_type
         sc_map_linear<object_type>::get_vect_pos(key_type pos_X)
 {
@@ -186,7 +186,7 @@ typename sc_map_linear<object_type>::size_type
 }
 
 //******************************************************************************
-template<typename object_type>
+template <typename object_type>
 object_type* sc_map_linear<object_type>::creator::operator() (
         const sc_module_name name, sc_map_linear<object_type>::key_type id)
 {
