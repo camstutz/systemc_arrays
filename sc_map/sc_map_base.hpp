@@ -23,6 +23,7 @@
 
 #include <systemc.h>
 
+#include <vector>
 #include <cstddef>
 #include <string>
 #include <sstream>
@@ -57,6 +58,10 @@ public:
 
     template <typename Creator>
     void init(size_type n, Creator object_creator);
+    template <typename Creator, typename config_type>
+    void init(size_type n, Creator object_creator, const config_type configurator);
+    template <typename Creator, typename config_type>
+    void init(size_type n, Creator object_creator, std::vector<config_type> configurations);
 
     size_type size();
     iterator begin();
@@ -161,6 +166,45 @@ void sc_map_base<object_type>::init(size_type n, Creator object_creator)
 
         object_type* p = object_creator(cname, i);
         objects.push_back(p);
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename Creator, typename config_type>
+void sc_map_base<object_type>::init(size_type n, Creator object_creator, const config_type configurator)
+{
+    objects.reserve(n);
+    for (size_type i = 0; i<n; ++i)
+    {
+        std::string name = basename();
+        const char* cname = name.c_str();
+
+        object_type* p = object_creator(cname, i, configurator);
+        objects.push_back(p);
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename Creator, typename config_type>
+void sc_map_base<object_type>::init(size_type n, Creator object_creator, std::vector<config_type> configurations)
+{
+    objects.reserve(n);
+    typename std::vector<config_type>::iterator configurator_it = configurations.begin();
+    for (size_type i = 0; i<n; ++i)
+    {
+        std::string name = basename();
+        const char* cname = name.c_str();
+
+        object_type* p = object_creator(cname, i, *configurator_it);
+        objects.push_back(p);
+
+        ++configurator_it;
     }
 
     return;

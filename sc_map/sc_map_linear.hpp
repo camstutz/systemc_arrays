@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear.hpp
  * @author Christian Amstutz
- * @date May 4, 2015
+ * @date May 18, 2015
  *
  * @brief
  *
@@ -20,6 +20,7 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 #include <map>
 #include <utility>
 
@@ -46,6 +47,10 @@ public:
     using base::operator();
 
     sc_map_linear(const size_type element_cnt_X, const sc_module_name name = "", const key_type start_id_X = default_start_id);
+    template <typename config_type>
+    sc_map_linear(const size_type element_cnt_X, const sc_module_name name, const key_type start_id_X, const config_type configuration);
+//    template <typename config_type>
+//    sc_map_linear(const size_type element_cnt_X, const sc_module_name name, const key_type start_id_X, const std::vector<config_type>);
     virtual ~sc_map_linear() {};
 
     size_type size_X() const;
@@ -71,6 +76,9 @@ private:
         creator() {};
         object_type* operator() (const sc_module_name name,
                 sc_map_linear<object_type>::key_type id);
+        template <typename config_type>
+        object_type* operator() (const sc_module_name name,
+                sc_map_linear<object_type>::key_type id, const config_type& configuration);
     };
 };
 
@@ -91,6 +99,24 @@ sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X,
 {
     this->start_id_X = start_id_X;
     this->init(element_cnt_X, creator());
+
+    for (size_type x = 0; x<element_cnt_X; ++x)
+    {
+        size_type vector_id = x;
+        objects_map[start_id_X+x] = vector_id;
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename object_type>
+template <typename config_type>
+sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X, const sc_module_name name, const key_type start_id_X, const config_type configuration) :
+        sc_map_base<object_type>(name)
+{
+    this->start_id_X = start_id_X;
+    this->init(element_cnt_X, creator(), configuration);
 
     for (size_type x = 0; x<element_cnt_X; ++x)
     {
@@ -196,3 +222,17 @@ object_type* sc_map_linear<object_type>::creator::operator() (
 
     return (new object_type(full_name.str().c_str()) );
 }
+
+//******************************************************************************
+template <typename object_type>
+template <typename config_type>
+object_type* sc_map_linear<object_type>::creator::operator() (
+        const sc_module_name name, sc_map_linear<object_type>::key_type id, const config_type& configuration)
+{
+    std::stringstream full_name;
+
+    full_name << name << sc_map_linear<object_type>::key_separator << id;
+
+    return (new object_type(full_name.str().c_str(), configuration));
+}
+
