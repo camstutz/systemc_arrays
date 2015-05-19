@@ -1,14 +1,14 @@
 /*!
  * @file sc_map_linear.hpp
  * @author Christian Amstutz
- * @date December 10, 2014
+ * @date April 15, 2015
  *
  * @brief
  *
  */
 
 /*
- *  Copyright (c) 2014 by Christian Amstutz
+ *  Copyright (c) 2015 by Christian Amstutz
  */
 
 #pragma once
@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <vector>
 #include <utility>
 
 #include <systemc.h>
@@ -56,8 +57,7 @@ private:
     {
     public:
         creator() {};
-        object_type* operator() (const sc_module_name name,
-                sc_map_linear<object_type>::key_type id);
+        object_type* operator() (const sc_module_name name, const sc_map_linear<object_type>::key_type id);
     };
 };
 
@@ -136,7 +136,7 @@ bool sc_map_linear<object_type>::bind(sc_map_linear<signal_type>& signals_map)
 //******************************************************************************
 template<typename object_type>
 object_type* sc_map_linear<object_type>::creator::operator() (
-        const sc_module_name name, sc_map_linear<object_type>::key_type id)
+        const sc_module_name name, const sc_map_linear<object_type>::key_type id)
 {
     std::stringstream full_name;
     
