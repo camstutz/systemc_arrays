@@ -160,7 +160,7 @@ int sc_main(int argc, char *agv[])
     source src_config("source_config");
     sc_map_linear<sc_signal<bool> > signal_config(2, "signal_config");
     src_config.output.bind(signal_config);
-    sc_map_linear<sink_configurable> test_config_sink_linear(2, "test", 0, configuration);
+    sc_map_linear<sink_configurable> test_config_sink_linear(2, "test", configuration, 0);
     test_config_sink_linear[0].input.bind(signal_config[0]);
     test_config_sink_linear[1].input.bind(signal_config[1]);
 
@@ -168,7 +168,7 @@ int sc_main(int argc, char *agv[])
     configs.resize(2);
     configs[0].config_value = 3;
     configs[1].config_value = 4;
-    sc_map_linear<sink_configurable> test_config_sink_linear2(2, "vector_test", 0, configs);
+    sc_map_linear<sink_configurable> test_config_sink_linear2(2, "vector_test", configs, 0);
     test_config_sink_linear2[0].input.bind(signal_config[0]);
     test_config_sink_linear2[1].input.bind(signal_config[1]);
 
