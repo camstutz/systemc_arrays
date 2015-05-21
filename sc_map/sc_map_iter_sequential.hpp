@@ -19,8 +19,8 @@ template<typename object_type>
 class sc_map_base;
 
 //******************************************************************************
-template<typename object_type>
-class sc_map_iter_sequential : public sc_map_iterator<object_type>
+template<typename key_T, typename object_T>
+class sc_map_iter_sequential : public sc_map_iterator<key_T, object_T>
 {
     friend class sc_map_base<object_type>;
 

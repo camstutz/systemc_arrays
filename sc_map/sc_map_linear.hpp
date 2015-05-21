@@ -15,6 +15,7 @@
 
 #include "sc_map_base.hpp"
 #include "sc_map_iter_linear.hpp"
+#include "sc_map_linear_key.hpp"
 
 #include <systemc.h>
 
@@ -25,23 +26,22 @@
 #include <utility>
 
 //******************************************************************************
+
 template <typename object_type>
-class sc_map_linear : public sc_map_base<object_type>
+class sc_map_linear : public sc_map_base<sc_map_linear_key, object_type>
 {
     friend class sc_map_iter_linear<object_type>;
 
 public:
-    typedef sc_map_base<object_type> base;
+    typedef sc_map_base<sc_map_linear_key, object_type> base;
+    typedef sc_map_regular_base<sc_map_linear_key, object_type> regular_base;
     typedef sc_map_iter_linear<object_type> linear_iterator;
-    typedef typename base::key_type key_type;
-    typedef struct
-    {
-        key_type X_dim;
-    } full_key_type;
+    typedef sc_map_linear_key key_type;
+    typedef regular_base::index_type index_type
     typedef typename base::size_type size_type;
-    typedef typename std::map<key_type, size_type> map_type;
+    typedef typename std::map<key_type, size_type, key_type::Comperator> map_type;
 
-    static const key_type default_start_id;
+    static const regular_base::index_t default_start_id;
 
     using base::bind;
     using base::operator();
@@ -58,7 +58,6 @@ public:
     object_type& operator[] (const key_type key_X);
     linear_iterator operator()(const key_type X_start, const key_type X_stop);
 
-    std::pair<bool, full_key_type> get_key(object_type& object) const;
     virtual std::string key_string(object_type& map_element) const;
 
 private:
@@ -84,9 +83,9 @@ private:
 
 //******************************************************************************
 
-template <typename object_type>
-const typename sc_map_linear<object_type>::key_type
-        sc_map_linear<object_type>::default_start_id = 0;
+//template <typename object_type>
+//const typename sc_map_key_regular_base::index_t
+//        sc_map_linear<object_type>::default_start_id = def;
 
 //******************************************************************************
 
@@ -160,29 +159,6 @@ typename sc_map_linear<object_type>::linear_iterator
     sc_map_iter_linear<object_type> it(*this, X_start, X_stop);
 
     return it;
-}
-
-//******************************************************************************
-template <typename object_type>
-std::pair<bool, typename sc_map_linear<object_type>::full_key_type>
-        sc_map_linear<object_type>::get_key(object_type& object) const
-{
-    std::pair<bool, full_key_type> full_key;
-    full_key.first = false;
-
-    typename map_type::const_iterator object_it = objects_map.begin();
-    for (; object_it != objects_map.end(); ++object_it)
-    {
-        const object_type* map_object = this->objects[object_it->second];
-        if (map_object == &object)
-        {
-            full_key.first = true;
-            full_key.second.X_dim = object_it->first;
-            break;
-        }
-    }
-
-    return full_key;
 }
 
 //******************************************************************************
