@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_key.hpp
  * @author Christian Amstutz
- * @date May 20, 2015
+ * @date May 27, 2015
  *
  * @brief
  *
@@ -13,22 +13,25 @@
 
 #pragma once
 
-#include "sc_map_key_regular_base.hpp"
+#include "sc_map_key_regular.hpp"
 
 #include <string>
 #include <sstream>
 
 //******************************************************************************
 
-class sc_map_linear_key : public sc_map_key_regular_base
+class sc_map_linear_key : public sc_map_key_regular
 {
 public:
-    typedef sc_map_key_regular_base::index_type index_type;
+    typedef sc_map_key_regular::index_type index_type;
 
     index_type X;
 
+    sc_map_linear_key(index_type X = 0);
     virtual ~sc_map_linear_key() {};
 
-    virtual bool is_smaller(const sc_map_key_base& compare) const;
     virtual std::string get_string() const;
+
+    virtual bool operator==(const sc_map_key& other_key) const;
+    virtual bool operator<(const sc_map_key& other_key) const;
 };

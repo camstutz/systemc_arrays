@@ -1,7 +1,7 @@
 /*!
- * @file sc_map_key_regular_base.hpp
+ * @file sc_map_key_regular.hpp
  * @author Christian Amstutz
- * @date May 20, 2015
+ * @date May 27, 2015
  *
  * @brief
  *
@@ -13,18 +13,20 @@
 
 #pragma once
 
-#include "sc_map_key_base.hpp"
+#include "sc_map_key.hpp"
 
 //******************************************************************************
-class sc_map_key_regular_base : public sc_map_key_base
+class sc_map_key_regular : public sc_map_key
 {
 public:
     typedef int index_type;
 
     static const index_type default_start_id;
 
-    virtual ~sc_map_key_regular_base() {};
+    virtual ~sc_map_key_regular() {};
 
-    virtual bool is_smaller(const sc_map_key_base& compare) const =0;
     virtual std::string get_string() const =0;
+
+    virtual bool operator==(const sc_map_key& other_key) const =0;
+    virtual bool operator<(const sc_map_key& other_key) const =0;
 };
