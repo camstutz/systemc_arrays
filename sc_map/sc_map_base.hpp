@@ -56,7 +56,7 @@ public:
     object_type& at(const key_type key);
     object_type& operator[] (const key_type key);
     iterator operator()(const key_type& start_key, const key_type& end_key);
-    sc_map_iterator<sc_map_base<range_type, object_type> > operator()(sc_map_list_key_range<key_type> range);
+    iterator operator()(sc_map_key_range<key_type>& range);
 
     template <typename signal_type>
     void bind(sc_signal<signal_type>& signal);
@@ -242,21 +242,15 @@ typename sc_map_base<range_T, object_T>::iterator
         sc_map_base<range_T, object_T>::operator()(
         const key_type& start_key, const key_type& end_key)
 {
-
-    sc_map_iterator<sc_map_base<range_type, object_type> > it(this, start_key, end_key);
-
-    return it;
+    return iterator(this, start_key, end_key);
 }
 
 //******************************************************************************
 template <typename range_T, typename object_T>
-sc_map_iterator<sc_map_base<range_T, object_T> >
-        sc_map_base<range_T, object_T>::operator()(sc_map_list_key_range<
-        typename sc_map_base<range_T, object_T>::key_type> range)
+typename sc_map_base<range_T, object_T>::iterator
+sc_map_base<range_T, object_T>::operator()(sc_map_key_range<key_type>& range)
 {
-    sc_map_iterator<sc_map_base<range_T, object_T> > it(this, range);
-
-    return it;
+    return iterator(this, range);
 }
 
 //******************************************************************************
