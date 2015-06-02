@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date May 29, 2015
+ * @date June 1, 2015
  *
  * @brief
  *
@@ -13,11 +13,13 @@
 
 #pragma once
 
+#include "sc_map_key_range.hpp"
+
 #include <iterator>
 
 #include <systemc.h>
 
-template<typename key_T, typename range_T, typename object_T>
+template<typename range_T, typename object_T>
 class sc_map_base;
 
 //******************************************************************************
@@ -28,13 +30,12 @@ public:
     typedef sc_map_T map_type;
     typedef typename map_type::object_type object_type;
     typedef typename map_type::key_type key_type;
-    typedef typename map_type::range_type range_type;
     typedef bool end_type;
-    typedef sc_map_base<key_type, range_type, object_type> base_map_type;
+    //typedef sc_map_base<range_type, object_type> base_map_type;
 
     static const end_type end;
 
-    virtual ~sc_map_iterator() {};
+    virtual ~sc_map_iterator();
 
     bool operator==(const sc_map_iterator& other) const;
     bool operator!=(const sc_map_iterator& other) const;
@@ -48,31 +49,31 @@ public:
     template<typename data_type>
     void operator= (const data_type& value);
 
-    template <typename signal_type>
-    void bind(sc_signal<signal_type>& signal);
-    template <typename signal_type>
-    void operator() (sc_signal<signal_type>& signal);
-    template <typename signal_type>
-    void bind(sc_map_base<key_type, range_type, signal_type>& signal_map);
-    template <typename signal_type>
-    void operator() (sc_map_base<key_type, range_type, signal_type>& signal_map);
-    template <typename signal_type>
-    void bind(sc_map_iterator<signal_type> signal_it);
-    template <typename signal_type>
-    void operator() (sc_map_iterator<signal_type> signal_it);
+    template <typename signal_T>
+    void bind(sc_signal<signal_T>& signal);
+    template <typename signal_T>
+    void operator() (sc_signal<signal_T>& signal);
+    template <typename signal_T, typename signal_range_T>
+    void bind(sc_map_base<signal_range_T, signal_T>& signal_map);
+    template <typename signal_T, typename signal_range_T>
+    void operator() (sc_map_base<signal_range_T, signal_T>& signal_map);
+    template <typename signal_T>
+    void bind(sc_map_iterator<signal_T> signal_it);
+    template <typename signal_T>
+    void operator() (sc_map_iterator<signal_T> signal_it);
 
 //protected:
-    base_map_type* map;
+    map_type* map;
 
-    sc_map_iterator(base_map_type& sc_map);
-    sc_map_iterator(base_map_type& sc_map, end_type end_id);
-    sc_map_iterator(base_map_type& sc_map, key_type map_pos);
-    sc_map_iterator(base_map_type& sc_map, range_type range);
-    sc_map_iterator(base_map_type& sc_map, range_type range, key_type map_pos);
-    sc_map_iterator(base_map_type& sc_map, const key_type& start_key, const key_type& end_key);
+    sc_map_iterator(sc_map_T* sc_map);
+    sc_map_iterator(sc_map_T* sc_map, end_type end_id);
+    sc_map_iterator(sc_map_T* sc_map, key_type map_pos);
+    sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range);
+    sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range, const key_type& map_pos);
+    sc_map_iterator(sc_map_T* sc_map, const key_type& start_key, const key_type& end_key);
 
 private:
-    range_type range;
+    sc_map_key_range<key_type>* range;
     key_type position;
     end_type end_flag;
 };
@@ -83,6 +84,15 @@ private:
 template<typename sc_map_T>
 const typename sc_map_iterator<sc_map_T>::end_type
         sc_map_iterator<sc_map_T>::end = true;
+
+//******************************************************************************
+template<typename sc_map_T>
+sc_map_iterator<sc_map_T>::~sc_map_iterator()
+{
+    //delete range;
+
+    return;
+};
 
 //******************************************************************************
 template<typename sc_map_T>
@@ -118,7 +128,7 @@ bool sc_map_iterator<sc_map_T>::operator!=(const sc_map_iterator& other) const
 template<typename sc_map_T>
 sc_map_iterator<sc_map_T>& sc_map_iterator<sc_map_T>::operator++ ()
 {
-    bool success = range.next_key(position);
+    bool success = range->next_key(position);
     if (!success)
     {
         end_flag = true;
@@ -169,8 +179,8 @@ void sc_map_iterator<sc_map_T>::operator= (const data_type& value)
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
-void sc_map_iterator<sc_map_T>::bind(sc_signal<signal_type>& signal)
+template <typename signal_T>
+void sc_map_iterator<sc_map_T>::bind(sc_signal<signal_T>& signal)
 {
     for (; *this != map->end(); ++(*this))
     {
@@ -182,8 +192,8 @@ void sc_map_iterator<sc_map_T>::bind(sc_signal<signal_type>& signal)
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
-void sc_map_iterator<sc_map_T>::operator() (sc_signal<signal_type>& signal)
+template <typename signal_T>
+void sc_map_iterator<sc_map_T>::operator() (sc_signal<signal_T>& signal)
 {
     bind(signal);
 
@@ -192,11 +202,11 @@ void sc_map_iterator<sc_map_T>::operator() (sc_signal<signal_type>& signal)
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
+template <typename signal_T, typename signal_range_T>
 void sc_map_iterator<sc_map_T>::bind(
-        sc_map_base<key_type, range_type, signal_type>& signal_map)
+        sc_map_base<signal_range_T, signal_T>& signal_map)
 {
-    for (typename sc_map_base<key_type, range_type, signal_type>::iterator signal_it = signal_map.begin();
+    for (typename sc_map_base<signal_range_T, signal_T>::iterator signal_it = signal_map.begin();
          *this != map->end();
          ++(*this))
     {
@@ -210,9 +220,9 @@ void sc_map_iterator<sc_map_T>::bind(
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
+template <typename signal_T, typename signal_range_T>
 void sc_map_iterator<sc_map_T>::operator() (
-        sc_map_base<key_type, range_type, signal_type>& signal_map)
+        sc_map_base<signal_range_T, signal_T>& signal_map)
 {
     bind(signal_map);
 
@@ -221,8 +231,8 @@ void sc_map_iterator<sc_map_T>::operator() (
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
-void sc_map_iterator<sc_map_T>::bind(sc_map_iterator<signal_type> signal_it)
+template <typename signal_T>
+void sc_map_iterator<sc_map_T>::bind(sc_map_iterator<signal_T> signal_it)
 {
     for (; *this != map->end(); ++(*this))
     {
@@ -236,9 +246,8 @@ void sc_map_iterator<sc_map_T>::bind(sc_map_iterator<signal_type> signal_it)
 
 //******************************************************************************
 template<typename sc_map_T>
-template <typename signal_type>
-void sc_map_iterator<sc_map_T>::operator() (sc_map_iterator<signal_type>
-        signal_it)
+template <typename signal_T>
+void sc_map_iterator<sc_map_T>::operator() (sc_map_iterator<signal_T> signal_it)
 {
     bind(signal_it);
 
@@ -246,63 +255,84 @@ void sc_map_iterator<sc_map_T>::operator() (sc_map_iterator<signal_type>
 }
 
 //******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map) :
-        map(&sc_map),
-        range(sc_map.range),
-        position(sc_map.range.first()),
-        end_flag(!end)
-{}
-
-//******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map,
-        end_type end_id) :
-        map(&sc_map),
-        range(sc_map.range),
-        position(sc_map.range.first()),
-        end_flag(end_id)
-{}
-
-//******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map,
-        key_type map_pos) :
-        map(&sc_map),
-        range(sc_map.range),
-        position(map_pos),
-        end_flag(!end)
-{}
-
-//******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map,
-        range_type range) :
-        map(&sc_map),
-        range(range),
-        position(range.first()),
-        end_flag(!end)
-{}
-
-//******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map,
-        range_type range, key_type map_pos) :
-        map(&sc_map),
-        range(range),
-        position(map_pos),
-        end_flag(!end)
-{}
-
-//******************************************************************************
-template<typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(base_map_type& sc_map,
-        const key_type& start_key, const key_type& end_key) :
-        map(&sc_map),
-        position(start_key),
+template <typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(sc_map_T* sc_map) :
+        map(sc_map),
         end_flag(!end)
 {
-    range = range_type(start_key, end_key);
+    range = sc_map->get_range();
+
+    position = range->first();
+
+    return;
+}
+
+//******************************************************************************
+template <typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, end_type end_id) :
+        map(sc_map),
+        end_flag(end_id)
+{
+    range = sc_map->get_range();
+
+    position = range->first();
+
+    return;
+}
+
+//******************************************************************************
+template <typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, key_type map_pos) :
+        map(sc_map),
+        end_flag(!end)
+{
+    range = map->get_range();
+
+    position = map_pos;
+
+    return;
+}
+
+//******************************************************************************
+template <typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
+        sc_map_key_range<key_type>& range) :
+        map(sc_map),
+        end_flag(!end)
+{
+    this->range = range.clone();
+    *(this->range) = range;
+
+    position = this->range->first();
+
+    return;
+}
+
+//******************************************************************************
+template <typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
+        sc_map_key_range<key_type>& range, const key_type& map_pos) :
+        map(sc_map),
+        end_flag(!end)
+{
+    range = range.clone();
+    *(this->range) = range;
+
+    position = map_pos;
+
+    return;
+}
+
+//******************************************************************************
+template<typename sc_map_T>
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
+        const key_type& start_key, const key_type& end_key) :
+        map(sc_map),
+        end_flag(!end)
+{
+    range = new typename map_type::range_type(start_key, end_key);
+
+    position = start_key;
 
     return;
 }

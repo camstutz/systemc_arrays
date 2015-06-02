@@ -28,6 +28,8 @@ public:
 
     virtual ~sc_map_key_range() {};
 
+    virtual sc_map_key_range* clone() =0;
+
     virtual key_type first() const =0;
     virtual key_type last() const =0;
 

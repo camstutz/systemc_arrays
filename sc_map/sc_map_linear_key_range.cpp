@@ -29,6 +29,12 @@ sc_map_linear_key_range::sc_map_linear_key_range(key_type start_key,
 {}
 
 //******************************************************************************
+sc_map_linear_key_range* sc_map_linear_key_range::clone()
+{
+  return new sc_map_linear_key_range(*this);
+}
+
+//******************************************************************************
 sc_map_linear_key_range::key_type sc_map_linear_key_range::first() const
 {
     return start_key;

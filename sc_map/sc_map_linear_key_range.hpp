@@ -29,6 +29,8 @@ public:
     sc_map_linear_key_range(key_type start_key, key_type end_key);
     virtual ~sc_map_linear_key_range() {};
 
+    virtual sc_map_linear_key_range* clone();
+
     virtual key_type first() const;
     virtual key_type last() const;
 
