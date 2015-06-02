@@ -1,5 +1,5 @@
 #include "../sc_map/sc_map.hpp"
-#include "../sc_map/sc_map_linear_key.hpp"
+#include "../sc_map/sc_map_linear/sc_map_linear_key.hpp"
 #include "source.hpp"
 #include "sink.hpp"
 

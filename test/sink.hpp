@@ -1,7 +1,7 @@
 
 #include <systemc.h>
 
-#include "../sc_map/sc_map_linear.hpp"
+#include "../sc_map/sc_map.hpp"
 
 class sink : public sc_module {
 public:
