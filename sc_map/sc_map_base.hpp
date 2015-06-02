@@ -37,12 +37,11 @@ public:
     typedef object_T object_type;
     typedef std::map<key_type, object_type*, typename key_type::Comperator> map_type;
     typedef sc_map_iterator<sc_map_base<range_type, object_type> > iterator;
-    typedef ptrdiff_t difference_type;
     typedef typename map_type::size_type size_type;
     typedef object_type* pointer;
 
-    static const char key_separator;
-    static const char key_sub_separator;
+    static const char key_separator_char;
+    static const char key_sub_separator_char;
 
     sc_map_base(const sc_module_name name);
     virtual ~sc_map_base() {};
@@ -61,16 +60,16 @@ public:
 
     template <typename signal_type>
     void bind(sc_signal<signal_type>& signal);
-//    template <typename signal_type>
-//    void operator()(sc_signal<signal_type>& signal);
-    template <typename signal_type, typename signal_range_T>
-    void bind(sc_map_base<signal_range_T, signal_type>& signal_map);
-//    template <typename signal_type, typename signal_range_T>
-//    void operator()(sc_map_base<signal_range_T, signal_type>& signal_map);
     template <typename signal_type>
-    void bind(sc_map_iterator<signal_type>& signal_it);
-//    template <typename signal_type, typename signal_range_T>
-//    void operator()(sc_map_iterator<signal_type, signal_range_T> signal_it);
+    void operator()(sc_signal<signal_type>& signal);
+    template <typename signal_range_T, typename signal_T>
+    void bind(sc_map_base<signal_range_T, signal_T>& signal_map);
+    template <typename signal_range_T, typename signal_T>
+    void operator()(sc_map_base<signal_range_T, signal_T>& signal_map);
+    template <typename signal_map_T>
+    void bind(sc_map_iterator<signal_map_T>& signal_it);
+    template <typename signal_map_T>
+    void operator()(sc_map_iterator<signal_map_T> signal_it);
 
     template<typename data_type>
     void write(const data_type& value);
@@ -92,8 +91,8 @@ public:
 template <typename trace_range_T, typename trace_object_T>
 friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_T>& sc_map, const std::string& name);
 
-template <typename sens_range_T, typename sens_object_T>
-friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<sens_range_T, sens_object_T>& signal_map);
+template <typename signal_range_T, typename signal_T>
+friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<signal_range_T, signal_T>& signal_map);
 
 /** Function for tracing support in ModelSim */
 #ifdef MODELSIM_COMPILER
@@ -108,10 +107,10 @@ friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<sen
 //******************************************************************************
 
 template <typename range_T, typename object_T>
-const char sc_map_base<range_T, object_T>::key_separator = '_';
+const char sc_map_base<range_T, object_T>::key_separator_char = '_';
 
 template <typename range_T, typename object_T>
-const char sc_map_base<range_T, object_T>::key_sub_separator = '-';
+const char sc_map_base<range_T, object_T>::key_sub_separator_char = '-';
 
 //******************************************************************************
 template <typename range_T, typename object_T>
@@ -262,8 +261,8 @@ sc_map_iterator<sc_map_base<range_T, object_T> >
 
 //******************************************************************************
 template <typename range_T, typename object_T>
-template <typename signal_type>
-void sc_map_base<range_T, object_T>::bind(sc_signal<signal_type>& signal)
+template <typename signal_T>
+void sc_map_base<range_T, object_T>::bind(sc_signal<signal_T>& signal)
 {
     for (iterator port_it = begin(); port_it != end(); ++port_it)
     {
@@ -274,27 +273,27 @@ void sc_map_base<range_T, object_T>::bind(sc_signal<signal_type>& signal)
 }
 
 //******************************************************************************
-//template <typename range_T, typename object_T>
-//template <typename signal_type>
-//void sc_map_base<range_T, object_T>::operator()(sc_signal<signal_type>& signal)
-//{
-//    bind(signal);
-//
-//    return;
-//}
+template <typename range_T, typename object_T>
+template <typename signal_T>
+void sc_map_base<range_T, object_T>::operator()(sc_signal<signal_T>& signal)
+{
+    bind(signal);
+
+    return;
+}
 
 //******************************************************************************
 template <typename range_T, typename object_T>
-template <typename signal_type, typename signal_range_T>
-void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_type>&
+template <typename signal_range_T, typename signal_T>
+void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_T>&
         signal_map)
 {
     // todo: check range
 
     iterator port_it = begin();
     iterator port_end = end();
-    typename sc_map_base<signal_range_T, signal_type>::iterator signal_it = signal_map.begin();
-    typename sc_map_base<signal_range_T, signal_type>::iterator signal_end = signal_map.end();
+    typename sc_map_base<signal_range_T, signal_T>::iterator signal_it = signal_map.begin();
+    typename sc_map_base<signal_range_T, signal_T>::iterator signal_end = signal_map.end();
 
     for (; port_it != port_end; ++port_it)
     {
@@ -306,20 +305,20 @@ void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_typ
 }
 
 //******************************************************************************
-//template <typename range_T, typename object_T>
-//template <typename signal_T, typename signal_range_T>
-//void sc_map_base<range_T, object_T>::operator()(
-//        sc_map_base<signal_range_T, signal_T>& signal_map)
-//{
-//    bind(signal_map);
-//
-//    return;
-//}
+template <typename range_T, typename object_T>
+template <typename signal_range_T, typename signal_T>
+void sc_map_base<range_T, object_T>::operator()(
+        sc_map_base<signal_range_T, signal_T>& signal_map)
+{
+    bind(signal_map);
+
+    return;
+}
 
 //******************************************************************************
 template <typename range_T, typename object_T>
-template <typename signal_type>
-void sc_map_base<range_T, object_T>::bind(sc_map_iterator<signal_type>& signal_it)
+template <typename signal_map_T>
+void sc_map_base<range_T, object_T>::bind(sc_map_iterator<signal_map_T>& signal_it)
 {
     // todo: check for equal size
     // todo: check for same object
@@ -338,15 +337,15 @@ void sc_map_base<range_T, object_T>::bind(sc_map_iterator<signal_type>& signal_i
 }
 
 //******************************************************************************
-//template <typename range_T, typename object_T>
-//template <typename signal_type, typename signal_range_T>
-//void sc_map_base<range_T, object_T>::operator()(
-//        sc_map_iterator<signal_type, signal_range_T> signal_it)
-//{
-//    bind(signal_it);
-//
-//    return;
-//}
+template <typename range_T, typename object_T>
+template <typename signal_map_T>
+void sc_map_base<range_T, object_T>::operator()(
+        sc_map_iterator<signal_map_T> signal_it)
+{
+    bind(signal_it);
+
+    return;
+}
 
 //******************************************************************************
 template <typename range_T, typename object_T>
@@ -391,11 +390,11 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_T>&
 }
 
 //******************************************************************************
-template <typename sens_range_T, typename sens_object_T>
+template <typename signal_range_T, typename signal_T>
 sc_sensitive& operator<< (sc_sensitive& sensitivity_list,
-        sc_map_base<sens_range_T, sens_object_T>& signal_map)
+        sc_map_base<signal_range_T, signal_T>& signal_map)
 {
-    for (typename sc_map_base<sens_range_T, sens_object_T>::iterator signal_it = signal_map.begin();
+    for (typename sc_map_base<signal_range_T, signal_T>::iterator signal_it = signal_map.begin();
          signal_it != signal_map.end();
          ++signal_it)
     {

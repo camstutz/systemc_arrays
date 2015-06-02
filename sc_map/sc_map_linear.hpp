@@ -103,7 +103,7 @@ object_type* sc_map_linear<object_type>::creator::operator() (
 {
     std::stringstream full_name;
     
-    full_name << name << sc_map_linear<object_type>::key_separator << id;
+    full_name << name << sc_map_linear<object_type>::key_separator_char << id;
 
     return (new object_type(full_name.str().c_str()) );
 }
@@ -117,7 +117,7 @@ object_type* sc_map_linear<object_type>::creator::operator() (
 {
     std::stringstream full_name;
 
-    full_name << name << sc_map_linear<object_type>::key_separator << id;
+    full_name << name << sc_map_linear<object_type>::key_separator_char << id;
 
     return (new object_type(full_name.str().c_str(), configuration));
 }

@@ -16,9 +16,10 @@ void source::create_data() {
 
     wait(15, SC_NS);
 
-    //output.write(true);
-    sc_map_linear<sc_out<bool> >::iterator out_it = output.begin();
-    out_it = true;
+    output.write(true);
+    //sc_map_linear<sc_out<bool> >::iterator out_it = output.begin();
+    //out_it = true;
+    //output = true;
 
     wait(85, SC_NS);
 
