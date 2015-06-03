@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date June 2, 2015
+ * @date June 3, 2015
  *
  * @brief
  *
@@ -14,7 +14,6 @@
 #pragma once
 
 #include "sc_map_iterator.hpp"
-#include "sc_map_list_key_range.hpp"
 
 #include "../modelsim_support/modelsim_support.hpp"
 
@@ -55,7 +54,7 @@ public:
     //* todo: const versions needed?
     object_type& at(const key_type key);
     object_type& operator[] (const key_type key);
-    iterator operator()(const key_type& start_key, const key_type& end_key);
+    iterator operator()(key_type& start_key, key_type& end_key);
     iterator operator()(sc_map_key_range<key_type>& range);
 
     template <typename signal_type>
@@ -77,15 +76,30 @@ public:
 //    template<typename data_type>
 //    void operator=(const data_type& value);
 
+    /** Function for tracing support in ModelSim */
+    #ifdef MODELSIM_COMPILER
+        template <typename data_type>
+        void register_signal_modelsim();
+    #endif
+
 public:
     map_type objects;
 
     template <typename Creator>
-    void init(std::vector<key_type> key_vector, Creator object_creator);
+    void init(std::vector<key_type>& key_vector, Creator object_creator);
     template <typename Creator, typename config_type>
-    void init(std::vector<key_type> key_vector, Creator object_creator, const config_type configurator);
+    void init(std::vector<key_type>& key_vector, Creator object_creator, const config_type& configurator);
     template <typename Creator, typename config_type>
-    void init(std::vector<key_type> key_vector, Creator object_creator, std::map<key_type, config_type> configurations);
+    void init(std::vector<key_type>& key_vector, Creator object_creator, const std::map<key_type, config_type>& configurations);
+
+    class creator
+    {
+    public:
+        creator() {};
+        object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id);
+        template <typename config_T>
+        object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id, const config_T& configuration);
+    };
 
 //* todo: add const to second argument of sc_trace
 template <typename trace_range_T, typename trace_object_T>
@@ -93,12 +107,6 @@ friend void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_
 
 template <typename signal_range_T, typename signal_T>
 friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<signal_range_T, signal_T>& signal_map);
-
-/** Function for tracing support in ModelSim */
-#ifdef MODELSIM_COMPILER
-    template <typename data_type>
-    void register_signal_modelsim();
-#endif
 
 };
 
@@ -121,10 +129,10 @@ sc_map_base<range_T, object_T>::sc_map_base(const sc_module_name name) :
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator>
-void sc_map_base<range_T, object_T>::init(std::vector<key_type> key_vector,
+void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
         Creator object_creator)
 {
-    for (typename std::vector<key_type>::iterator key_it = key_vector.begin();
+    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {
@@ -141,10 +149,10 @@ void sc_map_base<range_T, object_T>::init(std::vector<key_type> key_vector,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init(std::vector<key_type> key_vector,
-        Creator object_creator, const config_type configurator)
+void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
+        Creator object_creator, const config_type& configurator)
 {
-    for (typename std::vector<key_type>::iterator key_it = key_vector.begin();
+    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {
@@ -161,10 +169,11 @@ void sc_map_base<range_T, object_T>::init(std::vector<key_type> key_vector,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init(std::vector<key_type> key_vector,
-        Creator object_creator, std::map<key_type, config_type> configurations)
+void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
+        Creator object_creator,
+        const std::map<key_type, config_type>& configurations)
 {
-    for (typename std::vector<key_type>::iterator key_it = key_vector.begin();
+    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {
@@ -240,7 +249,7 @@ typename sc_map_base<range_T, object_T>::object_type&
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::iterator
         sc_map_base<range_T, object_T>::operator()(
-        const key_type& start_key, const key_type& end_key)
+        key_type& start_key, key_type& end_key)
 {
     return iterator(this, start_key, end_key);
 }
@@ -396,6 +405,32 @@ sc_sensitive& operator<< (sc_sensitive& sensitivity_list,
     }
 
     return sensitivity_list;
+}
+
+//******************************************************************************
+template <typename range_T, typename object_T>
+typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, object_T>::creator::operator() (
+        const sc_module_name name, sc_map_base<range_type, object_type>::key_type id)
+{
+    std::stringstream full_name;
+
+    full_name << name << sc_map_base<range_type, object_type>::key_separator_char << id;
+
+    return (new object_type(full_name.str().c_str()) );
+}
+
+//******************************************************************************
+template <typename range_T, typename object_T>
+template <typename config_T>
+typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, object_T>::creator::operator() (
+        const sc_module_name name, sc_map_base<range_type, object_type>::key_type id,
+        const config_T& configuration)
+{
+    std::stringstream full_name;
+
+    full_name << name << sc_map_base<range_type, object_type>::key_separator_char << id;
+
+    return (new object_type(full_name.str().c_str(), configuration));
 }
 
 //// *****************************************************************************

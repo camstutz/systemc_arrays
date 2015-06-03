@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date June 2, 2015
+ * @date June 3, 2015
  *
  * @brief
  *
@@ -40,7 +40,7 @@ public:
     sc_map_iterator(sc_map_T* sc_map, key_type map_pos);
     sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range);
     sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range, const key_type& map_pos);
-    sc_map_iterator(sc_map_T* sc_map, const key_type& start_key, const key_type& end_key);
+    sc_map_iterator(sc_map_T* sc_map, key_type& start_key, key_type& end_key);
     virtual ~sc_map_iterator();
 
     bool operator==(const sc_map_iterator& other) const;
@@ -86,27 +86,19 @@ const typename sc_map_iterator<sc_map_T>::end_type
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(sc_map_T* sc_map) :
         map(sc_map),
+        range(sc_map->get_range()),
+        position(range->first()),
         end_flag(!end)
-{
-    range = sc_map->get_range();
-
-    position = range->first();
-
-    return;
-}
+{}
 
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, end_type end_id) :
         map(sc_map),
+        range(sc_map->get_range()),
+        position(range->first()),
         end_flag(end_id)
-{
-    range = sc_map->get_range();
-
-    position = range->first();
-
-    return;
-}
+{}
 
 //******************************************************************************
 template <typename sc_map_T>
@@ -154,13 +146,12 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        const key_type& start_key, const key_type& end_key) :
+        key_type& start_key, key_type& end_key) :
         map(sc_map),
+        position(start_key),
         end_flag(!end)
 {
     range = new typename map_type::range_type(start_key, end_key);
-
-    position = start_key;
 
     return;
 }

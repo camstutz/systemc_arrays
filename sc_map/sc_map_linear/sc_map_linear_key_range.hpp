@@ -19,7 +19,6 @@
 #include <vector>
 
 //******************************************************************************
-
 class sc_map_linear_key_range : public sc_map_key_range<sc_map_linear_key>
 {
 public:

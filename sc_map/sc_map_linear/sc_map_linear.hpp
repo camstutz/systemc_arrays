@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear.hpp
  * @author Christian Amstutz
- * @date June 2, 2015
+ * @date June 3, 2015
  *
  * @brief
  *
@@ -43,17 +43,6 @@ public:
 
 private:
     range_type range;
-
-    class creator
-    {
-    public:
-        creator() {};
-        object_type* operator() (const sc_module_name name,
-                sc_map_linear<object_type>::key_type id);
-        template <typename config_type>
-        object_type* operator() (const sc_module_name name,
-                sc_map_linear<object_type>::key_type id, const config_type& configuration);
-    };
 };
 
 //******************************************************************************
@@ -62,7 +51,7 @@ private:
 template <typename object_type>
 sc_map_linear_key_range* sc_map_linear<object_type>::get_range()
 {
-    sc_map_linear_key_range * new_range = new sc_map_linear_key_range(range);
+    sc_map_linear_key_range* new_range = new sc_map_linear_key_range(range);
 
     return new_range;
 }
@@ -71,12 +60,17 @@ sc_map_linear_key_range* sc_map_linear<object_type>::get_range()
 template <typename object_type>
 sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X,
         const sc_module_name name, const index_type start_id_X) :
-        sc_map_base<range_type, object_type>(name)
+        sc_map_base<range_type, object_type>(name),
+        range(sc_map_linear_key(start_id_X),
+        sc_map_linear_key(start_id_X+element_cnt_X-1))
 {
-    range = sc_map_linear_key_range(sc_map_linear_key(start_id_X),
-            sc_map_linear_key(start_id_X+element_cnt_X-1));
+    std::vector<key_type> range_keys = range.get_key_vector();
 
-    this->init(range.get_key_vector(), creator());
+    this->init(range_keys, typename base::creator());
+
+//   sc_map_linear<sc_core::sc_out<bool> >::init(std::vector<sc_map_linear_key>&,          sc_map_base<sc_map_linear_key_range, sc_core::sc_out<bool> >::creator)’
+//   sc_map_base<range_T, object_T>       ::init(std::vector<typename range_T::key_type>&, sc_map_base<sc_map_linear_key_range, sc_core::sc_out<bool> >::creator&)                [with Creator = sc_map_base<sc_map_linear_key_range, sc_core::sc_out<bool> >::creator; range_T = sc_map_linear_key_range; object_T = sc_core::sc_out<bool>; typename range_T::key_type = sc_map_linear_key]
+
 
     return;
 }
@@ -91,33 +85,7 @@ sc_map_linear<object_type>::sc_map_linear(const size_type element_cnt_X,
         range(sc_map_linear_key(start_id_X),
         sc_map_linear_key(start_id_X+element_cnt_X-1))
 {
-    this->init(base::range.get_key_vector(), creator(), configuration);
+    this->init(base::range.get_key_vector(), typename base::creator(), configuration);
 
     return;
-}
-
-//******************************************************************************
-template <typename object_type>
-object_type* sc_map_linear<object_type>::creator::operator() (
-        const sc_module_name name, sc_map_linear<object_type>::key_type id)
-{
-    std::stringstream full_name;
-    
-    full_name << name << sc_map_linear<object_type>::key_separator_char << id;
-
-    return (new object_type(full_name.str().c_str()) );
-}
-
-//******************************************************************************
-template <typename object_type>
-template <typename config_type>
-object_type* sc_map_linear<object_type>::creator::operator() (
-        const sc_module_name name, sc_map_linear<object_type>::key_type id,
-        const config_type& configuration)
-{
-    std::stringstream full_name;
-
-    full_name << name << sc_map_linear<object_type>::key_separator_char << id;
-
-    return (new object_type(full_name.str().c_str(), configuration));
 }

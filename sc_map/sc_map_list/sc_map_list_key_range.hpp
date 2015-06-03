@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_list_key_range.hpp
  * @author Christian Amstutz
- * @date June 2, 2015
+ * @date June 3, 2015
  *
  * @brief
  *
@@ -13,22 +13,26 @@
 
 #pragma once
 
-#include "sc_map_key_range.hpp"
+#include "sc_map_list_key.hpp"
+
+#include "../sc_map_key_range.hpp"
 
 #include <vector>
 
 //******************************************************************************
-template <typename key_T>
-class sc_map_list_key_range : public sc_map_key_range<key_T>
+template <typename value_T>
+class sc_map_list_key_range : public sc_map_key_range<sc_map_list_key<value_T> >
 {
 public:
-    typedef typename sc_map_key_range<key_T>::key_type key_type;
+    typedef value_T value_type;
+    typedef sc_map_list_key<value_T> key_type;
 
     sc_map_list_key_range();
-    sc_map_list_key_range(const std::vector<key_type> keys);
+    sc_map_list_key_range(const std::vector<key_type>& keys);
+    sc_map_list_key_range(sc_map_key_range<key_type>& start_range, key_type start_key, key_type end_key);
     virtual ~sc_map_list_key_range() {};
 
-    virtual sc_map_list_key_range* clone();
+    virtual sc_map_list_key_range<value_type>* clone();
 
     void add_key(const key_type& new_key);
     //void add_key(const std::vector<key_type>& new_keys);
@@ -47,28 +51,54 @@ private:
 //******************************************************************************
 
 //******************************************************************************
-template <typename key_T>
-sc_map_list_key_range<key_T>::sc_map_list_key_range()
+template <typename value_T>
+sc_map_list_key_range<value_T>::sc_map_list_key_range()
 {}
 
+////******************************************************************************
+//template <typename key_T>
+//sc_map_list_key_range<value_T>::sc_map_list_key_range(
+//        const std::vector<value_type>& keys)
+//{
+//    for (typename std::vector<value_type>::const_iterator value_it = keys.begin();
+//         value_it != keys.end();
+//         ++value_it)
+//    {
+//        this->keys.push_back(key_type(*value_it));
+//    }
+//
+//    return;
+//}
+
 //******************************************************************************
-template <typename key_T>
-sc_map_list_key_range<key_T>::sc_map_list_key_range(
-        const std::vector<key_type> keys) :
+template <typename value_T>
+sc_map_list_key_range<value_T>::sc_map_list_key_range(
+        const std::vector<key_type>& keys) :
         keys(keys)
 {}
 
 //******************************************************************************
-template <typename key_T>
-typename sc_map_list_key_range<key_T>::sc_map_list_key_range*
-        sc_map_list_key_range<key_T>::clone()
+template <typename value_T>
+sc_map_list_key_range<value_T>::sc_map_list_key_range(
+        sc_map_list_key_range<value_T>& start_range, key_type start_key,
+        key_type end_key)
 {
-  return new sc_map_list_key_range<key_type>(*this);
+    range_key_T start_range.first();
+
+
+    return;
 }
 
 //******************************************************************************
-template <typename key_T>
-void sc_map_list_key_range<key_T>::add_key(const key_type& new_key)
+template <typename value_T>
+sc_map_list_key_range<value_T>* sc_map_list_key_range<value_T>::clone()
+{
+    return new sc_map_list_key_range<value_type>(*this);
+}
+
+//******************************************************************************
+template <typename value_T>
+void sc_map_list_key_range<value_T>::add_key(const key_type& new_key)
 {
     keys.push_back(new_key);
 
@@ -88,6 +118,10 @@ void sc_map_list_key_range<key_T>::add_key(const key_type& new_key)
 template <typename key_T>
 typename sc_map_list_key_range<key_T>::key_type
         sc_map_list_key_range<key_T>::first() const
+
+// sc_map_list_key_range<key_T>::key_type sc_map_list_key_range<key_T>::first() const [with key_T = sc_map_linear_key; sc_map_list_key_range<key_T>::key_type = sc_map_linear_key]’
+// sc_map_key_range<key_T>::key_type sc_map_key_range<key_T>::first() const [with key_T = sc_map_list_key<sc_map_linear_key>; sc_map_key_range<key_T>::key_type = sc_map_list_key<sc_map_linear_key>]’
+
 {
     return keys[0];
 }
