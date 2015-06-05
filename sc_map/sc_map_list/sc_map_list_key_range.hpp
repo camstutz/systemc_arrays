@@ -29,7 +29,7 @@ public:
 
     sc_map_list_key_range();
     sc_map_list_key_range(const std::vector<key_type>& keys);
-    sc_map_list_key_range(sc_map_key_range<key_type>& start_range, key_type start_key, key_type end_key);
+    sc_map_list_key_range(sc_map_key_range<key_type>* source_range, key_type start_key, key_type end_key);
     virtual ~sc_map_list_key_range() {};
 
     virtual sc_map_list_key_range<value_type>* clone();
@@ -55,21 +55,6 @@ template <typename value_T>
 sc_map_list_key_range<value_T>::sc_map_list_key_range()
 {}
 
-////******************************************************************************
-//template <typename key_T>
-//sc_map_list_key_range<value_T>::sc_map_list_key_range(
-//        const std::vector<value_type>& keys)
-//{
-//    for (typename std::vector<value_type>::const_iterator value_it = keys.begin();
-//         value_it != keys.end();
-//         ++value_it)
-//    {
-//        this->keys.push_back(key_type(*value_it));
-//    }
-//
-//    return;
-//}
-
 //******************************************************************************
 template <typename value_T>
 sc_map_list_key_range<value_T>::sc_map_list_key_range(
@@ -80,11 +65,23 @@ sc_map_list_key_range<value_T>::sc_map_list_key_range(
 //******************************************************************************
 template <typename value_T>
 sc_map_list_key_range<value_T>::sc_map_list_key_range(
-        sc_map_list_key_range<value_T>& start_range, key_type start_key,
+        sc_map_key_range<key_type>* source_range, key_type start_key,
         key_type end_key)
 {
-    range_key_T start_range.first();
 
+    if (source_range->key_in_range(start_key))
+    {
+        key_type key = start_key;
+
+        do
+        {
+            add_key(key);
+        } while (source_range->next_key(key));
+    }
+    else
+    {
+        return;
+    }
 
     return;
 }

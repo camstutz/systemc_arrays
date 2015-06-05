@@ -22,8 +22,8 @@ sc_map_linear_key_range::sc_map_linear_key_range() :
 }
 
 //******************************************************************************
-sc_map_linear_key_range::sc_map_linear_key_range(key_type start_key,
-        key_type end_key) :
+sc_map_linear_key_range::sc_map_linear_key_range(sc_map_key_range<key_type>*,
+        key_type start_key, key_type end_key) :
         start_key(start_key),
         end_key(end_key)
 {}

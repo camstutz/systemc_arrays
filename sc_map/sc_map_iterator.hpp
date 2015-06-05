@@ -151,7 +151,9 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
         position(start_key),
         end_flag(!end)
 {
-    range = new typename map_type::range_type(start_key, end_key);
+    range = new typename map_type::range_type(map->get_range(), start_key, end_key);
+
+    //sc_map_list_key_range<char>::sc_map_list_key_range(sc_map_key_range<sc_map_list_key<char> >*, sc_map_iterator<sc_map_base<sc_map_list_key_range<char>, sc_core::sc_signal<bool, (sc_core::sc_writer_policy)0u> > >::key_type&, sc_map_iterator<sc_map_base<sc_map_list_key_range<char>, sc_core::sc_signal<bool, (sc_core::sc_writer_policy)0u> > >::key_type&)’
 
     return;
 }

@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date June 3, 2015
+ * @date June 5, 2015
  *
  * @brief
  *
@@ -48,13 +48,13 @@ public:
     iterator begin();
     iterator end();
 
-    virtual sc_map_key_range<key_type>* get_range() =0;
+    range_type* get_range();
     std::pair<bool, key_type> get_key(object_type& object) const;
 
     //* todo: const versions needed?
     object_type& at(const key_type key);
     object_type& operator[] (const key_type key);
-    iterator operator()(key_type& start_key, key_type& end_key);
+    iterator operator()(key_type start_key, key_type end_key);
     iterator operator()(sc_map_key_range<key_type>& range);
 
     template <typename signal_type>
@@ -83,14 +83,15 @@ public:
     #endif
 
 public:
-    map_type objects;
-
     template <typename Creator>
     void init(std::vector<key_type>& key_vector, Creator object_creator);
     template <typename Creator, typename config_type>
     void init(std::vector<key_type>& key_vector, Creator object_creator, const config_type& configurator);
     template <typename Creator, typename config_type>
     void init(std::vector<key_type>& key_vector, Creator object_creator, const std::map<key_type, config_type>& configurations);
+
+    map_type objects;
+    range_type range;
 
     class creator
     {
@@ -205,6 +206,14 @@ typename sc_map_base<range_T, object_T>::iterator
 
 //******************************************************************************
 template <typename range_T, typename object_T>
+typename sc_map_base<range_T, object_T>::range_type*
+        sc_map_base<range_T, object_T>::get_range()
+{
+    return new range_type(range);
+}
+
+//******************************************************************************
+template <typename range_T, typename object_T>
 std::pair<bool, typename sc_map_base<range_T, object_T>::key_type>
         sc_map_base<range_T, object_T>::get_key(object_type& object) const
 {
@@ -249,7 +258,7 @@ typename sc_map_base<range_T, object_T>::object_type&
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::iterator
         sc_map_base<range_T, object_T>::operator()(
-        key_type& start_key, key_type& end_key)
+        key_type start_key, key_type end_key)
 {
     return iterator(this, start_key, end_key);
 }
@@ -384,8 +393,8 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_T>&
     {
         std::stringstream full_name;
         full_name << name
-                  << sc_map_base<trace_range_T, trace_object_T>::key_separator
-                  << sc_map.key_string(*object_it);
+                  << sc_map_base<trace_range_T, trace_object_T>::key_separator_char
+                  << object_it->name();
         sc_trace(tf, *object_it, full_name.str().c_str());
     }
 
