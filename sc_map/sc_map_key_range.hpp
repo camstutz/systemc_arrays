@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_key_range.hpp
  * @author Christian Amstutz
- * @date May 28, 2015
+ * @date June 5, 2015
  *
  * @brief
  *

@@ -14,8 +14,8 @@
 #include "sc_map_linear_key.hpp"
 
 //******************************************************************************
-sc_map_linear_key::sc_map_linear_key(index_type X_id) :
-        X(X_id)
+sc_map_linear_key::sc_map_linear_key(index_type X) :
+        X(X)
 {}
 
 //******************************************************************************

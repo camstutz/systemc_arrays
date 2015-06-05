@@ -14,6 +14,7 @@
 #pragma once
 
 #include "sc_map_iterator.hpp"
+#include "sc_map_config.hpp"
 
 #include "../modelsim_support/modelsim_support.hpp"
 
@@ -38,9 +39,6 @@ public:
     typedef sc_map_iterator<sc_map_base<range_type, object_type> > iterator;
     typedef typename map_type::size_type size_type;
     typedef object_type* pointer;
-
-    static const char key_separator_char;
-    static const char key_sub_separator_char;
 
     sc_map_base(const sc_module_name name);
     virtual ~sc_map_base() {};
@@ -112,14 +110,6 @@ friend sc_sensitive& operator<< (sc_sensitive& sensitivity_list, sc_map_base<sig
 };
 
 //******************************************************************************
-
-//******************************************************************************
-
-template <typename range_T, typename object_T>
-const char sc_map_base<range_T, object_T>::key_separator_char = '_';
-
-template <typename range_T, typename object_T>
-const char sc_map_base<range_T, object_T>::key_sub_separator_char = '-';
 
 //******************************************************************************
 template <typename range_T, typename object_T>
@@ -393,7 +383,7 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_T>&
     {
         std::stringstream full_name;
         full_name << name
-                  << sc_map_base<trace_range_T, trace_object_T>::key_separator_char
+                  << sc_map::key_separator_char
                   << object_it->name();
         sc_trace(tf, *object_it, full_name.str().c_str());
     }
@@ -423,7 +413,7 @@ typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, objec
 {
     std::stringstream full_name;
 
-    full_name << name << sc_map_base<range_type, object_type>::key_separator_char << id;
+    full_name << name << sc_map::key_separator_char << id;
 
     return (new object_type(full_name.str().c_str()) );
 }
@@ -437,7 +427,7 @@ typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, objec
 {
     std::stringstream full_name;
 
-    full_name << name << sc_map_base<range_type, object_type>::key_separator_char << id;
+    full_name << name << sc_map::key_separator_char << id;
 
     return (new object_type(full_name.str().c_str(), configuration));
 }

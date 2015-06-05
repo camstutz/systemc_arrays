@@ -45,7 +45,7 @@ sc_map_linear<object_T>::sc_map_linear(const typename base::size_type element_cn
         const sc_module_name name, const index_type start_id_X) :
         sc_map_base<typename base::range_type, object_T>(name)
 {
-    base::range = typename base::range_type(&(base::range), sc_map_linear_key(start_id_X),
+    base::range = typename base::range_type(sc_map_linear_key(start_id_X),
             sc_map_linear_key(start_id_X+element_cnt_X-1));
 
     std::vector<typename base::key_type> range_keys = base::range.get_key_vector();
@@ -61,10 +61,11 @@ template <typename config_type>
 sc_map_linear<object_T>::sc_map_linear(const typename base::size_type element_cnt_X,
         const sc_module_name name, const config_type configuration,
         const index_type start_id_X) :
-        sc_map_base<typename base::range_type, object_T>(name),
-        base::range(sc_map_linear_key(start_id_X),
-        sc_map_linear_key(start_id_X+element_cnt_X-1))
+        sc_map_base<typename base::range_type, object_T>(name)
 {
+    base::range = typename base::range_type(sc_map_linear_key(start_id_X),
+                sc_map_linear_key(start_id_X+element_cnt_X-1));
+
     this->init(base::range.get_key_vector(), typename base::creator(), configuration);
 
     return;

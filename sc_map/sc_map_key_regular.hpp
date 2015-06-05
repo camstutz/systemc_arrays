@@ -23,6 +23,7 @@ public:
 
     static const index_type default_start_id;
 
+    sc_map_key_regular() {};
     virtual ~sc_map_key_regular() {};
 
     virtual std::string get_string() const =0;
