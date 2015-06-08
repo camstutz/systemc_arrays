@@ -40,7 +40,6 @@ public:
     virtual key_type first() const;
     virtual key_type last() const;
     virtual bool next_key(key_type& key) const;
-    virtual bool key_in_range(const key_type& key) const;
 
     std::vector<key_type> get_key_vector() const;
 
@@ -151,23 +150,6 @@ bool sc_map_list_key_range<key_T>::next_key(key_type& key) const
             {
                 return false;
             }
-        }
-    }
-
-    return false;
-}
-
-//******************************************************************************
-template <typename key_T>
-bool sc_map_list_key_range<key_T>::key_in_range(const key_type& key) const
-{
-    for (typename std::vector<key_type>::const_iterator key_it = keys.begin();
-         key_it != keys.end();
-         ++key_it)
-    {
-        if (*key_it == key)
-        {
-            return true;
         }
     }
 
