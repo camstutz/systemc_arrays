@@ -50,7 +50,8 @@ sc_map_list<value_T, object_T>::sc_map_list(std::vector<value_type>& key_vector,
          value_it != key_vector.end();
          ++value_it)
     {
-        keys.push_back(key_type(*value_it));
+        typename base::key_type new_key = typename base::key_type(*value_it);
+        keys.push_back(new_key);
     }
 
     base::range = keys;

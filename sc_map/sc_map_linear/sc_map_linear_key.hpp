@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_key.hpp
  * @author Christian Amstutz
- * @date June 2, 2015
+ * @date June 8, 2015
  *
  * @brief
  *
@@ -13,17 +13,17 @@
 
 #pragma once
 
-#include "../sc_map_key_regular.hpp"
+#include "../sc_map_regular/sc_map_regular_key.hpp"
 
 #include <string>
 #include <sstream>
 
 //******************************************************************************
 
-class sc_map_linear_key : public sc_map_key_regular
+class sc_map_linear_key : public sc_map_regular_key
 {
 public:
-    typedef sc_map_key_regular::index_type index_type;
+    typedef sc_map_regular_key::index_type index_type;
 
     index_type X;
 

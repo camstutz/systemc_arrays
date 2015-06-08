@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_list_key.hpp
  * @author Christian Amstutz
- * @date June 3, 2015
+ * @date June 8, 2015
  *
  * @brief
  *
@@ -13,14 +13,14 @@
 
 #pragma once
 
-#include "../sc_map_key_regular.hpp"
+#include "../sc_map_key.hpp"
 
 #include <string>
 #include <sstream>
 
 //******************************************************************************
 template <typename value_T>
-class sc_map_list_key : public sc_map_key_regular
+class sc_map_list_key : public sc_map_key
 {
 public:
     typedef value_T value_type;

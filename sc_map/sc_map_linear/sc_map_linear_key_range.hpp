@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_key_range.hpp
  * @author Christian Amstutz
- * @date June 5, 2015
+ * @date June 8, 2015
  *
  * @brief
  *
@@ -14,7 +14,7 @@
 #pragma once
 
 #include "sc_map_linear_key.hpp"
-#include "../sc_map_regular_key_range.hpp"
+#include "../sc_map_regular/sc_map_regular_key_range.hpp"
 
 #include <vector>
 

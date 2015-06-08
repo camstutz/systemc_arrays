@@ -27,6 +27,10 @@ int sc_main(int argc, char *agv[])
 //    sink_4d snk4("sink4");
 
     sc_map_linear<sc_signal<bool> > signals1(2, "signal1");
+    std::vector<char> sig_names;
+    sig_names.push_back('a');
+    sig_names.push_back('b');
+    sc_map_list<char, sc_signal<bool> > signals_list(sig_names, "signal_list");
 //    sc_map_square<sc_signal<bool> > signals2(3, 2, "signal2");
 //    sc_map_cube<sc_signal<bool> > signals3(4, 3, 2, "signal3");
 //    sc_map_4d<sc_signal<bool> > signals4(5, 4, 3, 2, "signal4");

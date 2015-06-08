@@ -45,7 +45,7 @@ bool sc_map_linear_key_range::next_key(key_type& key) const
     sc_map_linear_key new_key;
     new_key.X = key_linear->X + 1;
 
-    if (key_in_range(new_key))
+    if (new_key <= end_key)
     {
         *key_linear = new_key;
         return true;

@@ -1,7 +1,7 @@
 /*!
- * @file sc_map_key_regular.hpp
+ * @file sc_map_regular_key.hpp
  * @author Christian Amstutz
- * @date May 27, 2015
+ * @date June 8, 2015
  *
  * @brief
  *
@@ -13,18 +13,18 @@
 
 #pragma once
 
-#include "sc_map_key.hpp"
+#include "../sc_map_key.hpp"
 
 //******************************************************************************
-class sc_map_key_regular : public sc_map_key
+class sc_map_regular_key : public sc_map_key
 {
 public:
     typedef int index_type;
 
     static const index_type default_start_id;
 
-    sc_map_key_regular() {};
-    virtual ~sc_map_key_regular() {};
+    sc_map_regular_key() {};
+    virtual ~sc_map_regular_key() {};
 
     virtual std::string get_string() const =0;
 
