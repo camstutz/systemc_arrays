@@ -49,7 +49,9 @@ int sc_main(int argc, char *agv[])
 //              << signals4.size_Y() << "/"
 //              << signals4.size_X() << ")" << std::endl;
 
-    src1.output.bind(signals1);
+    src1.output.bind(signals1(0,1));
+
+
     //src1.output.bind(signals_list);
 //    src2.output.bind(signals2);
 //    src3.output.bind(signals3);

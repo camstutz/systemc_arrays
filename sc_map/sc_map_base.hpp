@@ -65,7 +65,7 @@ public:
     template <typename signal_range_T, typename signal_T>
     void operator()(sc_map_base<signal_range_T, signal_T>& signal_map);
     template <typename signal_map_T>
-    void bind(sc_map_iterator<signal_map_T>& signal_it);
+    void bind(sc_map_iterator<signal_map_T> signal_it);
     template <typename signal_map_T>
     void operator()(sc_map_iterator<signal_map_T> signal_it);
 
@@ -330,7 +330,7 @@ void sc_map_base<range_T, object_T>::operator()(
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename signal_map_T>
-void sc_map_base<range_T, object_T>::bind(sc_map_iterator<signal_map_T>& signal_it)
+void sc_map_base<range_T, object_T>::bind(sc_map_iterator<signal_map_T> signal_it)
 {
     // todo: check for equal size
     // todo: check for same object
