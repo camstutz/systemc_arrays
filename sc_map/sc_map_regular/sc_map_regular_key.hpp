@@ -20,6 +20,7 @@ class sc_map_regular_key : public sc_map_key
 {
 public:
     typedef int index_type;
+    typedef enum {UP_count, DOWN_count} count_direction_type;
 
     static const index_type default_start_id;
 

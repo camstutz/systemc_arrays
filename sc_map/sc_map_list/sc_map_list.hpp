@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_list.hpp
  * @author Christian Amstutz
- * @date June 8, 2015
+ * @date June 9, 2015
  *
  * @brief
  *
@@ -18,21 +18,27 @@
 
 #include <systemc.h>
 
-#include <vector>
 #include <string>
 #include <sstream>
 
 //******************************************************************************
-template <typename value_T, typename object_T>
-class sc_map_list : public sc_map_base<sc_map_list_key_range<value_T>, object_T>
+template <typename key_value_T, typename object_T>
+class sc_map_list : public sc_map_base<sc_map_list_key_range<key_value_T>, object_T>
 {
 public:
-    typedef sc_map_base<sc_map_list_key_range<value_T>, object_T> base;
-    typedef value_T value_type;
+    typedef sc_map_base<sc_map_list_key_range<key_value_T>, object_T> base;
+    typedef key_value_T key_value_type;
+    typedef std::vector<key_value_type> key_value_vector_type;
+    typedef typename base::range_type range_type;
+    typedef typename base::key_type key_type;
+    typedef typename base::key_vector_type key_vector_type;
 
-    sc_map_list(std::vector<value_type>& key_vector, const sc_module_name name);
+    sc_map_list(key_value_vector_type& key_vector, const sc_module_name name);
     template <typename config_T>
-    sc_map_list(std::vector<value_type>& key_vector, const sc_module_name name, const config_T configuration);
+    sc_map_list(key_value_vector_type& key_vector, const sc_module_name name, const config_T configuration);
+    sc_map_list(range_type& new_range, const sc_module_name name);
+    template <typename config_T>
+    sc_map_list(range_type& new_range, const sc_module_name name, const config_T configuration);
     virtual ~sc_map_list() {};
 };
 
@@ -40,22 +46,20 @@ public:
 
 //******************************************************************************
 template <typename value_T, typename object_T>
-sc_map_list<value_T, object_T>::sc_map_list(std::vector<value_type>& key_vector,
+sc_map_list<value_T, object_T>::sc_map_list(key_value_vector_type& key_vector,
         const sc_module_name name) :
-        sc_map_base<typename base::range_type, object_T>(name)
+        sc_map_base<range_type, object_T>(name)
 {
-    std::vector<typename base::key_type> keys;
+    range_type range;
 
-    for (typename std::vector<value_type>::iterator value_it = key_vector.begin();
+    for (typename key_value_vector_type::iterator value_it = key_vector.begin();
          value_it != key_vector.end();
          ++value_it)
     {
-        typename base::key_type new_key = typename base::key_type(*value_it);
-        keys.push_back(new_key);
+        range.add_key(key_type(*value_it));
     }
 
-    base::range = keys;
-    this->init(keys, typename base::creator());
+    this->init(range, typename base::creator());
 
     return;
 }
@@ -63,21 +67,41 @@ sc_map_list<value_T, object_T>::sc_map_list(std::vector<value_type>& key_vector,
 //******************************************************************************
 template <typename value_T, typename object_T>
 template <typename config_T>
-sc_map_list<value_T, object_T>::sc_map_list(std::vector<value_type>& key_vector,
+sc_map_list<value_T, object_T>::sc_map_list(key_value_vector_type& key_vector,
         const sc_module_name name, const config_T configuration) :
-        sc_map_base<typename base::range_type, object_T>(name)
+        sc_map_base<range_type, object_T>(name)
 {
-    std::vector<typename base::key_type> keys;
+    range_type range;
 
-    for (typename std::vector<value_type>::iterator value_it = key_vector.begin();
+    for (typename key_value_vector_type::iterator value_it = key_vector.begin();
          value_it != key_vector.end();
          ++value_it)
     {
-        keys.push_back(typename base::key_type(*value_it));
+        range.add_key(key_type(*value_it));
     }
 
-    base::range = keys;
-    this->init(base::range.get_key_vector(), typename base::creator(), configuration);
+    this->init(range, typename base::creator(), configuration);
+
+    return;
+}
+
+//******************************************************************************
+template <typename value_T, typename object_T>
+sc_map_list<value_T, object_T>::sc_map_list(range_type& new_range,
+        const sc_module_name name)
+{
+    this->init(new_range, typename base::creator());
+
+    return;
+}
+
+//******************************************************************************
+template <typename value_T, typename object_T>
+template <typename config_T>
+sc_map_list<value_T, object_T>::sc_map_list(range_type& new_range,
+        const sc_module_name name, const config_T configuration)
+{
+    this->init(new_range, typename base::creator(), configuration);
 
     return;
 }

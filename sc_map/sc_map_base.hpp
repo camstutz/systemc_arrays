@@ -34,6 +34,7 @@ class sc_map_base : public sc_object
 public:
     typedef range_T range_type;
     typedef typename range_type::key_type key_type;
+    typedef std::vector<key_type> key_vector_type;
     typedef object_T object_type;
     typedef std::map<key_type, object_type*, typename key_type::Comperator> map_type;
     typedef sc_map_iterator<sc_map_base<range_type, object_type> > iterator;
@@ -82,11 +83,11 @@ public:
 
 public:
     template <typename Creator>
-    void init(std::vector<key_type>& key_vector, Creator object_creator);
+    void init(range_type& new_range, Creator object_creator);
     template <typename Creator, typename config_type>
-    void init(std::vector<key_type>& key_vector, Creator object_creator, const config_type& configurator);
+    void init(range_type& new_range, Creator object_creator, const config_type& configurator);
     template <typename Creator, typename config_type>
-    void init(std::vector<key_type>& key_vector, Creator object_creator, const std::map<key_type, config_type>& configurations);
+    void init(range_type& new_range, Creator object_creator, const std::map<key_type, config_type>& configurations);
 
     map_type objects;
     range_type range;
@@ -120,10 +121,13 @@ sc_map_base<range_T, object_T>::sc_map_base(const sc_module_name name) :
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator>
-void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
+void sc_map_base<range_T, object_T>::init(range_type& new_range,
         Creator object_creator)
 {
-    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
+    range = new_range;
+
+    key_vector_type key_vector = range.get_key_vector();
+    for (typename key_vector_type::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {
@@ -140,10 +144,13 @@ void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
+void sc_map_base<range_T, object_T>::init(range_type& new_range,
         Creator object_creator, const config_type& configurator)
 {
-    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
+    range = new_range;
+
+    key_vector_type key_vector = range.get_key_vector();
+    for (typename key_vector_type::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {
@@ -160,11 +167,14 @@ void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init( std::vector<key_type>& key_vector,
+void sc_map_base<range_T, object_T>::init(range_type& new_range,
         Creator object_creator,
         const std::map<key_type, config_type>& configurations)
 {
-    for (typename std::vector<key_type>::const_iterator key_it = key_vector.begin();
+    range = new_range;
+
+    key_vector_type key_vector = range.get_key_vector();
+    for (typename key_vector_type::const_iterator key_it = key_vector.begin();
          key_it != key_vector.end();
          ++key_it)
     {

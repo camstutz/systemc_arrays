@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_key.hpp
  * @author Christian Amstutz
- * @date June 8, 2015
+ * @date June 9, 2015
  *
  * @brief
  *
@@ -23,7 +23,7 @@
 class sc_map_linear_key : public sc_map_regular_key
 {
 public:
-    typedef sc_map_regular_key::index_type index_type;
+    using sc_map_regular_key::index_type;
 
     index_type X;
 

@@ -32,7 +32,7 @@ sc_map_linear_key_range::sc_map_linear_key_range(sc_map_key_range<key_type>*,
 {}
 
 //******************************************************************************
-sc_map_linear_key_range* sc_map_linear_key_range::clone()
+sc_map_linear_key_range* sc_map_linear_key_range::clone() const
 {
   return new sc_map_linear_key_range(*this);
 }
