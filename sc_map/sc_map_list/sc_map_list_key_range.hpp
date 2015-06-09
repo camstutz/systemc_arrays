@@ -129,6 +129,8 @@ typename sc_map_list_key_range<key_T>::key_type
 template <typename key_T>
 bool sc_map_list_key_range<key_T>::next_key(key_type& key) const
 {
+    // todo: reverse access
+
     for (typename std::vector<key_type>::const_iterator key_it = keys.begin();
          key_it != keys.end();
          ++key_it)
