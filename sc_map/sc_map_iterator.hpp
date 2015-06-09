@@ -13,11 +13,10 @@
 
 #pragma once
 
-#include "sc_map_key_range.hpp"
-
 #include <iterator>
 
 #include <systemc.h>
+#include "sc_map_range.hpp"
 
 template <typename range_T, typename object_T>
 class sc_map_base;
@@ -38,8 +37,8 @@ public:
     sc_map_iterator(sc_map_T* sc_map);
     sc_map_iterator(sc_map_T* sc_map, end_type end_id);
     sc_map_iterator(sc_map_T* sc_map, key_type map_pos);
-    sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range);
-    sc_map_iterator(sc_map_T* sc_map, sc_map_key_range<key_type>& range, const key_type& map_pos);
+    sc_map_iterator(sc_map_T* sc_map, sc_map_range<key_type>& range);
+    sc_map_iterator(sc_map_T* sc_map, sc_map_range<key_type>& range, const key_type& map_pos);
     sc_map_iterator(sc_map_T* sc_map, key_type& start_key, key_type& end_key);
     virtual ~sc_map_iterator();
 
@@ -70,7 +69,7 @@ public:
 
 private:
     map_type* map;
-    sc_map_key_range<key_type>* range;
+    sc_map_range<key_type>* range;
     key_type position;
     end_type end_flag;
 };
@@ -116,7 +115,7 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, key_type map_pos) :
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        sc_map_key_range<key_type>& range) :
+        sc_map_range<key_type>& range) :
         map(sc_map),
         end_flag(!end)
 {
@@ -131,7 +130,7 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        sc_map_key_range<key_type>& range, const key_type& map_pos) :
+        sc_map_range<key_type>& range, const key_type& map_pos) :
         map(sc_map),
         end_flag(!end)
 {

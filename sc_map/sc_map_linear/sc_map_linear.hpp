@@ -15,20 +15,19 @@
 
 #include "../sc_map_base.hpp"
 #include "sc_map_linear_key.hpp"
-#include "sc_map_linear_key_range.hpp"
-
 #include <systemc.h>
 
 #include <string>
 #include <sstream>
+#include "sc_map_linear_range.hpp"
 
 //******************************************************************************
 
 template <typename object_T>
-class sc_map_linear : public sc_map_base<sc_map_linear_key_range, object_T>
+class sc_map_linear : public sc_map_base<sc_map_linear_range, object_T>
 {
 public:
-    typedef sc_map_base<sc_map_linear_key_range, object_T> base;
+    typedef sc_map_base<sc_map_linear_range, object_T> base;
     typedef typename base::range_type range_type;
     typedef typename base::key_type key_type;
     typedef typename base::key_vector_type key_vector_type;

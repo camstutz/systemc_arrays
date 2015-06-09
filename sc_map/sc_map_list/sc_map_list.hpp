@@ -14,19 +14,18 @@
 #pragma once
 
 #include "../sc_map_base.hpp"
-#include "sc_map_list_key_range.hpp"
-
 #include <systemc.h>
 
 #include <string>
 #include <sstream>
+#include "sc_map_list_range.hpp"
 
 //******************************************************************************
 template <typename key_value_T, typename object_T>
-class sc_map_list : public sc_map_base<sc_map_list_key_range<key_value_T>, object_T>
+class sc_map_list : public sc_map_base<sc_map_list_range<key_value_T>, object_T>
 {
 public:
-    typedef sc_map_base<sc_map_list_key_range<key_value_T>, object_T> base;
+    typedef sc_map_base<sc_map_list_range<key_value_T>, object_T> base;
     typedef key_value_T key_value_type;
     typedef std::vector<key_value_type> key_value_vector_type;
     typedef typename base::range_type range_type;

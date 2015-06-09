@@ -1,7 +1,7 @@
 /*!
- * @file sc_map_key_range.hpp
+ * @file sc_map_range.hpp
  * @author Christian Amstutz
- * @date June 8, 2015
+ * @date June 9, 2015
  *
  * @brief
  *
@@ -22,15 +22,15 @@
 
 //******************************************************************************
 template <typename key_T>
-class sc_map_key_range
+class sc_map_range
 {
 public:
     typedef key_T key_type;
     typedef std::vector<key_type> key_vector_type;
 
-    virtual ~sc_map_key_range() {};
+    virtual ~sc_map_range() {};
 
-    virtual sc_map_key_range* clone() const =0;
+    virtual sc_map_range* clone() const =0;
 
     virtual key_type first() const =0;
     virtual key_type last() const =0;
@@ -44,7 +44,7 @@ public:
 
 //******************************************************************************
 template <typename key_T>
-bool sc_map_key_range<key_T>::key_in_range(const key_type& key) const
+bool sc_map_range<key_T>::key_in_range(const key_type& key) const
 {
     key_type range_key = first();
     do
@@ -60,8 +60,8 @@ bool sc_map_key_range<key_T>::key_in_range(const key_type& key) const
 
 //******************************************************************************
 template <typename key_T>
-typename sc_map_key_range<key_T>::key_vector_type
-        sc_map_key_range<key_T>::get_key_vector() const
+typename sc_map_range<key_T>::key_vector_type
+        sc_map_range<key_T>::get_key_vector() const
 {
     key_vector_type key_vector;
 

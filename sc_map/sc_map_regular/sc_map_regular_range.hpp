@@ -1,5 +1,5 @@
 /*!
- * @file sc_map_regular_key_range.hpp
+ * @file sc_map_regular_range.hpp
  * @author Christian Amstutz
  * @date June 9, 2015
  *
@@ -13,21 +13,20 @@
 
 #pragma once
 
-#include "../sc_map_key_range.hpp"
-
 #include <vector>
+#include "../sc_map_range.hpp"
 
 //******************************************************************************
 template <typename key_T>
-class sc_map_regular_key_range : public sc_map_key_range<key_T>
+class sc_map_regular_range : public sc_map_range<key_T>
 {
 public:
     typedef key_T key_type;
 
-    sc_map_regular_key_range(key_type start_key, key_type end_key);
-    virtual ~sc_map_regular_key_range() {};
+    sc_map_regular_range(key_type start_key, key_type end_key);
+    virtual ~sc_map_regular_range() {};
 
-    virtual sc_map_key_range<key_type>* clone() const =0;
+    virtual sc_map_range<key_type>* clone() const =0;
 
     virtual key_type first() const;
     virtual key_type last() const;
@@ -43,7 +42,7 @@ public:
 
 //******************************************************************************
 template <typename key_T>
-sc_map_regular_key_range<key_T>::sc_map_regular_key_range(key_type start_key,
+sc_map_regular_range<key_T>::sc_map_regular_range(key_type start_key,
         key_type end_key) :
         start_key(start_key),
         end_key(end_key)
@@ -51,16 +50,16 @@ sc_map_regular_key_range<key_T>::sc_map_regular_key_range(key_type start_key,
 
 //******************************************************************************
 template <typename key_T>
-typename sc_map_regular_key_range<key_T>::key_type
-        sc_map_regular_key_range<key_T>::first() const
+typename sc_map_regular_range<key_T>::key_type
+        sc_map_regular_range<key_T>::first() const
 {
     return start_key;
 }
 
 //******************************************************************************
 template <typename key_T>
-typename sc_map_regular_key_range<key_T>::key_type
-        sc_map_regular_key_range<key_T>::last() const
+typename sc_map_regular_range<key_T>::key_type
+        sc_map_regular_range<key_T>::last() const
 {
     return end_key;
 }
