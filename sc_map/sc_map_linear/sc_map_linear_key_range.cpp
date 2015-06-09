@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_key_range.cpp
  * @author Christian Amstutz
- * @date June 5, 2015
+ * @date June 9, 2015
  *
  * @brief
  *
@@ -41,14 +41,25 @@ sc_map_linear_key_range* sc_map_linear_key_range::clone() const
 bool sc_map_linear_key_range::next_key(key_type& key) const
 {
     sc_map_linear_key* key_linear = dynamic_cast<sc_map_linear_key*>(&key);
-
     sc_map_linear_key new_key;
-    new_key.X = key_linear->X + 1;
 
-    if (new_key <= end_key)
+    if (start_key <= end_key)
     {
-        *key_linear = new_key;
-        return true;
+        new_key.X = key_linear->X + 1;
+        if (new_key <= end_key)
+        {
+            *key_linear = new_key;
+            return true;
+        }
+    }
+    else
+    {
+        new_key.X = key_linear->X - 1;
+        if (new_key >= start_key)
+        {
+            *key_linear = new_key;
+            return true;
+        }
     }
 
     return false;
