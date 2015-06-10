@@ -28,6 +28,8 @@ public:
     typedef key_T key_type;
     typedef std::vector<key_type> key_vector_type;
 
+    enum direction{UP, DOWN};
+
     virtual ~sc_map_range() {};
 
     virtual sc_map_range* clone() const =0;

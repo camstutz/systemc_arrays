@@ -14,7 +14,6 @@
 #pragma once
 
 #include "sc_map_linear_key.hpp"
-#include <vector>
 #include "../sc_map_regular/sc_map_regular_range.hpp"
 
 //******************************************************************************
@@ -31,4 +30,7 @@ public:
     virtual sc_map_linear_range* clone() const;
 
     virtual bool next_key(key_type& key) const;
+
+private:
+    direction X_dir;
 };

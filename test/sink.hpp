@@ -13,16 +13,16 @@ public:
     SC_HAS_PROCESS(sink);
 };
 
-//class sink_square : public sc_module {
-//public:
-//    sc_map_square<sc_in<bool> > input;
-//
-//    void detect_signal();
-//
-//    sink_square(sc_module_name _name);
-//    SC_HAS_PROCESS(sink_square);
-//};
-//
+class sink_square : public sc_module {
+public:
+    sc_map_square<sc_in<bool> > input;
+
+    void detect_signal();
+
+    sink_square(sc_module_name _name);
+    SC_HAS_PROCESS(sink_square);
+};
+
 //class sink_cube : public sc_module {
 //public:
 //    sc_map_cube<sc_in<bool> > input;

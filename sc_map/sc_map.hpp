@@ -16,4 +16,4 @@
 #include "sc_map_base.hpp"
 #include "sc_map_list/sc_map_list.hpp"
 #include "sc_map_linear/sc_map_linear.hpp"
-//#include "sc_map_square/sc_map_square.hpp"
+#include "sc_map_square/sc_map_square.hpp"
