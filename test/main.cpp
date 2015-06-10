@@ -57,6 +57,16 @@ int sc_main(int argc, char *agv[])
 
     snk1.input.bind(signals1);
     snk2.input.bind(signals2);
+
+    std::cerr << "Size Sink2: " << snk2.input.objects.size() << std::endl;
+    std::cerr << "Size Src2: " << src2.output.objects.size() << std::endl;
+    for (sc_map_square<sc_in<bool> >::map_type::iterator in_it = snk2.input.objects.begin();
+         in_it != snk2.input.objects.end();
+         ++in_it)
+    {
+        std::cerr << "-> " << in_it->first << "," << in_it->second->name() << std::endl;
+    }
+
 //    snk3.input.bind(signals3);
 //    snk4.input.bind(signals4);
 

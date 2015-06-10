@@ -25,6 +25,9 @@
 #include <string>
 #include <sstream>
 
+// todo: remove
+#include <iostream>
+
 //******************************************************************************
 template <typename range_T, typename object_T>
 class sc_map_base : public sc_object
@@ -96,7 +99,7 @@ public:
     {
     public:
         creator() {};
-        object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id);
+        object_type* operator() (const sc_module_name name, const sc_map_base<range_type, object_type>::key_type id);
         template <typename config_T>
         object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id, const config_T& configuration);
     };
@@ -136,6 +139,8 @@ void sc_map_base<range_T, object_T>::init(range_type& new_range,
 
         object_type* p = object_creator(cname, *key_it);
         objects.insert(typename map_type::value_type(*key_it, p));
+
+        std::cout << __FILE__ << ": Key " << *key_it << " £ " << objects.size() << std::endl;
     }
 
     return;
@@ -308,7 +313,7 @@ void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_T>&
 
     for (; port_it != port_end; ++port_it)
     {
-        std::cout << port_it->name() << "->" << signal_it->name() << std::endl;
+std::cout << __FILE__ << ": " << port_it->name() << "->" << signal_it->name() << std::endl;
 
         //port_it->bind(*signal_it);
         ++signal_it;
@@ -420,10 +425,11 @@ sc_sensitive& operator<< (sc_sensitive& sensitivity_list,
 //******************************************************************************
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, object_T>::creator::operator() (
-        const sc_module_name name, sc_map_base<range_type, object_type>::key_type id)
+        const sc_module_name name, const sc_map_base<range_type, object_type>::key_type id)
 {
     std::stringstream full_name;
 
+std::cerr << __FILE__ << ": " << id << std::endl;
     full_name << name << sc_map::key_separator_char << id;
 
     return (new object_type(full_name.str().c_str()) );
