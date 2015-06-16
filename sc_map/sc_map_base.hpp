@@ -308,9 +308,7 @@ void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_T>&
 
     for (; port_it != port_end; ++port_it)
     {
-        std::cout << port_it->name() << "->" << signal_it->name() << std::endl;
-
-        //port_it->bind(*signal_it);
+        port_it->bind(*signal_it);
         ++signal_it;
     }
 

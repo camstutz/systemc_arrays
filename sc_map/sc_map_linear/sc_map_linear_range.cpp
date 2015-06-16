@@ -15,7 +15,7 @@
 
 //******************************************************************************
 sc_map_linear_range::sc_map_linear_range() :
-        sc_map_regular_range(0, 0),
+        sc_map_regular_range(sc_map_linear_key(0), sc_map_linear_key(0)),
         X_dir(UP)
 {}
     // todo:: this is basically not correct!

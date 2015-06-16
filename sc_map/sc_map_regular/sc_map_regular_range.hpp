@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_regular_range.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 15, 2015
  *
  * @brief
  *
@@ -23,7 +23,7 @@ class sc_map_regular_range : public sc_map_range<key_T>
 public:
     typedef key_T key_type;
 
-    sc_map_regular_range(key_type start_key, key_type end_key);
+    sc_map_regular_range(const key_type& start_key, const key_type& end_key);
     virtual ~sc_map_regular_range() {};
 
     virtual sc_map_range<key_type>* clone() const =0;
@@ -42,8 +42,8 @@ public:
 
 //******************************************************************************
 template <typename key_T>
-sc_map_regular_range<key_T>::sc_map_regular_range(key_type start_key,
-        key_type end_key) :
+sc_map_regular_range<key_T>::sc_map_regular_range(const key_type& start_key,
+        const key_type& end_key) :
         start_key(start_key),
         end_key(end_key)
 {}

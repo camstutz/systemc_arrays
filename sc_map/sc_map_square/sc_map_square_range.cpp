@@ -22,10 +22,19 @@ sc_map_square_range::sc_map_square_range() :
     // todo:: this is basically not correct!
 
 //******************************************************************************
-sc_map_square_range::sc_map_square_range(key_type start_key,
-        key_type end_key) :
+sc_map_square_range::sc_map_square_range(const key_type& start_key,
+        const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
 {
+    if (start_key.Y <= end_key.Y)
+    {
+        Y_dir = UP;
+    }
+    else
+    {
+        Y_dir = DOWN;
+    }
+
     if (start_key.X <= end_key.X)
     {
         X_dir = UP;
@@ -33,25 +42,25 @@ sc_map_square_range::sc_map_square_range(key_type start_key,
     else
     {
         X_dir = DOWN;
-    }
-
-    if (start_key.X <= end_key.X)
-    {
-        Y_dir = UP;
-    }
-    else
-    {
-        Y_dir = DOWN;
     }
 
     return;
 }
 
 //******************************************************************************
-sc_map_square_range::sc_map_square_range(sc_map_range<key_type>*,
-        key_type start_key, key_type end_key) :
+sc_map_square_range::sc_map_square_range(const sc_map_range<key_type>*,
+        const key_type& start_key, const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
 {
+    if (start_key.Y <= end_key.Y)
+    {
+        Y_dir = UP;
+    }
+    else
+    {
+        Y_dir = DOWN;
+    }
+
     if (start_key.X <= end_key.X)
     {
         X_dir = UP;
@@ -59,15 +68,6 @@ sc_map_square_range::sc_map_square_range(sc_map_range<key_type>*,
     else
     {
         X_dir = DOWN;
-    }
-
-    if (start_key.X <= end_key.X)
-    {
-        Y_dir = UP;
-    }
-    else
-    {
-        Y_dir = DOWN;
     }
 
     return;
@@ -118,8 +118,6 @@ bool sc_map_square_range::next_key(key_type& key) const
     }
 
     *key_square = new_key;
-
-    return true;
 
     return true;
 }

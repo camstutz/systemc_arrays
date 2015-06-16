@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square_key.cpp
  * @author Christian Amstutz
- * @date May 27, 2015
+ * @date June 16, 2015
  *
  * @brief
  *
@@ -56,10 +56,19 @@ bool sc_map_square_key::operator<(const sc_map_key& other_key) const
     const sc_map_square_key* other_key_square =
             dynamic_cast<const sc_map_square_key*>(&other_key);
 
-    bool smaller =  true;
+    bool smaller = false;
 
-    smaller &= this->Y < other_key_square->Y;
-    smaller &= this->X < other_key_square->X;
+    if (this->Y < other_key_square->Y)
+    {
+        smaller = true;
+    }
+    else if (this->Y == other_key_square->Y)
+    {
+        if (this->X < other_key_square->X)
+        {
+            smaller = true;
+        }
+    }
 
     return smaller;
 }

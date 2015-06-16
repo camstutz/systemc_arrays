@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_key.cpp
  * @author Christian Amstutz
- * @date May 207, 2015
+ * @date May 27, 2015
  *
  * @brief
  *
