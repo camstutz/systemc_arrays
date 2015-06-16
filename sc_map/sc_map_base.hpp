@@ -300,17 +300,7 @@ template <typename signal_range_T, typename signal_T>
 void sc_map_base<range_T, object_T>::bind(sc_map_base<signal_range_T, signal_T>&
         signal_map)
 {
-    // todo: check range
-
-    iterator port_it = begin();
-    iterator port_end = end();
-    typename sc_map_base<signal_range_T, signal_T>::iterator signal_it = signal_map.begin();
-
-    for (; port_it != port_end; ++port_it)
-    {
-        port_it->bind(*signal_it);
-        ++signal_it;
-    }
+    bind(signal_map.begin());
 
     return;
 }
