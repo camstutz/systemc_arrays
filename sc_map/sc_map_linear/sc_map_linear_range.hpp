@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_range.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
