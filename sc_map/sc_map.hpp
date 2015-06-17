@@ -1,7 +1,7 @@
 /*!
  * @file sc_map.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -17,3 +17,4 @@
 #include "sc_map_list/sc_map_list.hpp"
 #include "sc_map_linear/sc_map_linear.hpp"
 #include "sc_map_square/sc_map_square.hpp"
+#include "sc_map_cube/sc_map_cube.hpp"

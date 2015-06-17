@@ -27,17 +27,17 @@ public:
     SC_HAS_PROCESS(source_square);
 };
 
-//class source_cube : public sc_module
-//{
-//public:
-//    sc_map_cube<sc_out<bool> > output;
-//
-//    void create_data();
-//
-//    source_cube(sc_module_name _name);
-//    SC_HAS_PROCESS(source_cube);
-//};
-//
+class source_cube : public sc_module
+{
+public:
+    sc_map_cube<sc_out<bool> > output;
+
+    void create_data();
+
+    source_cube(sc_module_name _name);
+    SC_HAS_PROCESS(source_cube);
+};
+
 //class source_4d : public sc_module
 //{
 //public:

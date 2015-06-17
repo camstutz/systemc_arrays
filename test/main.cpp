@@ -18,12 +18,12 @@ int sc_main(int argc, char *agv[])
 
     source src1("source1");
     source_square src2("source2");
-//    source_cube src3("source3");
+    source_cube src3("source3");
 //    source_4d src4("source4");
 
     sink snk1("sink1");
     sink_square snk2("sink2");
-//    sink_cube snk3("sink3");
+    sink_cube snk3("sink3");
 //    sink_4d snk4("sink4");
 
     sc_map_linear<sc_signal<bool> > signals1(2, "signal1");
@@ -33,7 +33,7 @@ int sc_main(int argc, char *agv[])
     sc_map_list<char, sc_signal<bool> > signals_list(sig_names, "signal_list");
     sc_map_square<sc_signal<bool> > signals2(3, 2, "signal2");
 
-//    sc_map_cube<sc_signal<bool> > signals3(4, 3, 2, "signal3");
+    sc_map_cube<sc_signal<bool> > signals3(4, 3, 2, "signal3");
 //    sc_map_4d<sc_signal<bool> > signals4(5, 4, 3, 2, "signal4");
 
 //    std::cout << "Signals in signals1: " << signals1.size() << std::endl;
@@ -53,21 +53,21 @@ int sc_main(int argc, char *agv[])
     src1.output.bind(signals1(0,1));
     //src1.output.bind(signals_list);
     src2.output.bind(signals2);
-//    src3.output.bind(signals3);
+    src3.output.bind(signals3);
 //    src4.output.bind(signals4);
 
     snk1.input.bind(signals1);
     snk2.input.bind(signals2);
-//    snk3.input.bind(signals3);
+    snk3.input.bind(signals3);
 //    snk4.input.bind(signals4);
 
     // Testing get_key()
-//    sc_map_linear<sc_signal<bool> >::iterator signal_it = signals1.begin();
-//    for (;signal_it != signals1.end(); ++signal_it)
-//    {
-//        std::pair<bool, sc_map_linear<sc_signal<bool> >::key_type> the_key = signals1.get_key(*signal_it);
-//        std::cout << "Key: " << the_key.first << " - " << the_key.second.X << std::endl;
-//    }
+    sc_map_linear<sc_signal<bool> >::iterator signal_it = signals1.begin();
+    for (;signal_it != signals1.end(); ++signal_it)
+    {
+        std::pair<bool, sc_map_linear<sc_signal<bool> >::key_type> the_key = signals1.get_key(*signal_it);
+        std::cout << "Key: " << the_key.first << " - " << the_key.second.X << std::endl;
+    }
 
     std::pair<bool, sc_map_linear<sc_signal<bool> >::key_type> the_key2 = signals1.get_key(signals1.at(0));
     std::cout << "Key: " << the_key2.first << " - " << the_key2.second.X << std::endl;
