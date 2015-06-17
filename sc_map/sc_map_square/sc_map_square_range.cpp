@@ -26,23 +26,7 @@ sc_map_square_range::sc_map_square_range(const key_type& start_key,
         const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
 {
-    if (start_key.Y <= end_key.Y)
-    {
-        Y_dir = UP;
-    }
-    else
-    {
-        Y_dir = DOWN;
-    }
-
-    if (start_key.X <= end_key.X)
-    {
-        X_dir = UP;
-    }
-    else
-    {
-        X_dir = DOWN;
-    }
+    init(NULL, start_key, end_key);
 
     return;
 }
@@ -52,6 +36,15 @@ sc_map_square_range::sc_map_square_range(
         const sc_map_range<key_type>* base_range, const key_type& start_key,
         const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
+{
+    init(base_range, start_key, end_key);
+
+    return;
+}
+
+//******************************************************************************
+void sc_map_square_range::init(const sc_map_range<key_type>* base_range,
+        const key_type& start_key, const key_type& end_key)
 {
     if (start_key.Y <= end_key.Y)
     {

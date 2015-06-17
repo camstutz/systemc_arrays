@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square_range.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -34,4 +34,6 @@ public:
 private:
     direction Y_dir;
     direction X_dir;
+
+    void init(const sc_map_range<key_type>* base_range, const key_type& start_key, const key_type& end_key);
 };

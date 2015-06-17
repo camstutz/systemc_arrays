@@ -23,8 +23,8 @@ public:
     using sc_map_range::key_type;
 
     sc_map_linear_range();
-    sc_map_linear_range(key_type start_key, key_type end_key);
-    sc_map_linear_range(sc_map_range<key_type>*, key_type start_key, key_type end_key);
+    sc_map_linear_range(const key_type& start_key, const key_type& end_key);
+    sc_map_linear_range(const sc_map_range<key_type>* base_range, const key_type& start_key, const key_type& end_key);
     virtual ~sc_map_linear_range() {};
 
     virtual sc_map_linear_range* clone() const;
@@ -33,4 +33,6 @@ public:
 
 private:
     direction X_dir;
+
+    void init(const sc_map_range<key_type>* base_range, const key_type& start_key, const key_type& end_key);
 };

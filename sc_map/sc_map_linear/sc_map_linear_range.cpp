@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_linear_range.cpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -21,26 +21,28 @@ sc_map_linear_range::sc_map_linear_range() :
     // todo:: this is basically not correct!
 
 //******************************************************************************
-sc_map_linear_range::sc_map_linear_range(key_type start_key,
-        key_type end_key) :
+sc_map_linear_range::sc_map_linear_range(const key_type& start_key,
+        const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
 {
-    if (start_key <= end_key)
-    {
-        X_dir = UP;
-    }
-    else
-    {
-        X_dir = DOWN;
-    }
+    init(NULL, start_key, end_key);
 
     return;
 }
 
 //******************************************************************************
-sc_map_linear_range::sc_map_linear_range(sc_map_range<key_type>*,
-        key_type start_key, key_type end_key) :
+sc_map_linear_range::sc_map_linear_range(
+        const sc_map_range<key_type>* base_range,
+        const key_type& start_key, const key_type& end_key) :
         sc_map_regular_range(start_key, end_key)
+{
+    init(base_range, start_key, end_key);
+
+    return;
+}
+
+//******************************************************************************
+void sc_map_linear_range::init(const sc_map_range<key_type>* base_range, const key_type& start_key, const key_type& end_key)
 {
     if (start_key <= end_key)
     {
