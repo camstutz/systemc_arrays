@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square_key.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 16, 2015
  *
  * @brief
  *
@@ -30,7 +30,7 @@ public:
     index_type X;
 
     sc_map_square_key();
-    sc_map_square_key(index_type Y, index_type X);
+    sc_map_square_key(const index_type& Y, const index_type& X);
     virtual ~sc_map_square_key() {};
 
     virtual std::string get_string() const;

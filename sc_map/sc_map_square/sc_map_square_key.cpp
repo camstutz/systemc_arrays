@@ -20,7 +20,7 @@ sc_map_square_key::sc_map_square_key() :
 {}
 
 //******************************************************************************
-sc_map_square_key::sc_map_square_key(index_type Y, index_type X) :
+sc_map_square_key::sc_map_square_key(const index_type& Y, const index_type& X) :
         Y(Y),
         X(X)
 {}

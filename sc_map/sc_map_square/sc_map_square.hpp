@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_square.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -41,17 +41,17 @@ public:
     template <typename config_type>
     sc_map_square(const size_type element_cnt_Y, const size_type element_cnt_X, const sc_module_name name, const config_type configuration, const index_type start_id_Y, const index_type start_id_X);
 
-    sc_map_square(const key_type start_key, const key_type end_key, const sc_module_name name);
+    sc_map_square(const key_type& start_key, const key_type& end_key, const sc_module_name name);
     template <typename config_type>
-    sc_map_square(const key_type start_key, const key_type end_key, const sc_module_name name, const config_type configuration);
+    sc_map_square(const key_type& start_key, const key_type& end_key, const sc_module_name name, const config_type& configuration);
 
-    sc_map_square(const range_type new_range, const sc_module_name name);
+    sc_map_square(const range_type& new_range, const sc_module_name name);
     template <typename config_type>
-    sc_map_square(const range_type new_range, const sc_module_name name, const config_type configuration);
+    sc_map_square(const range_type& new_range, const sc_module_name name, const config_type& configuration);
 
     virtual ~sc_map_square() {};
 
-    object_T& at(const index_type Y, const index_type X);
+    object_T& at(const index_type& Y, const index_type& X);
 };
 
 //******************************************************************************
@@ -120,8 +120,8 @@ sc_map_square<object_T>::sc_map_square(const size_type element_cnt_Y,
 
 //******************************************************************************
 template <typename object_T>
-sc_map_square<object_T>::sc_map_square(const key_type start_key,
-        const key_type end_key, const sc_module_name name) :
+sc_map_square<object_T>::sc_map_square(const key_type& start_key,
+        const key_type& end_key, const sc_module_name name) :
         sc_map_base<range_type, object_T>(name)
 {
     range_type range = range_type(start_key, end_key);
@@ -133,9 +133,9 @@ sc_map_square<object_T>::sc_map_square(const key_type start_key,
 //******************************************************************************
 template <typename object_T>
 template <typename config_type>
-sc_map_square<object_T>::sc_map_square(const key_type start_key,
-        const key_type end_key, const sc_module_name name,
-        const config_type configuration) :
+sc_map_square<object_T>::sc_map_square(const key_type& start_key,
+        const key_type& end_key, const sc_module_name name,
+        const config_type& configuration) :
         sc_map_base<range_type, object_T>(name)
 {
     range_type range = range_type(start_key, end_key);
@@ -146,7 +146,7 @@ sc_map_square<object_T>::sc_map_square(const key_type start_key,
 
 //******************************************************************************
 template <typename object_T>
-sc_map_square<object_T>::sc_map_square(const range_type new_range,
+sc_map_square<object_T>::sc_map_square(const range_type& new_range,
         const sc_module_name name) :
         sc_map_base<range_type, object_T>(name)
 {
@@ -158,8 +158,8 @@ sc_map_square<object_T>::sc_map_square(const range_type new_range,
 //******************************************************************************
 template <typename object_T>
 template <typename config_type>
-sc_map_square<object_T>::sc_map_square(const range_type new_range,
-        const sc_module_name name, const config_type configuration) :
+sc_map_square<object_T>::sc_map_square(const range_type& new_range,
+        const sc_module_name name, const config_type& configuration) :
         sc_map_base<range_type, object_T>(name)
 {
     this->init(new_range, typename base::creator(), configuration);
@@ -169,8 +169,8 @@ sc_map_square<object_T>::sc_map_square(const range_type new_range,
 
 //******************************************************************************
 template <typename object_T>
-object_T& sc_map_square<object_T>::at(const index_type Y,
-        const index_type X)
+object_T& sc_map_square<object_T>::at(const index_type& Y,
+        const index_type& X)
 {
     return base::at(key_type(Y, X));
 }

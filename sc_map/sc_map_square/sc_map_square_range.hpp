@@ -24,7 +24,7 @@ public:
 
     sc_map_square_range();
     sc_map_square_range(const key_type& start_key, const key_type& end_key);
-    sc_map_square_range(const sc_map_range<key_type>*, const key_type& start_key, const key_type& end_key);
+    //sc_map_square_range(const sc_map_range<key_type>* base_range, const key_type& start_key, const key_type& end_key);
     virtual ~sc_map_square_range() {};
 
     virtual sc_map_square_range* clone() const;
