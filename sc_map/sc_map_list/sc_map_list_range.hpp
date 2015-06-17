@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_list_range.hpp
  * @author Christian Amstutz
- * @date June 9, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -30,7 +30,7 @@ public:
 
     sc_map_list_range();
     sc_map_list_range(const std::vector<key_type>& keys);
-    sc_map_list_range(sc_map_range<key_type>* source_range, key_type start_key, key_type end_key);
+    sc_map_list_range(const sc_map_range<key_type>* source_range, const key_type& start_key, const key_type& end_key);
     virtual ~sc_map_list_range() {};
 
     virtual sc_map_list_range<value_type>* clone() const;
@@ -63,8 +63,8 @@ sc_map_list_range<value_T>::sc_map_list_range(
 //******************************************************************************
 template <typename value_T>
 sc_map_list_range<value_T>::sc_map_list_range(
-        sc_map_range<key_type>* source_range, key_type start_key,
-        key_type end_key)
+        const sc_map_range<key_type>* source_range, const key_type& start_key,
+        const key_type& end_key)
 {
 
     if (source_range->key_in_range(start_key))
