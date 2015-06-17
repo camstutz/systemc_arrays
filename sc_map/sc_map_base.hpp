@@ -47,14 +47,14 @@ public:
     iterator begin();
     iterator end();
 
-    range_type* get_range();
+    range_type* get_range() const;
     std::pair<bool, key_type> get_key(object_type& object) const;
 
     //* todo: const versions needed?
-    object_type& at(const key_type key);
-    object_type& operator[] (const key_type key);
-    iterator operator()(key_type start_key, key_type end_key);
-    iterator operator()(sc_map_range<key_type>& range);
+    object_type& at(const key_type& key);
+    object_type& operator[] (const key_type& key);
+    iterator operator()(const key_type& start_key, const key_type& end_key);
+    iterator operator()(const sc_map_range<key_type>& range);
 
     template <typename signal_type>
     void bind(sc_signal<signal_type>& signal);
@@ -83,11 +83,11 @@ public:
 
 public:
     template <typename Creator>
-    void init(range_type& new_range, Creator object_creator);
+    void init(const range_type& new_range, const Creator& object_creator);
     template <typename Creator, typename config_type>
-    void init(range_type& new_range, Creator object_creator, const config_type& configurator);
+    void init(const range_type& new_range, const Creator& object_creator, const config_type& configurator);
     template <typename Creator, typename config_type>
-    void init(range_type& new_range, Creator object_creator, const std::map<key_type, config_type>& configurations);
+    void init(const range_type& new_range, const Creator& object_creator, const std::map<key_type, config_type>& configurations);
 
     map_type objects;
     range_type range;
@@ -96,9 +96,9 @@ public:
     {
     public:
         creator() {};
-        object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id);
+        object_type* operator() (const sc_module_name name, const sc_map_base<range_type, object_type>::key_type& id) const;
         template <typename config_T>
-        object_type* operator() (const sc_module_name name, sc_map_base<range_type, object_type>::key_type id, const config_T& configuration);
+        object_type* operator() (const sc_module_name name, const sc_map_base<range_type, object_type>::key_type& id, const config_T& configuration) const;
     };
 
 //* todo: add const to second argument of sc_trace
@@ -121,8 +121,8 @@ sc_map_base<range_T, object_T>::sc_map_base(const sc_module_name name) :
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator>
-void sc_map_base<range_T, object_T>::init(range_type& new_range,
-        Creator object_creator)
+void sc_map_base<range_T, object_T>::init(const range_type& new_range,
+        const Creator& object_creator)
 {
     range = new_range;
 
@@ -144,8 +144,8 @@ void sc_map_base<range_T, object_T>::init(range_type& new_range,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init(range_type& new_range,
-        Creator object_creator, const config_type& configurator)
+void sc_map_base<range_T, object_T>::init(const range_type& new_range,
+        const Creator& object_creator, const config_type& configurator)
 {
     range = new_range;
 
@@ -167,8 +167,8 @@ void sc_map_base<range_T, object_T>::init(range_type& new_range,
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
-void sc_map_base<range_T, object_T>::init(range_type& new_range,
-        Creator object_creator,
+void sc_map_base<range_T, object_T>::init(const range_type& new_range,
+        const Creator& object_creator,
         const std::map<key_type, config_type>& configurations)
 {
     range = new_range;
@@ -207,7 +207,7 @@ typename sc_map_base<range_T, object_T>::iterator
 //******************************************************************************
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::range_type*
-        sc_map_base<range_T, object_T>::get_range()
+        sc_map_base<range_T, object_T>::get_range() const
 {
     return new range_type(range);
 }
@@ -238,7 +238,7 @@ std::pair<bool, typename sc_map_base<range_T, object_T>::key_type>
 //******************************************************************************
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::object_type&
-        sc_map_base<range_T, object_T>::at(const key_type key)
+        sc_map_base<range_T, object_T>::at(const key_type& key)
 {
     // todo: at exception handling for out range accesses
     object_type& ret_object = *(this->objects[key]);
@@ -249,7 +249,7 @@ typename sc_map_base<range_T, object_T>::object_type&
 //******************************************************************************
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::object_type&
-        sc_map_base<range_T, object_T>::operator[] (const key_type key)
+        sc_map_base<range_T, object_T>::operator[] (const key_type& key)
 {
     return at(key);
 }
@@ -258,7 +258,7 @@ typename sc_map_base<range_T, object_T>::object_type&
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::iterator
         sc_map_base<range_T, object_T>::operator()(
-        key_type start_key, key_type end_key)
+        const key_type& start_key, const key_type& end_key)
 {
     return iterator(this, start_key, end_key);
 }
@@ -266,7 +266,7 @@ typename sc_map_base<range_T, object_T>::iterator
 //******************************************************************************
 template <typename range_T, typename object_T>
 typename sc_map_base<range_T, object_T>::iterator
-sc_map_base<range_T, object_T>::operator()(sc_map_range<key_type>& range)
+sc_map_base<range_T, object_T>::operator()(const sc_map_range<key_type>& range)
 {
     return iterator(this, range);
 }
@@ -407,8 +407,10 @@ sc_sensitive& operator<< (sc_sensitive& sensitivity_list,
 
 //******************************************************************************
 template <typename range_T, typename object_T>
-typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, object_T>::creator::operator() (
-        const sc_module_name name, sc_map_base<range_type, object_type>::key_type id)
+typename sc_map_base<range_T, object_T>::object_type*
+        sc_map_base<range_T, object_T>::creator::operator() (
+        const sc_module_name name,
+        const sc_map_base<range_type, object_type>::key_type& id) const
 {
     std::stringstream full_name;
 
@@ -420,9 +422,11 @@ typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, objec
 //******************************************************************************
 template <typename range_T, typename object_T>
 template <typename config_T>
-typename sc_map_base<range_T, object_T>::object_type* sc_map_base<range_T, object_T>::creator::operator() (
-        const sc_module_name name, sc_map_base<range_type, object_type>::key_type id,
-        const config_T& configuration)
+typename sc_map_base<range_T, object_T>::object_type*
+        sc_map_base<range_T, object_T>::creator::operator() (
+        const sc_module_name name,
+        const sc_map_base<range_type, object_type>::key_type& id,
+        const config_T& configuration) const
 {
     std::stringstream full_name;
 
