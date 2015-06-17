@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date June 3, 2015
+ * @date June 17, 2015
  *
  * @brief
  *
@@ -35,11 +35,11 @@ public:
     static const end_type end;
 
     sc_map_iterator(sc_map_T* sc_map);
-    sc_map_iterator(sc_map_T* sc_map, end_type end_id);
-    sc_map_iterator(sc_map_T* sc_map, key_type map_pos);
-    sc_map_iterator(sc_map_T* sc_map, sc_map_range<key_type>& range);
-    sc_map_iterator(sc_map_T* sc_map, sc_map_range<key_type>& range, const key_type& map_pos);
-    sc_map_iterator(sc_map_T* sc_map, key_type& start_key, key_type& end_key);
+    sc_map_iterator(sc_map_T* sc_map, const end_type end_id);
+    sc_map_iterator(sc_map_T* sc_map, const key_type& map_pos);
+    sc_map_iterator(sc_map_T* sc_map, const sc_map_range<key_type>& range);
+    sc_map_iterator(sc_map_T* sc_map, const sc_map_range<key_type>& range, const key_type& map_pos);
+    sc_map_iterator(sc_map_T* sc_map, const key_type& start_key, const key_type& end_key);
     virtual ~sc_map_iterator();
 
     bool operator==(const sc_map_iterator& other) const;
@@ -92,7 +92,8 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(sc_map_T* sc_map) :
 
 //******************************************************************************
 template <typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, end_type end_id) :
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
+        const end_type end_id) :
         map(sc_map),
         range(sc_map->get_range()),
         position(range->first()),
@@ -101,7 +102,8 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, end_type end_id) :
 
 //******************************************************************************
 template <typename sc_map_T>
-sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, key_type map_pos) :
+sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
+        const key_type& map_pos) :
         map(sc_map),
         end_flag(!end)
 {
@@ -115,7 +117,7 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map, key_type map_pos) :
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        sc_map_range<key_type>& range) :
+        const sc_map_range<key_type>& range) :
         map(sc_map),
         end_flag(!end)
 {
@@ -130,7 +132,7 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        sc_map_range<key_type>& range, const key_type& map_pos) :
+        const sc_map_range<key_type>& range, const key_type& map_pos) :
         map(sc_map),
         end_flag(!end)
 {
@@ -145,7 +147,7 @@ sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
 //******************************************************************************
 template <typename sc_map_T>
 sc_map_iterator<sc_map_T>::sc_map_iterator(map_type* sc_map,
-        key_type& start_key, key_type& end_key) :
+        const key_type& start_key, const key_type& end_key) :
         map(sc_map),
         position(start_key),
         end_flag(!end)
