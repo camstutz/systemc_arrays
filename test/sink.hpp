@@ -33,15 +33,15 @@ public:
     SC_HAS_PROCESS(sink_cube);
 };
 
-//class sink_4d : public sc_module {
-//public:
-//    sc_map_4d<sc_in<bool> > input;
-//
-//    void detect_signal();
-//
-//    sink_4d(sc_module_name _name);
-//    SC_HAS_PROCESS(sink_4d);
-//};
+class sink_4d : public sc_module {
+public:
+    sc_map_4d<sc_in<bool> > input;
+
+    void detect_signal();
+
+    sink_4d(sc_module_name _name);
+    SC_HAS_PROCESS(sink_4d);
+};
 
 class sink_config
 {

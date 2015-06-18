@@ -18,3 +18,4 @@
 #include "sc_map_linear/sc_map_linear.hpp"
 #include "sc_map_square/sc_map_square.hpp"
 #include "sc_map_cube/sc_map_cube.hpp"
+#include "sc_map_4d/sc_map_4d.hpp"

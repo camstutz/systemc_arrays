@@ -19,12 +19,12 @@ int sc_main(int argc, char *agv[])
     source src1("source1");
     source_square src2("source2");
     source_cube src3("source3");
-//    source_4d src4("source4");
+    source_4d src4("source4");
 
     sink snk1("sink1");
     sink_square snk2("sink2");
     sink_cube snk3("sink3");
-//    sink_4d snk4("sink4");
+    sink_4d snk4("sink4");
 
     sc_map_linear<sc_signal<bool> > signals1(2, "signal1");
     std::vector<char> sig_names;
@@ -34,7 +34,7 @@ int sc_main(int argc, char *agv[])
     sc_map_square<sc_signal<bool> > signals2(3, 2, "signal2");
 
     sc_map_cube<sc_signal<bool> > signals3(4, 3, 2, "signal3");
-//    sc_map_4d<sc_signal<bool> > signals4(5, 4, 3, 2, "signal4");
+    sc_map_4d<sc_signal<bool> > signals4(5, 4, 3, 2, "signal4");
 
 //    std::cout << "Signals in signals1: " << signals1.size() << std::endl;
 //    std::cout << "Signals in signals2: " << signals2.size() << " ("
@@ -54,12 +54,12 @@ int sc_main(int argc, char *agv[])
     //src1.output.bind(signals_list);
     src2.output.bind(signals2);
     src3.output.bind(signals3);
-//    src4.output.bind(signals4);
+    src4.output.bind(signals4);
 
     snk1.input.bind(signals1);
     snk2.input.bind(signals2);
     snk3.input.bind(signals3);
-//    snk4.input.bind(signals4);
+    snk4.input.bind(signals4);
 
     // Testing get_key()
     sc_map_linear<sc_signal<bool> >::iterator signal_it = signals1.begin();
@@ -184,9 +184,9 @@ int sc_main(int argc, char *agv[])
     fp->set_time_unit(1, SC_NS);
 
     sc_trace(fp, signals1, "signal1");
-//    sc_trace(fp, signals2, "signal2");
-//    sc_trace(fp, signals3, "signal3");
-//    sc_trace(fp, signals4, "signal4");
+    sc_trace(fp, signals2, "signal2");
+    sc_trace(fp, signals3, "signal3");
+    sc_trace(fp, signals4, "signal4");
     //sc_trace(fp, bind_signals, "b_signal");
 
     sc_delay_tb delay_testbench("delay_testbench");
