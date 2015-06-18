@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_base.hpp
  * @author Christian Amstutz
- * @date June 16, 2015
+ * @date June 18, 2015
  *
  * @brief
  *
@@ -383,7 +383,7 @@ void sc_trace(sc_trace_file* tf, sc_map_base<trace_range_T, trace_object_T>&
         std::stringstream full_name;
         full_name << name
                   << sc_map::key_separator_char
-                  << object_it->name();
+                  << object_it.get_key().second;
         sc_trace(tf, *object_it, full_name.str().c_str());
     }
 
