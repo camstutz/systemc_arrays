@@ -1,7 +1,7 @@
 /*!
  * @file sc_map_iterator.hpp
  * @author Christian Amstutz
- * @date June 17, 2015
+ * @date June 18, 2015
  *
  * @brief
  *
@@ -13,10 +13,13 @@
 
 #pragma once
 
-#include <iterator>
+#include "sc_map_range.hpp"
 
 #include <systemc.h>
-#include "sc_map_range.hpp"
+
+#include <iterator>
+#include <utility>
+
 
 template <typename range_T, typename object_T>
 class sc_map_base;
@@ -66,6 +69,8 @@ public:
     void bind(sc_map_iterator<signal_map_T> signal_it);
     template <typename signal_map_T>
     void operator() (sc_map_iterator<signal_map_T> signal_it);
+
+    std::pair<end_type, key_type> get_key() const;
 
 private:
     map_type* map;
@@ -319,11 +324,21 @@ void sc_map_iterator<sc_map_T>::bind(sc_map_iterator<signal_map_T> signal_it)
 //******************************************************************************
 template <typename sc_map_T>
 template <typename signal_map_T>
-void sc_map_iterator<sc_map_T>::operator() (sc_map_iterator<signal_map_T> signal_it)
+void sc_map_iterator<sc_map_T>::operator() (
+        sc_map_iterator<signal_map_T> signal_it)
 {
     bind(signal_it);
 
     return;
+}
+
+//******************************************************************************
+template <typename sc_map_T>
+std::pair<typename sc_map_iterator<sc_map_T>::end_type,
+        typename sc_map_iterator<sc_map_T>::key_type>
+        sc_map_iterator<sc_map_T>::get_key() const
+{
+    return std::pair<end_type, key_type>(end_flag, position);
 }
 
 ////******************************************************************************
