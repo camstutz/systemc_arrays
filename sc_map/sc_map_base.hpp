@@ -87,6 +87,8 @@ public:
     template <typename Creator, typename config_type>
     void init(const range_type& new_range, const Creator& object_creator, const config_type& configurator);
     template <typename Creator, typename config_type>
+    void init(const range_type& new_range, const Creator& object_creator, const std::vector<config_type>& configurations);
+    template <typename Creator, typename config_type>
     void init(const range_type& new_range, const Creator& object_creator, const std::map<key_type, config_type>& configurations);
 
     map_type objects;
@@ -145,7 +147,8 @@ void sc_map_base<range_T, object_T>::init(const range_type& new_range,
 template <typename range_T, typename object_T>
 template <typename Creator, typename config_type>
 void sc_map_base<range_T, object_T>::init(const range_type& new_range,
-        const Creator& object_creator, const config_type& configurator)
+        const Creator& object_creator,
+        const config_type& configurator)
 {
     range = new_range;
 
@@ -159,6 +162,33 @@ void sc_map_base<range_T, object_T>::init(const range_type& new_range,
 
         object_type* p = object_creator(cname, *key_it, configurator);
         objects.insert(typename map_type::value_type(*key_it, p));
+    }
+
+    return;
+}
+
+//******************************************************************************
+template <typename range_T, typename object_T>
+template <typename Creator, typename config_type>
+void sc_map_base<range_T, object_T>::init(const range_type& new_range,
+        const Creator& object_creator,
+        const std::vector<config_type>& configurations)
+{
+    range = new_range;
+
+    key_vector_type key_vector = range.get_key_vector();
+    typename std::vector<config_type>::const_iterator config_it = configurations.begin();
+    for (typename key_vector_type::const_iterator key_it = key_vector.begin();
+         key_it != key_vector.end();
+         ++key_it)
+    {
+        std::string name = basename();
+        const char* cname = name.c_str();
+
+        object_type* p = object_creator(cname, *key_it, *config_it);
+        objects.insert(typename map_type::value_type(*key_it, p));
+
+        ++config_it;
     }
 
     return;

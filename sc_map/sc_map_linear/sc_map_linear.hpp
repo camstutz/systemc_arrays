@@ -74,6 +74,7 @@ sc_map_linear<object_T>::sc_map_linear(const size_type element_cnt_X,
                 sc_map_linear_key(start_id_X+element_cnt_X-1));
 
     this->init(range, typename base::creator(), configuration);
+//  sink_configurable::sink_configurable(const char*, const std::vector<sink_config>&)’
 
     return;
 }

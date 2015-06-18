@@ -85,55 +85,56 @@ int sc_main(int argc, char *agv[])
 //    std::cout << "Key: " << the_key5.first << " - " << the_key5.second.W_dim << ","<< the_key5.second.Z_dim << "," << the_key5.second.Y_dim << "," << the_key5.second.X_dim << std::endl;
 //    std::cout << std::endl;
 
-//    // Testing dimensional iterators
-//
-//    sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
-//
-//    sc_map_iter_square<sc_signal<bool> > sig_iter = signals_sq(0, 1000, 1, 1000);
-//    sc_map_iter_sequential<sc_signal<bool> > end = signals_sq.end();
-//    std::cout << std::endl;
-//    for( ; sig_iter != end; ++sig_iter)
-//    {
-//        std::cout << (*sig_iter).name() << std::endl;
-//    }
-//
-//    sc_map_iter_square<sc_signal<bool> > sig_iter2 = signals_sq(0, 1, 0, 1);
-//    std::cout << std::endl;
-//    for( ; sig_iter2 != end; ++sig_iter2)
-//    {
-//        std::cout << (*sig_iter2).name() << std::endl;
-//    }
-//
-//    sc_map_iter_square<sc_signal<bool> > sig_iter2p = signals_sq(1, 0, 1, 0);
-//    std::cout << std::endl;
-//    for( ; sig_iter2p != end; ++sig_iter2p)
-//    {
-//        std::cout << (*sig_iter2p).name() << std::endl;
-//    }
-//
-//    sc_map_iter_square<sc_signal<bool> > sig_iter3 = signals_sq(1, 1, 1, 1000);
-//    std::cout << std::endl;
-//    for( ; sig_iter3 != end; ++sig_iter3)
-//    {
-//        std::cout << (*sig_iter3).name() << std::endl;
-//    }
-//
-//    sc_map_cube<sc_out<bool> >::cube_iterator port_it3 = src3.output(2, 1000, 1, 1, 1, 1);
-//    sc_map_cube<sc_out<bool> >::iterator port_it3_end = src3.output.end();
-//    std::cout << std::endl;
-//    for( ; port_it3 != port_it3_end; ++port_it3)
-//    {
-//        std::cout << (*port_it3).name() << std::endl;
-//    }
-//
-//    sc_map_iter_4d<sc_in<bool> > port_it4 = snk4.input(3, 3, 1, 1, 1, 1000, 1, 1);
-//    sc_map_iter_sequential<sc_in<bool> > port_it4_end = snk4.input.end();
-//    std::cout << std::endl;
-//    for( ; port_it4 != port_it4_end; ++port_it4)
-//    {
-//        std::cout << (*port_it4).name() << std::endl;
-//    }
-//    std::cout << std::endl;
+    // Testing dimensional iterators
+
+    sc_map_square<sc_signal<bool> > signals_sq(4, 3, "signalSQ");
+
+    sc_map_square<sc_signal<bool> >::iterator sig_iter = signals_sq(sc_map_square_key(0, 0), sc_map_square_key(1, 1));
+
+    sc_map_square<sc_signal<bool> >::iterator end = signals_sq.end();
+    std::cout << std::endl;
+    for( ; sig_iter != end; ++sig_iter)
+    {
+        std::cout << sig_iter->name() << std::endl;
+    }
+
+    sc_map_square<sc_signal<bool> >::iterator sig_iter2 = signals_sq(sc_map_square_key(0, 1), sc_map_square_key(0, 1));
+    std::cout << std::endl;
+    for( ; sig_iter2 != end; ++sig_iter2)
+    {
+        std::cout << sig_iter2->name() << std::endl;
+    }
+
+    sc_map_square<sc_signal<bool> >::iterator sig_iter2p = signals_sq(sc_map_square_key(1, 1), sc_map_square_key(0, 0));
+    std::cout << std::endl;
+    for( ; sig_iter2p != end; ++sig_iter2p)
+    {
+        std::cout << sig_iter2p->name() << std::endl;
+    }
+
+    sc_map_square<sc_signal<bool> >::iterator sig_iter3 = signals_sq(sc_map_square_key(1, 1), sc_map_square_key(1, 2));
+    std::cout << std::endl;
+    for( ; sig_iter3 != end; ++sig_iter3)
+    {
+        std::cout << sig_iter3->name() << std::endl;
+    }
+
+    sc_map_cube<sc_out<bool> >::iterator port_it3 = src3.output(sc_map_cube_key(2, 1, 1), sc_map_cube_key(3, 1, 1)); //   2, 1000, 1, 1, 1, 1);
+    sc_map_cube<sc_out<bool> >::iterator port_it3_end = src3.output.end();
+    std::cout << std::endl;
+    for( ; port_it3 != port_it3_end; ++port_it3)
+    {
+        std::cout << (*port_it3).name() << std::endl;
+    }
+
+    sc_map_4d<sc_in<bool> >::iterator port_it4 = snk4.input(sc_map_4d_key(3, 1, 1, 1), sc_map_4d_key(3, 1, 2, 1) );
+    sc_map_4d<sc_in<bool> >::iterator port_it4_end = snk4.input.end();
+    std::cout << std::endl;
+    for( ; port_it4 != port_it4_end; ++port_it4)
+    {
+        std::cout << (*port_it4).name() << std::endl;
+    }
+    std::cout << std::endl;
 
 //    // Test multi-dimensional partial binding
 //    sc_map_linear<sc_signal<bool> > bind_signals(10, "bsigs");
@@ -159,24 +160,24 @@ int sc_main(int argc, char *agv[])
 //    btest1.output.bind(bind_signals(0,5));
 
     // *** Configurable test **** //
-//    sink_config configuration;
-//    configuration.config_value = 7;
-//
-//    //sink_configurable test_config_sink("config_sink", configuration);
-//    source src_config("source_config");
-//    sc_map_linear<sc_signal<bool> > signal_config(2, "signal_config");
-//    src_config.output.bind(signal_config);
-//    sc_map_linear<sink_configurable> test_config_sink_linear(2, "test", configuration, 0);
-//    test_config_sink_linear[0].input.bind(signal_config[0]);
-//    test_config_sink_linear[1].input.bind(signal_config[1]);
-//
-//    std::vector<sink_config> configs;
-//    configs.resize(2);
-//    configs[0].config_value = 3;
-//    configs[1].config_value = 4;
-//    sc_map_linear<sink_configurable> test_config_sink_linear2(2, "vector_test", configs, 0);
-//    test_config_sink_linear2[0].input.bind(signal_config[0]);
-//    test_config_sink_linear2[1].input.bind(signal_config[1]);
+    sink_config configuration;
+    configuration.config_value = 7;
+
+    //sink_configurable test_config_sink("config_sink", configuration);
+    source src_config("source_config");
+    sc_map_linear<sc_signal<bool> > signal_config(2, "signal_config");
+    src_config.output.bind(signal_config);
+    sc_map_linear<sink_configurable> test_config_sink_linear(2, "test", configuration, 0);
+    test_config_sink_linear[0].input.bind(signal_config[0]);
+    test_config_sink_linear[1].input.bind(signal_config[1]);
+
+    std::vector<sink_config> configs;
+    configs.resize(2);
+    configs[0].config_value = 3;
+    configs[1].config_value = 4;
+    sc_map_linear<sink_configurable> test_config_sink_linear2(2, "vector_test", configs, 0);
+    test_config_sink_linear2[0].input.bind(signal_config[0]);
+    test_config_sink_linear2[1].input.bind(signal_config[1]);
 
     // **** Setup Tracing
     sc_trace_file* fp;

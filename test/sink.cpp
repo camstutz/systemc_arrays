@@ -115,41 +115,41 @@ void sink_4d::detect_signal()
     return;
 }
 
-////******************************************************************************
-//sink_configurable::sink_configurable(sc_module_name _name) :
-//        sc_module(_name),
-//        input("input")
-//{
-//    config_value = 8;
-//
-//    SC_THREAD(detect_signal_config);
-//        sensitive << input;
-//
-//    return;
-//}
-//
-////******************************************************************************
-//sink_configurable::sink_configurable(sc_module_name _name, sink_config configuration) :
-//        sc_module(_name),
-//        input("input")
-//{
-//    config_value = configuration.config_value;
-//
-//    SC_THREAD(detect_signal_config);
-//        sensitive << input;
-//
-//    return;
-//}
-//
-////******************************************************************************
-//void sink_configurable::detect_signal_config()
-//{
-//    while (1)
-//    {
-//        wait();
-//
-//        std::cout << sc_time_stamp() << " {" << config_value << "}" << " - " << input.name() << " = 1" << std::endl;
-//    }
-//
-//    return;
-//}
+//******************************************************************************
+sink_configurable::sink_configurable(sc_module_name _name) :
+        sc_module(_name),
+        input("input")
+{
+    config_value = 8;
+
+    SC_THREAD(detect_signal_config);
+        sensitive << input;
+
+    return;
+}
+
+//******************************************************************************
+sink_configurable::sink_configurable(sc_module_name _name, sink_config configuration) :
+        sc_module(_name),
+        input("input")
+{
+    config_value = configuration.config_value;
+
+    SC_THREAD(detect_signal_config);
+        sensitive << input;
+
+    return;
+}
+
+//******************************************************************************
+void sink_configurable::detect_signal_config()
+{
+    while (1)
+    {
+        wait();
+
+        std::cout << sc_time_stamp() << " {" << config_value << "}" << " - " << input.name() << " = 1" << std::endl;
+    }
+
+    return;
+}
