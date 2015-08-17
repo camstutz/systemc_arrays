@@ -16,7 +16,7 @@
 #include "sc_map_iterator.hpp"
 #include "sc_map_config.hpp"
 
-#include "../modelsim_support/modelsim_support.hpp"
+#include "../../modelsim_support/include/modelsim_support.hpp"
 
 #include <systemc.h>
 

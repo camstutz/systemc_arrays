@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "../sc_map_base.hpp"
+#include "sc_map_base.hpp"
 #include <systemc.h>
 
 #include <string>
